@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bookworm</title>
+        <link
+            rel="stylesheet"
+            href="https:///fonts.googleapis.com/css?family=Roboto:300,400"
+        />
+        <link
+            rel="stylesheet"
+            href="{{CONTEXT}}/include/fontawesome-free-5.15.1-web/css/all.min.css"
+        />
+        <!-- <link rel="stylesheet" href="../include/menu.css"> -->
+        <link rel="stylesheet" href="{{CONTEXT}}/include/style.css" />
+        <link rel="stylesheet" href="{{CONTEXT}}/include/editor.css" />
+        <link rel="stylesheet" href="{{CONTEXT}}/auswertung/style.css" />
+        <script>
+            if (typeof module === 'object') {
+                window.module = module;
+                module = undefined;
+            }
+        </script>
+        <script src="{{CONTEXT}}/include/jquery-4.3.1.min.js"></script>
+        <script src="{{CONTEXT}}/include/actions.js"></script>
+        <link rel="stylesheet" href="{{CONTEXT}}/include/editor.css" />
+        <script src="{{CONTEXT}}/auswertung/auswertung.js"></script>
+        <script src="{{CONTEXT}}/auswertung/expBox.js"></script>
+        <script src="{{CONTEXT}}/auswertung/sketch.js"></script>
+        <script>
+            if (window.module) module = window.module;
+        </script>
+    </head>
+
+    <body onload="startup();setup()">
+        <!-- Editor======================================================================================= -->
+        <div id="mydiv">
+            <div id="mydivheader">
+                Exporteinstellungen
+                <button class="closeButton" onclick="closeEditor()">X</button>
+            </div>
+            <table style="text-align: left">
+                <tr>
+                    <td>
+                        <label>Gymnasium:</label>
+                    </td>
+                    <td>
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GYMalter5"
+                            />5</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GYMalter6"
+                            />6</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GYMalter7"
+                            />7</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GYMalter8"
+                            />8</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GYMalter9"
+                            />9</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GYMalter10"
+                            />10</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GYMalter11"
+                            />11</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GYMalter12"
+                            />12</label
+                        >
+                    </td>
+                    <!-- ====================================================================== -->
+                </tr>
+                <tr>
+                    <td>
+                        <label>Gemeinschaftsschule:</label>
+                    </td>
+                    <td>
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GSalter5"
+                            />5</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GSalter6"
+                            />6</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GSalter7"
+                            />7</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GSalter8"
+                            />8</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GSalter9"
+                            />9</label
+                        >
+                        <label
+                            ><input
+                                type="checkbox"
+                                name=""
+                                id="GSalter10"
+                            />10</label
+                        >
+                    </td>
+                    <!-- ====================================================================== -->
+                </tr>
+
+                <tr>
+                    <!-- ====================================================================== -->
+                    <td></td>
+                    <td>
+                        <button
+                            id="bttnSave"
+                            disabled
+                            class="sendButton"
+                            onclick="preExport()"
+                        >
+                            exportieren
+                        </button>
+                    </td>
+                </tr>
+                <tr style="visibility: collapse">
+                    <td>
+                        <input type="text" name="" id="hiddenData" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <script src="{{CONTEXT}}/include/editor.js"></script>
+
+        <div id="containerOutput">
+            <div id="output">
+                <div id="outputGeneral"></div>
+                <div id="outputGym">
+                    <h1>Gymnasium</h1>
+                </div>
+
+                <div id="outputGS">
+                    <h1>Gemeinschaftsschule</h1>
+                </div>
+            </div>
+            <div id="generatedOutput"></div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,66 @@
+#output {
+    margin: 5px;
+}
+
+table {
+    width: calc(100% - 5px);
+    text-align: left;
+
+    /* table-layout: fixed; */
+
+    /* border: 0.25px solid lightgrey;*/
+
+    border-collapse: collapse;
+}
+
+tr,
+td,
+th {
+    border: 0.25px solid lightgrey;
+    padding: 0px;
+}
+
+.tableRowDark {
+    background-color: rgb(122, 197, 122);
+}
+
+.tableRowLight {
+    background-color: rgb(192, 255, 192);
+}
+.tableRowDark:hover,
+.tableRowLight:hover {
+    background-color: darkgray;
+}
+
+summary {
+    font-size: larger;
+}
+
+summary:focus {
+    outline: none;
+}
+
+.uberDiv {
+    width: calc(100% - 5px);
+    /* margin-left: 5px; */
+    outline: solid;
+    outline-color: rgb(122, 197, 122);
+    outline-width: 1px;
+
+    padding-left: 5px;
+    padding-bottom: 5px;
+}
+
+.pagebreak {
+    page-break-before: always;
+}
+
+#generatedOutput {
+    margin: 0px;
+    width: 100%;
+    font-size: small;
+}
+
+.exportTable {
+    display: none;
+}
