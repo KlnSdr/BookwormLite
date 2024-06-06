@@ -1,0 +1,27 @@
+{
+  "application": {
+    "name": "BookwormLite",
+    "version": "3.0"
+  },
+  "dobby": {
+    "staticContent": {
+      "directory": "static"
+    },
+    "session": {
+      "age": 5
+    },
+    "port": 2711,
+    "threads": 10,
+    "mode": "http"
+  },
+  "hades": {
+    "context": "/bookworm",
+    "login": {
+      "maxAttempts": 5,
+      "redirect":{
+        "success": "/",
+        "successAdmin": "/hades"
+      }
+    }
+  }
+}
