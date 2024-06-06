@@ -6,6 +6,18 @@ body {
     overflow-x: hidden;
 }
 
+nav {
+    padding: 5px;
+}
+
+nav button {
+    background-color: rgb(192, 255, 192);
+}
+
+nav button:hover {
+    background-color: rgb(122, 197, 122);
+}
+
 .mainInfo,
 .menu {
     width: 100%;
