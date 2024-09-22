@@ -28,12 +28,12 @@ public class BooksService {
         return Janus.parse(Connector.read(BUCKET_NAME, id.toString(), NewJson.class), Book.class);
     }
 
-    public void save(Book book) {
-        Connector.write(BUCKET_NAME, book.getId().toString(), book.toStoreJson());
+    public boolean save(Book book) {
+        return Connector.write(BUCKET_NAME, book.getId().toString(), book.toStoreJson());
     }
 
-    public void delete(UUID id) {
-        Connector.delete(BUCKET_NAME, id.toString());
+    public boolean delete(UUID id) {
+        return Connector.delete(BUCKET_NAME, id.toString());
     }
 
     public List<Book> getForGrade(int grade, boolean isGem) {

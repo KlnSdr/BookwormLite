@@ -43,7 +43,7 @@ public class Book implements DataClass {
         return priceEur + priceCts / 100f;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.priceEur = (int) price;
         this.priceCts = (int) ((price - priceEur) * 100);
     }
@@ -96,7 +96,8 @@ public class Book implements DataClass {
     public NewJson toStoreJson() {
         final NewJson json = new NewJson();
         json.setString("name", name);
-        json.setString("price", priceEur + "." + priceCts);
+        json.setInt("priceEur", priceEur);
+        json.setInt("priceCts", priceCts);
         json.setList("grades", grades.stream().map(o -> (Object) o).collect(Collectors.toList()));
         json.setString("applyFee", applyFee ? "true" : "false");
         json.setString("forGem", forGem ? "true" : "false");
