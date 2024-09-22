@@ -16,7 +16,7 @@ public class StudentResource {
     private static final StudentsService service = StudentsService.getInstance();
     private static final String BASE_PATH = "/students";
 
-    @Get(BASE_PATH + "/{id}")
+    @Get(BASE_PATH + "/id/{id}")
     public void getStudentById(HttpContext context) {
         final String id = context.getRequest().getParam("id");
         UUID uuid;
@@ -78,11 +78,11 @@ public class StudentResource {
         }
 
         context.getResponse().setCode(ResponseCodes.CREATED);
-        context.getResponse().setHeader("Location", BASE_PATH + "/" + student.getId());
+        context.getResponse().setHeader("Location", BASE_PATH + "/id/" + student.getId());
         context.getResponse().setBody(student.toJson());
     }
 
-    @Put(BASE_PATH + "/{id}")
+    @Put(BASE_PATH + "/id/{id}")
     public void updateStudent(HttpContext context) {
         final String id = context.getRequest().getParam("id");
         UUID uuid;
@@ -139,10 +139,10 @@ public class StudentResource {
 
         context.getResponse().setCode(ResponseCodes.OK);
         context.getResponse().setBody(student.toJson());
-        context.getResponse().setHeader("Location", BASE_PATH + "/" + student.getId());
+        context.getResponse().setHeader("Location", BASE_PATH + "/id/" + student.getId());
     }
 
-    @Delete(BASE_PATH + "/{id}")
+    @Delete(BASE_PATH + "/id/{id}")
     public void deleteStudent(HttpContext context) {
         final String id = context.getRequest().getParam("id");
         UUID uuid;
