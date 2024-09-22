@@ -176,6 +176,39 @@ public class BooksResource {
         context.getResponse().setCode(ResponseCodes.NO_CONTENT);
     }
 
+    @Get(BASE_PATH + "/{type}/grade/{grade}")
+    public void getBooksForGrade(HttpContext context) {
+        final String schoolType = context.getRequest().getParam("type");
+
+        if (schoolType == null || (!schoolType.equalsIgnoreCase("gym") && !schoolType.equalsIgnoreCase("gem"))) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Invalid school type");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final int grade;
+        try {
+            grade = Integer.parseInt(context.getRequest().getParam("grade"));
+        } catch (NumberFormatException e) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Invalid grade");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final boolean isGem = schoolType.equalsIgnoreCase("gem");
+
+        final List<Book> books = service.getForGrade(grade, isGem);
+
+        final NewJson payload = new NewJson();
+        payload.setList("books", books.stream().map(Book::toJson).collect(Collectors.toList()));
+
+        context.getResponse().setBody(payload);
+    }
+
     private boolean verifyCreateRequest(NewJson body) {
         return body.hasKeys("name", "price", "grades", "applyFee", "forGem");
     }
