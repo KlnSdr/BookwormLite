@@ -5,6 +5,7 @@ import dobby.util.json.NewJson;
 import janus.Janus;
 import thot.connector.Connector;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class StudentsService {
@@ -34,17 +35,18 @@ public class StudentsService {
         return Connector.delete(BUCKET_NAME, id.toString());
     }
 
-    public Student getForGrade(int grade, boolean isGem) {
+    public Student[] getForGrade(int grade, boolean isGem) {
         final NewJson[] allStudents = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
+        final ArrayList<Student> students = new ArrayList<>();
         for (NewJson studentJson : allStudents) {
             final Student student = Janus.parse(studentJson, Student.class);
             if (student == null) {
                 continue;
             }
             if (student.getGrade() == grade && student.isGem() == isGem) {
-                return student;
+                students.add(student);
             }
         }
-        return null;
+        return students.toArray(new Student[0]);
     }
 }
