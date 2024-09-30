@@ -1,6 +1,7 @@
 package bookworm.updates;
 
 import bookworm.books.service.BooksService;
+import bookworm.books.service.StudentBookAssociationService;
 import bookworm.students.service.StudentsService;
 import hades.update.Update;
 import thot.connector.Connector;
@@ -8,7 +9,7 @@ import thot.connector.Connector;
 public class CreateBucketsUpdate implements Update {
     @Override
     public boolean run() {
-        final String[] bucketNames = new String[]{BooksService.BUCKET_NAME, StudentsService.BUCKET_NAME};
+        final String[] bucketNames = new String[]{BooksService.BUCKET_NAME, StudentsService.BUCKET_NAME, StudentBookAssociationService.BUCKET_NAME};
 
         for (String bucketName : bucketNames) {
             if (!Connector.write(bucketName, "TEST", "") || !Connector.delete(bucketName, "TEST")) {

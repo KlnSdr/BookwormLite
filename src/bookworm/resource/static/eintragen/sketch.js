@@ -90,10 +90,10 @@ function setup() {
 }
 
 function doc_keyUp(e) {
-    if (e.ctrlKey && e.altKey && e.keyCode == 78) {
+    if (e.ctrlKey && e.altKey && e.keyCode === 78) {
         newStudent();
         closeStudentSelection();
-    } else if (e.ctrlKey && e.altKey && e.keyCode == 79) {
+    } else if (e.ctrlKey && e.altKey && e.keyCode === 79) {
         openStudentSelection();
     }
 }
@@ -102,7 +102,7 @@ function save() {
     if (check()) {
         console.log('check passed');
 
-        let personalData = new Object();
+        let personalData = {};
         personalData['name'] = document.getElementById('inputName').value;
         personalData['id'] = isNaN(globalStudentID)
             ? undefined
@@ -117,7 +117,7 @@ function save() {
             document.getElementById('inputZusatzGeb').value;
         personalData['EBook'] = document.getElementById('inputEBook').value;
 
-        let bookData = new Object();
+        let bookData = {};
 
         currentBoxes.forEach((book) => {
             bookData[book.id.toString()] = book.value.toString();
@@ -126,35 +126,40 @@ function save() {
         console.log(JSON.stringify(personalData));
         console.log(JSON.stringify(bookData));
 
-        // $.askBackend('save.php', {
-        //     person: JSON.stringify(personalData),
-        //     books: JSON.stringify(bookData)
-        // }, function (data) {
-        //     let json = JSON.parse(data);
-        //     if (json.success = "true") {
-        //         document.getElementById("inputName").value = "";
-        //         reloadInformation();
-        //     } else {
-
+        // fetch("{CONTEXT}/students", {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(personalData),
+        // }).then((response) => {
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
         //     }
+        //     return response.json();
+        // })
+        // .then((data) => {})
+        // .catch((error) => {
+        //     console.error('Error:', error);
+        //     alert('Error: ' + error);
         // });
-
-        askBackend(
-            '/save',
-            {
-                person: JSON.stringify(personalData),
-                books: JSON.stringify(bookData),
-            },
-            (data) => {
-                if ((data.success = 'true')) {
-                    document.getElementById('inputName').value = '';
-                    document.getElementById('inputZusatzGeb').value = '';
-                    document.getElementById('inputEBook').value = '';
-                    reloadInformation();
-                } else {
-                }
-            }
-        );
+        //
+        // askBackend(
+        //     '/save',
+        //     {
+        //         person: JSON.stringify(personalData),
+        //         books: JSON.stringify(bookData),
+        //     },
+        //     (data) => {
+        //         if ((data.success = 'true')) {
+        //             document.getElementById('inputName').value = '';
+        //             document.getElementById('inputZusatzGeb').value = '';
+        //             document.getElementById('inputEBook').value = '';
+        //             reloadInformation();
+        //         } else {
+        //         }
+        //     }
+        // );
     } else {
         console.log('something is wrong');
     }
