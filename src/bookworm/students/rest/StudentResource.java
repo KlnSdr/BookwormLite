@@ -1,6 +1,7 @@
 package bookworm.students.rest;
 
 import bookworm.books.BookUsageType;
+import bookworm.books.StudentBook;
 import bookworm.books.StudentBookAssociation;
 import bookworm.books.service.StudentBookAssociationService;
 import bookworm.students.Student;
@@ -223,6 +224,43 @@ public class StudentResource {
 
         final NewJson payload = new NewJson();
         payload.setList("students", Arrays.stream(students).map(Student::toJson).collect(Collectors.toList()));
+
+        context.getResponse().setBody(payload);
+    }
+
+    @Get(BASE_PATH + "/id/{id}/books")
+    public void getBooksForStudent(HttpContext context) {
+        final String id = context.getRequest().getParam("id");
+        UUID uuid;
+
+        try {
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            uuid = null;
+        }
+
+        if (uuid == null) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "No id provided");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final Student student = studentService.find(uuid);
+
+        if (student == null) {
+            context.getResponse().setCode(ResponseCodes.NOT_FOUND);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Student not found");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final StudentBook[] books = associationService.getBooksForStudent(uuid);
+
+        final NewJson payload = new NewJson();
+        payload.setList("books", Arrays.stream(books).map(StudentBook::toJson).collect(Collectors.toList()));
 
         context.getResponse().setBody(payload);
     }

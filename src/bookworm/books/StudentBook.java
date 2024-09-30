@@ -1,6 +1,9 @@
 package bookworm.books;
 
-public class StudentBook {
+import dobby.util.json.NewJson;
+import janus.DataClass;
+
+public class StudentBook implements DataClass {
     private final Book book;
     private final BookUsageType usageType;
 
@@ -15,5 +18,24 @@ public class StudentBook {
 
     public BookUsageType getUsageType() {
         return usageType;
+    }
+
+    /**
+     * not needed
+     * @return an empty string
+     */
+    @Override
+    public String getKey() {
+        return "";
+    }
+
+    @Override
+    public NewJson toJson() {
+        final NewJson json = new NewJson();
+
+        json.setJson("book", book.toJson());
+        json.setString("type", usageType.toString());
+
+        return json;
     }
 }
