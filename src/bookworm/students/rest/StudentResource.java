@@ -74,6 +74,8 @@ public class StudentResource {
         student.setGem(body.getBoolean("isGem"));
         student.setFee(body.getInt("fee"));
         student.setName(body.getString("name"));
+        student.setEBookLicense(body.getInt("eBookLicense"));
+        student.setBill(body.getInt("bill"));
 
         final boolean success = studentService.save(student);
 
@@ -286,7 +288,7 @@ public class StudentResource {
     }
 
     private boolean verifyCreateRequest(NewJson body) {
-        return body.hasKeys("grade", "classAddition", "isGem", "fee", "name");
+        return body.hasKeys("grade", "classAddition", "isGem", "fee", "name", "eBookLicense", "bill");
     }
 
     private boolean verifyBookRequest(NewJson body) {

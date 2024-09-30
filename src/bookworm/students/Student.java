@@ -24,10 +24,30 @@ public class Student implements DataClass {
     @JanusString("name")
     private String name;
     @JanusUUID("id")
-    private UUID id;
+    private final UUID id;
+    @JanusInteger("bill")
+    private int bill;
+    @JanusInteger("eBookLicense")
+    private int eBookLicense;
 
     public Student() {
         this.id = UUID.randomUUID();
+    }
+
+    public int getBill() {
+        return bill;
+    }
+
+    public void setBill(int bill) {
+        this.bill = bill;
+    }
+
+    public int getEBookLicense() {
+        return eBookLicense;
+    }
+
+    public void setEBookLicense(int eBookLicense) {
+        this.eBookLicense = eBookLicense;
     }
 
     public int getGrade() {
@@ -88,6 +108,8 @@ public class Student implements DataClass {
         json.setInt("fee", fee);
         json.setString("name", name);
         json.setString("id", id.toString());
+        json.setInt("eBookLicense", eBookLicense);
+        json.setInt("bill", bill);
         return json;
     }
 
@@ -99,6 +121,8 @@ public class Student implements DataClass {
         json.setInt("fee", fee);
         json.setString("name", name);
         json.setString("id", id.toString());
+        json.setInt("eBookLicense", eBookLicense);
+        json.setInt("bill", bill);
         return json;
     }
 }
