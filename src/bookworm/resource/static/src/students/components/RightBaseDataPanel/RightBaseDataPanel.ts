@@ -18,7 +18,7 @@ class RightBaseDataPanel implements Component {
                 classes: ["label"]
             }, new Button("speichern", () => {
                 console.log("speichern")
-            }, ["smallFlexButton"]).instructions(),]
+            }, ["secondaryButton", "smallFlexButton"]).instructions(),]
         };
     }
 

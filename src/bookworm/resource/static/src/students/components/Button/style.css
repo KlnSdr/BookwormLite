@@ -14,3 +14,8 @@
 .smallFlexButton {
     width: fit-content;
 }
+
+.secondaryButton {
+    background-color: var(--secondary-color);
+    color: var(--font-light);
+}
