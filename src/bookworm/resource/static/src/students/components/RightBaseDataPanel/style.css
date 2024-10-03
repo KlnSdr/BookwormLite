@@ -1,0 +1,4 @@
+.rightBaseDataPanel {
+    display: flex;
+    flex-direction: column;
+}

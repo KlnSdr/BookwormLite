@@ -5,6 +5,10 @@
     --font-dark: #343a40;
 }
 
+* {
+    font-family: monospace;
+}
+
 body {
     margin: 0;
 }

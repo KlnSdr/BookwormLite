@@ -1,0 +1,9 @@
+.baseDataPanel {
+    background-color: var(--primary-color);
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 5px;
+    grid-row-gap: 0;
+}

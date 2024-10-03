@@ -5,8 +5,12 @@ class BaseDataPanel implements Component {
 
   public instructions(): edomTemplate {
     return {
-      tag: "p",
-      text: "Hello World!"
+      tag: "div",
+      classes: ["baseDataPanel"],
+      children: [
+        new LeftBaseDataPanel().instructions(),
+        new RightBaseDataPanel().instructions(),
+      ]
     };
   }
 
