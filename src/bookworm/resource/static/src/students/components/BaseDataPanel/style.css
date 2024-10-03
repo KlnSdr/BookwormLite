@@ -7,3 +7,9 @@
     grid-column-gap: 5px;
     grid-row-gap: 0;
 }
+
+@media (max-width: 600px) {
+    .baseDataPanel {
+        grid-template-columns: 1fr;
+    }
+}
