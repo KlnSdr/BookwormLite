@@ -9,6 +9,7 @@ class BaseDataPanel implements Component {
       classes: ["baseDataPanel"],
       children: [
         new LeftBaseDataPanel().instructions(),
+        new MiddleBaseDataPanel().instructions(),
         new RightBaseDataPanel().instructions(),
       ]
     };
