@@ -5,7 +5,7 @@
   },
   "dobby": {
     "staticContent": {
-      "directory": "static"
+      "directory": "static/out"
     },
     "session": {
       "age": 5
