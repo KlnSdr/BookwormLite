@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class BooksResource {
     private static final BooksService service = BooksService.getInstance();
-    private static final String BASE_PATH = "/books";
+    private static final String BASE_PATH = "/rest/books";
 
     @Get(BASE_PATH + "/id/{id}")
     public void getBookById(HttpContext context) {

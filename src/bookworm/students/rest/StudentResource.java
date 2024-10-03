@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class StudentResource {
     private static final StudentsService studentService = StudentsService.getInstance();
     private static final StudentBookAssociationService associationService = StudentBookAssociationService.getInstance();
-    private static final String BASE_PATH = "/students";
+    private static final String BASE_PATH = "/rest/students";
 
     @Get(BASE_PATH + "/id/{id}")
     public void getStudentById(HttpContext context) {
