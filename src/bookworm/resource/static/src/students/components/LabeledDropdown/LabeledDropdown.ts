@@ -18,22 +18,7 @@ class LabeledDropdown implements Component {
             text: this.labelText,
             classes: ["label"]
           },
-          {
-            tag: "select",
-            classes: ["select"],
-            children: [
-              {
-                tag: "option",
-                text: "Option 1",
-                classes: ["option"]
-              },
-              {
-                tag: "option",
-                text: "Option 2",
-                classes: ["option"]
-              }
-            ]
-          }
+          new Dropdown().instructions()
         ]
     };
   }

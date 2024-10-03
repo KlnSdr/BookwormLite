@@ -18,10 +18,7 @@ class LabeledInput implements Component {
           text: this.labelText,
           classes: ["label"]
         },
-        {
-          tag: "input",
-          classes: ["input"]
-        }
+          new Input().instructions()
       ]
     };
   }
