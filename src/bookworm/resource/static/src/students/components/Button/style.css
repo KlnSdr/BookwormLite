@@ -10,3 +10,7 @@
     background-color: var(--font-light);
     color: var(--primary-color);
 }
+
+.smallFlexButton {
+    width: fit-content;
+}

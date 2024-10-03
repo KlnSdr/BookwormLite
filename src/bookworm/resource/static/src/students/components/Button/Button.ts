@@ -1,10 +1,12 @@
 class Button implements Component {
+  private readonly classes: string[];
   private readonly text: string;
   private readonly onClick: (self: edomElement) => void;
 
-  public constructor(text: string, onClick: (self: edomElement) => void) {
+  public constructor(text: string, onClick: (self: edomElement) => void, classes: string[] = []) {
     this.text = text;
     this.onClick = onClick;
+    this.classes = classes;
   }
 
   public render(parent: edomElement) {
@@ -15,7 +17,7 @@ class Button implements Component {
     return {
       tag: "button",
       text: this.text,
-      classes: ["button"],
+      classes: ["button", ...this.classes],
       handler: [
         {
           id: "click",

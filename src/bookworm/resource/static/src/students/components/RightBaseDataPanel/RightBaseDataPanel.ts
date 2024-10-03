@@ -9,13 +9,16 @@ class RightBaseDataPanel implements Component {
             classes: ["rightBaseDataPanel"],
             children: [{
                 tag: "label", text: "Leih: 0€",
+                classes: ["label"]
             }, {
                 tag: "label", text: "Kauf: 0€",
+                classes: ["label"]
             }, {
                 tag: "label", text: "Gesamt: 0€",
+                classes: ["label"]
             }, new Button("speichern", () => {
                 console.log("speichern")
-            }).instructions(),]
+            }, ["smallFlexButton"]).instructions(),]
         };
     }
 
