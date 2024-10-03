@@ -4,5 +4,5 @@ function startup() {
 }
 
 function initUI() {
-    edom.fromTemplate([new hello().instructions()], edom.body);
+    edom.fromTemplate([new App().instructions()], edom.body);
 }

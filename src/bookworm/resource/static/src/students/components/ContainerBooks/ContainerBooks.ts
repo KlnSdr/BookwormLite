@@ -1,4 +1,4 @@
-class hello implements Component {
+class ContainerBooks implements Component {
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
   }
