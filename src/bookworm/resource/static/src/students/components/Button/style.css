@@ -3,11 +3,11 @@
     padding: 5px;
     border-radius: 5px;
     background-color: var(--primary-color);
-    color: var(--font-light);
+    color: var(--font-dark);
 }
 
 .button:hover {
-    background-color: var(--font-light);
+    background-color: var(--font-dark);
     color: var(--primary-color);
 }
 
@@ -17,5 +17,5 @@
 
 .secondaryButton {
     background-color: var(--secondary-color);
-    color: var(--font-light);
+    color: var(--font-dark);
 }
