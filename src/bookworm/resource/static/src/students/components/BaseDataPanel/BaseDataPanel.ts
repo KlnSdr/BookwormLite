@@ -35,7 +35,7 @@ class BaseDataPanel implements Component {
             (val: string) => this.setClassAddition(val),
             (val: boolean) => this.setIsGem(val)
         ).instructions(),
-        new RightBaseDataPanel().instructions(),
+        new RightBaseDataPanel(() => this.getStudentData()).instructions(),
       ]
     };
   }
@@ -94,6 +94,10 @@ class BaseDataPanel implements Component {
         isGem: val
         };
         console.log(this.studentData);
+    }
+
+    private getStudentData(): StudentData {
+        return this.studentData;
     }
 
   public unload() {}

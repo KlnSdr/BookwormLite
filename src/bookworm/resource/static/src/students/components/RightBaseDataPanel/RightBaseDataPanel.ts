@@ -1,4 +1,9 @@
 class RightBaseDataPanel implements Component {
+    private readonly getStudentData: () => void;
+    public constructor(getStudentData: () => void = () => {}) {
+        this.getStudentData = getStudentData;
+    }
+
     public render(parent: edomElement) {
         edom.fromTemplate([this.instructions()], parent);
     }
@@ -16,10 +21,13 @@ class RightBaseDataPanel implements Component {
             }, {
                 tag: "label", text: "Gesamt: 0€",
                 classes: ["label"]
-            }, new Button("speichern", () => {
-                console.log("speichern")
-            }, ["secondaryButton", "smallFlexButton"]).instructions(),]
+            }, new Button("speichern", () => this.saveStudentData(), ["secondaryButton", "smallFlexButton"]).instructions(),]
         };
+    }
+
+    private saveStudentData() {
+        console.log("saving student data...");
+        console.log(this.getStudentData());
     }
 
     public unload() {
