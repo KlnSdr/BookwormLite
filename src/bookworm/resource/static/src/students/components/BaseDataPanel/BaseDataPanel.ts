@@ -29,7 +29,12 @@ class BaseDataPanel implements Component {
       classes: ["baseDataPanel"],
       children: [
         new LeftBaseDataPanel((val: string) => this.setName(val), (val: string) => this.setBill(val), (val: string) => this.setEBookLicense(val)).instructions(),
-        new MiddleBaseDataPanel().instructions(),
+        new MiddleBaseDataPanel(
+            (val: string) => this.setFee(val),
+            (val: string) => this.setGrade(val),
+            (val: string) => this.setClassAddition(val),
+            (val: boolean) => this.setIsGem(val)
+        ).instructions(),
         new RightBaseDataPanel().instructions(),
       ]
     };
@@ -58,6 +63,38 @@ class BaseDataPanel implements Component {
     };
     console.log(this.studentData);
   }
+
+  private setFee(val: string) {
+    this.studentData = {
+      ...this.studentData,
+      fee: parseFloat(val)
+    };
+    console.log(this.studentData);
+  }
+
+    private setGrade(val: string) {
+        this.studentData = {
+        ...this.studentData,
+        grade: parseFloat(val)
+        };
+        console.log(this.studentData);
+    }
+
+    private setClassAddition(val: string) {
+        this.studentData = {
+        ...this.studentData,
+        classAddition: val
+        };
+        console.log(this.studentData);
+    }
+
+    private setIsGem(val: boolean) {
+        this.studentData = {
+        ...this.studentData,
+        isGem: val
+        };
+        console.log(this.studentData);
+    }
 
   public unload() {}
 }

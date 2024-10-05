@@ -1,7 +1,9 @@
 class LabeledDropdown implements Component {
   private readonly labelText: string;
-    public constructor(labelText: string) {
+  private readonly onInput: (val: string) => void;
+    public constructor(labelText: string, onInput: (val: string) => void = () => {}) {
         this.labelText = labelText;
+        this.onInput = onInput;
     }
 
   public render(parent: edomElement) {
@@ -18,7 +20,7 @@ class LabeledDropdown implements Component {
             text: this.labelText,
             classes: ["label"]
           },
-          new Dropdown().instructions()
+          new Dropdown(this.onInput).instructions()
         ]
     };
   }
