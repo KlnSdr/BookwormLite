@@ -1,0 +1,6 @@
+.containerBooks {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    gap: 5px;
+}
