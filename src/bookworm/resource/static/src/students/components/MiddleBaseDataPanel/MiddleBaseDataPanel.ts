@@ -26,7 +26,7 @@ class MiddleBaseDataPanel implements Component {
         new LabeledDropdown("Leihgebühr (€):", this.setFee).instructions(),
         new LabeledDropdown("Klassestufe:", this.setGrade).instructions(),
         new LabeledDropdown("Klassenzusatz:", this.setClassAddition).instructions(),
-        new Checkbox("Gemeinschaftsschule: ").instructions(),
+        new Checkbox("Gemeinschaftsschule: ", this.setIsGem).instructions(),
       ]
     };
   }
