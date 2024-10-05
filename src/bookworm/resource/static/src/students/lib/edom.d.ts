@@ -1,3 +1,7 @@
+declare class edomAnchorElement extends edomElement {
+    target: string;
+    href(location: string): void;
+}
 declare class edom {
     static body: edomElement;
     private static _allElements;
@@ -10,10 +14,6 @@ declare class edom {
     static findById(id: string): edomElement | edomInputElement | edomAnchorElement | edomListElement | edomImageElement | edomLabelElement | edomTAElement | undefined;
     static break(): edomElement | edomInputElement | edomAnchorElement | edomListElement | edomImageElement | edomLabelElement | edomTAElement;
     static fromTemplate(template: edomTemplate | edomTemplate[], parent?: edomElement | null): void;
-}
-declare class edomAnchorElement extends edomElement {
-    target: string;
-    href(location: string): void;
 }
 declare class edomElement {
     element: HTMLElement;
@@ -63,6 +63,9 @@ declare class edomInputElement extends edomElement {
     private _type;
     get type(): string;
     set type(type: string);
+    private _name;
+    get name(): string;
+    set name(name: string);
     private _checked;
     get checked(): boolean;
     set checked(state: boolean);
@@ -122,6 +125,7 @@ interface edomTemplate extends Object {
     groupID?: string;
     target?: string;
     handler?: handlerPreObject[];
+    name?: string;
 }
 interface Component {
     render: (parent: edomElement) => void;
