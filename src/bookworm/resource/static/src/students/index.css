@@ -7,8 +7,10 @@
 
 * {
     font-family: monospace;
+    font-size: large;
 }
 
 body {
+    background-color: var(--secondary-color);
     margin: 0;
 }

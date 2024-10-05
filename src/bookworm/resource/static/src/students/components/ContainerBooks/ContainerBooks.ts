@@ -5,8 +5,8 @@ class ContainerBooks implements Component {
 
   public instructions(): edomTemplate {
     return {
-      tag: "p",
-      text: "Hello World!"
+      tag: "div",
+        classes: ["containerBooks"],
     };
   }
 
