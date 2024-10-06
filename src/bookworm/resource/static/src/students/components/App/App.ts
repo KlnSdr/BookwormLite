@@ -1,13 +1,3 @@
-interface StudentData {
-    name: string;
-    bill: number;
-    eBookLicense: number;
-    fee: number;
-    grade: number;
-    classAddition: string;
-    isGem: boolean;
-};
-
 class App implements Component {
     private studentData: StudentData = {
         name: "",
