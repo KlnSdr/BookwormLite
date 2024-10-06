@@ -13,7 +13,7 @@ class NavbarButton implements Component {
 
   public instructions(): edomTemplate {
     return new Button(this.text, () => {
-      console.log(this.destination);
+      window.location.assign(this.destination);
     }).instructions();
   }
 

@@ -15,7 +15,7 @@ class Navbar implements Component {
     },
     {
       text: "Auswertung",
-      destination: "{{CONTEXT}}/"
+      destination: "{{CONTEXT}}/evaluation"
     },
   ];
 
