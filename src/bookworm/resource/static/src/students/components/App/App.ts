@@ -6,7 +6,8 @@ class App implements Component {
         fee: 0,
         grade: 0,
         classAddition: "",
-        isGem: false
+        isGem: false,
+        books: []
     };
 
   public render(parent: edomElement) {
@@ -28,7 +29,9 @@ class App implements Component {
               (val: boolean) => this.setIsGem(val),
               () => this.getStudentData()
           ).instructions(),
-          new ContainerBooks().instructions()
+          new ContainerBooks(
+              (book: string, option: BookUsageType) => this.updateBooks(book, option)
+          ).instructions()
       ]
     };
   }
@@ -85,6 +88,28 @@ class App implements Component {
         this.studentData = {
             ...this.studentData,
             isGem: val
+        };
+        console.log(this.studentData);
+    }
+
+    private updateBooks(book: string, option: BookUsageType) {
+        const books = this.studentData.books;
+        const bookIndex = books.findIndex((studentBook: StudentBook) => studentBook.id === book);
+        if (bookIndex === -1) {
+            books.push({
+                id: book,
+                type: option
+            });
+        } else {
+            books[bookIndex] = {
+                id: book,
+                type: option
+            };
+        }
+
+        this.studentData = {
+            ...this.studentData,
+            books: books
         };
         console.log(this.studentData);
     }

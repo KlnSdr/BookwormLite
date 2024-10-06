@@ -1,7 +1,9 @@
 class BookBox implements Component {
   private readonly title: string;
-  public constructor(title: string) {
+  private readonly onChange: (option: BookUsageType) => void;
+  public constructor(title: string, onChange: (option: BookUsageType) => void = () => {}) {
     this.title = title;
+    this.onChange = onChange;
   }
 
   public render(parent: edomElement) {
@@ -18,7 +20,7 @@ class BookBox implements Component {
           classes: ["label"],
           text: this.title
         },
-        new RadiobuttonGroup(["kaufen", "leihen", "vorhanden", "nicht benötigt"]).instructions()
+        new RadiobuttonGroup(["kaufen", "leihen", "vorhanden", "nicht benötigt"], (val: string) => this.onChange(bookUsageTypeFromString(val))).instructions()
       ]
     };
   }

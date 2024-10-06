@@ -1,8 +1,10 @@
 class RadiobuttonGroup implements Component {
   private readonly options: string[];
   private readonly groupName: string = Math.random().toString(36);
-  public constructor(options: string[]) {
+  private readonly onChange: (option: string) => void;
+  public constructor(options: string[], onChange: (option: string) => void = () => {}) {
     this.options = options;
+    this.onChange = onChange;
   }
 
   public render(parent: edomElement) {
@@ -12,7 +14,11 @@ class RadiobuttonGroup implements Component {
   public instructions(): edomTemplate {
     return {
       tag: "div",
-      children: this.options.map((option: string) => new Radiobutton(option, this.groupName).instructions())
+      children: this.options.map((option: string) => new Radiobutton(
+          option,
+          this.groupName,
+          () => this.onChange(option)
+      ).instructions())
     };
   }
 

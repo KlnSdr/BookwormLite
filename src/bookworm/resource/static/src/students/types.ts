@@ -6,4 +6,18 @@ interface StudentData {
     grade: number;
     classAddition: string;
     isGem: boolean;
+    books: StudentBook[];
 };
+
+enum BookUsageType {
+    BUY,
+    BORROW,
+    ALREADY_OWNED,
+    NOT_NEEDED,
+    UNKNOWN
+};
+
+interface StudentBook {
+    id: string;
+    type: BookUsageType;
+}
