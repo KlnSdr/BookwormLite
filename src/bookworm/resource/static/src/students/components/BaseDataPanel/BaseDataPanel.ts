@@ -1,23 +1,31 @@
-interface StudentData {
-  name: string;
-  bill: number;
-  eBookLicense: number;
-  fee: number;
-  grade: number;
-  classAddition: string;
-  isGem: boolean;
-};
-
 class BaseDataPanel implements Component {
-  private studentData: StudentData = {
-    name: "",
-    bill: 0,
-    eBookLicense: 0,
-    fee: 0,
-    grade: 0,
-    classAddition: "",
-    isGem: false
-  };
+    private readonly setName: (val: string) => void;
+    private readonly setBill: (val: string) => void;
+    private readonly setEBookLicense: (val: string) => void;
+    private readonly setFee: (val: string) => void;
+    private readonly setGrade: (val: string) => void;
+    private readonly setClassAddition: (val: string) => void;
+    private readonly setIsGem: (val: boolean) => void;
+    private readonly getStudentData: () => StudentData;
+    public constructor(
+        setName: (val: string) => void,
+        setBill: (val: string) => void,
+        setEBookLicense: (val: string) => void,
+        setFee: (val: string) => void,
+        setGrade: (val: string) => void,
+        setClassAddition: (val: string) => void,
+        setIsGem: (val: boolean) => void,
+        getStudentData: () => StudentData
+    ) {
+        this.setName = setName;
+        this.setBill = setBill;
+        this.setEBookLicense = setEBookLicense;
+        this.setFee = setFee;
+        this.setGrade = setGrade;
+        this.setClassAddition = setClassAddition;
+        this.setIsGem = setIsGem;
+        this.getStudentData = getStudentData;
+    }
 
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
@@ -28,77 +36,16 @@ class BaseDataPanel implements Component {
       tag: "div",
       classes: ["baseDataPanel"],
       children: [
-        new LeftBaseDataPanel((val: string) => this.setName(val), (val: string) => this.setBill(val), (val: string) => this.setEBookLicense(val)).instructions(),
+        new LeftBaseDataPanel(this.setName, this.setBill, this.setEBookLicense).instructions(),
         new MiddleBaseDataPanel(
-            (val: string) => this.setFee(val),
-            (val: string) => this.setGrade(val),
-            (val: string) => this.setClassAddition(val),
-            (val: boolean) => this.setIsGem(val)
+            this.setFee,
+            this.setGrade,
+            this.setClassAddition,
+            this.setIsGem
         ).instructions(),
         new RightBaseDataPanel(() => this.getStudentData()).instructions(),
       ]
     };
   }
-
-  private setName(val: string) {
-    this.studentData = {
-        ...this.studentData,
-        name: val
-    };
-    console.log(this.studentData);
-  }
-
-  private setBill(val: string) {
-    this.studentData = {
-      ...this.studentData,
-      bill: parseFloat(val)
-    };
-    console.log(this.studentData);
-  }
-
-  private setEBookLicense(val: string) {
-    this.studentData = {
-      ...this.studentData,
-      eBookLicense: parseFloat(val)
-    };
-    console.log(this.studentData);
-  }
-
-  private setFee(val: string) {
-    this.studentData = {
-      ...this.studentData,
-      fee: parseFloat(val)
-    };
-    console.log(this.studentData);
-  }
-
-    private setGrade(val: string) {
-        this.studentData = {
-        ...this.studentData,
-        grade: parseFloat(val)
-        };
-        console.log(this.studentData);
-    }
-
-    private setClassAddition(val: string) {
-        this.studentData = {
-        ...this.studentData,
-        classAddition: val
-        };
-        console.log(this.studentData);
-    }
-
-    private setIsGem(val: boolean) {
-        this.studentData = {
-        ...this.studentData,
-        isGem: val
-        };
-        console.log(this.studentData);
-    }
-
-    private getStudentData(): StudentData {
-        return this.studentData;
-    }
-
   public unload() {}
 }
