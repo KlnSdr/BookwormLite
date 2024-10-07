@@ -5,8 +5,11 @@ class App implements Component {
 
   public instructions(): edomTemplate {
     return {
-      tag: "p",
-      text: "Hello World!"
+      tag: "div",
+      children: [
+          // @ts-ignore included from students project
+          new Navbar().instructions(),
+      ]
     };
   }
 
