@@ -1,4 +1,4 @@
-class App implements Component {
+class BaseDataPanel implements Component {
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
   }
@@ -6,10 +6,11 @@ class App implements Component {
   public instructions(): edomTemplate {
     return {
       tag: "div",
+      classes: ["baseDataPanel"],
       children: [
-          // @ts-ignore included from students project
-          new Navbar().instructions(),
-          new BaseDataPanel().instructions(),
+        new LeftBaseDataPanel().instructions(),
+        new MiddleBaseDataPanel().instructions(),
+        new RightBaseDataPanel().instructions(),
       ]
     };
   }
