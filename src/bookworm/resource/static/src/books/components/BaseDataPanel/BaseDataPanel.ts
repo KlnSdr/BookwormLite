@@ -42,17 +42,14 @@ class BaseDataPanel implements Component {
 
   private setName(name: string) {
     this.bookData = { ...this.bookData, name };
-    console.log(this.bookData);
   }
 
   private setStock(stock: number) {
     this.bookData = { ...this.bookData, stock };
-    console.log(this.bookData);
   }
 
   private setPrice(price: number) {
     this.bookData = { ...this.bookData, price };
-    console.log(this.bookData);
   }
 
   private setLowerClassLimit(limit: number) {
@@ -99,17 +96,14 @@ class BaseDataPanel implements Component {
 
   private setClasses(classes: number[]) {
     this.bookData = { ...this.bookData, classes };
-    console.log(this.bookData);
   }
 
   private setIsGem(isGem: boolean) {
     this.bookData = { ...this.bookData, isGem };
-    console.log(this.bookData);
   }
 
   private setIsCalculateFee(isCalculateFee: boolean) {
     this.bookData = { ...this.bookData, isCalculateFee };
-    console.log(this.bookData);
   }
 
   private validateBookData(): boolean {

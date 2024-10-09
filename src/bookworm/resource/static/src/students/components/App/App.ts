@@ -76,7 +76,6 @@ class App implements Component {
       ...this.studentData,
       name: val,
     };
-    console.log(this.studentData);
   }
 
   private setBill(val: string) {
@@ -84,7 +83,6 @@ class App implements Component {
       ...this.studentData,
       bill: parseFloat(val),
     };
-    console.log(this.studentData);
   }
 
   private setEBookLicense(val: string) {
@@ -92,7 +90,6 @@ class App implements Component {
       ...this.studentData,
       eBookLicense: parseFloat(val),
     };
-    console.log(this.studentData);
   }
 
   private setFee(val: string) {
@@ -100,7 +97,6 @@ class App implements Component {
       ...this.studentData,
       fee: parseFloat(val),
     };
-    console.log(this.studentData);
   }
 
   private setGrade(val: string) {
@@ -108,7 +104,6 @@ class App implements Component {
       ...this.studentData,
       grade: parseFloat(val),
     };
-    console.log(this.studentData);
     this.updateBookContainer();
     this.resetBooks();
   }
@@ -118,7 +113,6 @@ class App implements Component {
       ...this.studentData,
       classAddition: val,
     };
-    console.log(this.studentData);
   }
 
   private setIsGem(val: boolean) {
@@ -126,7 +120,6 @@ class App implements Component {
       ...this.studentData,
       isGem: val,
     };
-    console.log(this.studentData);
     this.updateBookContainer();
     this.resetBooks();
   }
@@ -152,7 +145,6 @@ class App implements Component {
       ...this.studentData,
       books: books,
     };
-    console.log(this.studentData);
   }
 
   private resetBooks() {
@@ -160,7 +152,6 @@ class App implements Component {
       ...this.studentData,
       books: [],
     };
-    console.log(this.studentData);
   }
 
   private getStudentData(): StudentData {
