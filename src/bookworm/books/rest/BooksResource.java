@@ -72,6 +72,8 @@ public class BooksResource {
         book.setApplyFee(body.getBoolean("applyFee"));
         book.setForGem(body.getBoolean("forGem"));
 
+        book.setStock(body.getInt("stock"));
+
         if (!service.save(book)) {
             context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
             final NewJson payload = new NewJson();
@@ -210,6 +212,6 @@ public class BooksResource {
     }
 
     private boolean verifyCreateRequest(NewJson body) {
-        return body.hasKeys("name", "price", "grades", "applyFee", "forGem");
+        return body.hasKeys("name", "price", "grades", "applyFee", "forGem", "stock");
     }
 }

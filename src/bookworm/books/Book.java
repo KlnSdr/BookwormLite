@@ -18,6 +18,8 @@ public class Book implements DataClass {
     private int priceEur;
     @JanusInteger("priceCts")
     private int priceCts;
+    @JanusInteger("stock")
+    private int stock;
     @JanusList("grades")
     private List<Integer> grades;
     @JanusBoolean("applyFee")
@@ -76,6 +78,14 @@ public class Book implements DataClass {
         return id;
     }
 
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
     @Override
     public String getKey() {
         return id.toString();
@@ -90,6 +100,7 @@ public class Book implements DataClass {
         json.setBoolean("applyFee", applyFee);
         json.setBoolean("forGem", forGem);
         json.setString("id", id.toString());
+        json.setInt("stock", stock);
         return json;
     }
 
@@ -102,6 +113,7 @@ public class Book implements DataClass {
         json.setString("applyFee", applyFee ? "true" : "false");
         json.setString("forGem", forGem ? "true" : "false");
         json.setString("id", id.toString());
+        json.setInt("stock", stock);
         return json;
     }
 }

@@ -33,7 +33,8 @@ class BaseDataPanel implements Component {
         ).instructions(),
         new RightBaseDataPanel(
             () => this.validateBookData(),
-            () => this.getBookData()
+            () => this.getBookData(),
+            () => this.reset()
         ).instructions(),
       ]
     };
@@ -101,8 +102,8 @@ class BaseDataPanel implements Component {
 
   private validateBookData(): boolean {
     return this.bookData.name !== ""
-        && this.bookData.stock > 0
-        && this.bookData.price > 0
+        && this.bookData.stock !== undefined
+        && this.bookData.price !== undefined
         && this.bookData.classes.length > 0
         && this.lowerClassLimit !== undefined
         && this.upperClassLimit !== undefined
@@ -111,6 +112,32 @@ class BaseDataPanel implements Component {
 
   private getBookData(): Book {
     return this.bookData;
+  }
+
+  private reset() {
+    this.bookData = {
+      name: "",
+      stock: 0,
+      price: 0,
+      classes: [],
+      isGem: false,
+      isCalculateFee: false
+    };
+    this.lowerClassLimit = undefined;
+    this.upperClassLimit = undefined;
+
+    const self: edomElement[] = edom.allElements.filter((e: edomElement) => e.hasStyle("baseDataPanel"));
+
+    if (self.length == 0) {
+        return;
+    }
+
+    const firstSelf: edomElement = self[0];
+    while (firstSelf.children.length > 0) {
+      firstSelf.children[0].delete();
+    }
+
+    edom.fromTemplate(this.instructions().children ?? [], firstSelf);
   }
 
   public unload() {}
