@@ -21,3 +21,13 @@ interface StudentBook {
     id: string;
     type: BookUsageType;
 }
+
+interface Book {
+    id: string;
+    name: string;
+    stock: number;
+    price: number;
+    grades: number[];
+    forGem: boolean;
+    applyFee: boolean;
+}

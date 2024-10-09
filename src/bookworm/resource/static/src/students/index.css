@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #7ABB7AFF;
-    --secondary-color: #C0FFC0FF;
+    --primary-color: #7abb7aff;
+    --secondary-color: #c0ffc0ff;
     --font-light: #f8f9fa;
     --font-dark: #343a40;
 }
@@ -8,6 +8,7 @@
 * {
     font-family: monospace;
     font-size: large;
+    color: var(--font-dark);
 }
 
 body {

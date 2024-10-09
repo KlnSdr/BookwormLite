@@ -1,7 +1,12 @@
 class ContainerBooks implements Component {
   private readonly updateBooks: (book: string, option: BookUsageType) => void;
-  public constructor(updateBooks: (book: string, option: BookUsageType) => void = () => {}) {
+  private readonly books: Book[];
+  public constructor(
+    books: Book[],
+    updateBooks: (book: string, option: BookUsageType) => void = () => {},
+  ) {
     this.updateBooks = updateBooks;
+    this.books = books;
   }
 
   public render(parent: edomElement) {
@@ -11,14 +16,12 @@ class ContainerBooks implements Component {
   public instructions(): edomTemplate {
     return {
       tag: "div",
-        classes: ["containerBooks"],
-      children: ["Hausaufgabenheft", "Chemie - Heute", "Elemente der Mathematik 5"]
-          .map((book: string) => new BookBox(
-              book,
-              (option: BookUsageType) => {
-                this.updateBooks(book, option);
-              }
-          ).instructions())
+      classes: ["containerBooks"],
+      children: this.books.map((book: Book) =>
+        new BookBox(book.name, (option: BookUsageType) => {
+          this.updateBooks(book.id, option);
+        }).instructions(),
+      ),
     };
   }
 
