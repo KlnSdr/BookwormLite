@@ -110,6 +110,7 @@ class App implements Component {
     };
     console.log(this.studentData);
     this.updateBookContainer();
+    this.resetBooks();
   }
 
   private setClassAddition(val: string) {
@@ -127,6 +128,7 @@ class App implements Component {
     };
     console.log(this.studentData);
     this.updateBookContainer();
+    this.resetBooks();
   }
 
   private updateBooks(book: string, option: BookUsageType) {
@@ -149,6 +151,14 @@ class App implements Component {
     this.studentData = {
       ...this.studentData,
       books: books,
+    };
+    console.log(this.studentData);
+  }
+
+  private resetBooks() {
+    this.studentData = {
+      ...this.studentData,
+      books: [],
     };
     console.log(this.studentData);
   }
