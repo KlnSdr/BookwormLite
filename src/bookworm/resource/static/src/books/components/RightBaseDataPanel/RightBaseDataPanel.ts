@@ -9,10 +9,6 @@ class RightBaseDataPanel implements Component {
       classes: ["rightBaseDataPanel"],
       children: [
         // @ts-ignore included from students project
-        new Checkbox("Gemeinschaftsschule").instructions(),
-        // @ts-ignore included from students project
-        new Checkbox("Leihgebühr berechnen").instructions(),
-        // @ts-ignore included from students project
         new Button("speichern", () => {}, ["secondaryButton", "smallFlexButton"]).instructions()
       ]
     };
