@@ -1,9 +1,13 @@
 class RightBaseDataPanel implements Component {
   private readonly validateBookData: () => boolean;
-  private readonly getBookData: () => Book;
+  private readonly getBookData: () => CreateBook;
   private readonly resetPanel: () => void;
 
-  constructor(validateBookData: () => boolean, getBookData: () => Book, resetPanel: () => void) {
+  constructor(
+    validateBookData: () => boolean,
+    getBookData: () => CreateBook,
+    resetPanel: () => void,
+  ) {
     this.validateBookData = validateBookData;
     this.getBookData = getBookData;
     this.resetPanel = resetPanel;
@@ -19,8 +23,11 @@ class RightBaseDataPanel implements Component {
       classes: ["rightBaseDataPanel"],
       children: [
         // @ts-ignore included from students project
-        new Button("speichern", () => this.doSave(), ["secondaryButton", "smallFlexButton"]).instructions()
-      ]
+        new Button("speichern", () => this.doSave(), [
+          "secondaryButton",
+          "smallFlexButton",
+        ]).instructions(),
+      ],
     };
   }
 
@@ -36,32 +43,32 @@ class RightBaseDataPanel implements Component {
     fetch("{{CONTEXT}}/rest/books", {
       method: "POST",
       headers: {
-          "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(mappedData)
+      body: JSON.stringify(mappedData),
     })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("HTTP error, status = " + response.status);
-      }
-      alert("Daten erfolgreich gespeichert.");
-      this.resetPanel();
-    })
-    .catch((reason: any) => {
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error, status = " + response.status);
+        }
+        alert("Daten erfolgreich gespeichert.");
+        this.resetPanel();
+      })
+      .catch((reason: any) => {
         console.error(reason);
         alert("Fehler beim Speichern der Daten.");
-    });
+      });
   }
 
   // transform bookdata to what the backend expects, because i don't want to change either for now (this is temporary *wink*)
-  private map(bookData: Book) {
+  private map(bookData: CreateBook) {
     return {
       name: bookData.name,
       stock: bookData.stock,
       price: bookData.price,
       grades: bookData.classes,
       forGem: bookData.isGem,
-      applyFee: bookData.isCalculateFee
+      applyFee: bookData.isCalculateFee,
     };
   }
 

@@ -6,6 +6,7 @@ import janus.DataClass;
 import janus.annotations.*;
 import thot.annotations.Bucket;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -96,7 +97,7 @@ public class Book implements DataClass {
         final NewJson json = new NewJson();
         json.setString("name", name);
         json.setString("price", priceEur + "." + priceCts);
-        json.setList("grades", grades.stream().map(Object::toString).collect(Collectors.toList()));
+        json.setList("grades", new ArrayList<>(grades));
         json.setBoolean("applyFee", applyFee);
         json.setBoolean("forGem", forGem);
         json.setString("id", id.toString());

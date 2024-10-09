@@ -10,6 +10,7 @@ class App implements Component {
           // @ts-ignore included from students project
           new Navbar().instructions(),
           new BaseDataPanel().instructions(),
+          new BookOutputPanel().instructions()
       ]
     };
   }

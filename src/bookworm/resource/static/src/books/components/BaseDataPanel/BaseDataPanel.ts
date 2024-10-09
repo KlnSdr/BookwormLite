@@ -1,11 +1,11 @@
 class BaseDataPanel implements Component {
-  private bookData: Book = {
+  private bookData: CreateBook = {
     name: "",
     stock: 0,
     price: 0,
     classes: [],
     isGem: false,
-    isCalculateFee: false
+    isCalculateFee: false,
   };
 
   private lowerClassLimit: number | undefined = undefined;
@@ -21,22 +21,22 @@ class BaseDataPanel implements Component {
       classes: ["baseDataPanel"],
       children: [
         new LeftBaseDataPanel(
-            (val: string) => this.setName(val),
-            (val: number) => this.setStock(val),
-            (val: number) => this.setPrice(val)
+          (val: string) => this.setName(val),
+          (val: number) => this.setStock(val),
+          (val: number) => this.setPrice(val),
         ).instructions(),
         new MiddleBaseDataPanel(
-            (val: number) => this.setLowerClassLimit(val),
-            (val: number) => this.setUpperClassLimit(val),
-            (val: boolean) => this.setIsGem(val),
-            (val: boolean) => this.setIsCalculateFee(val),
+          (val: number) => this.setLowerClassLimit(val),
+          (val: number) => this.setUpperClassLimit(val),
+          (val: boolean) => this.setIsGem(val),
+          (val: boolean) => this.setIsCalculateFee(val),
         ).instructions(),
         new RightBaseDataPanel(
-            () => this.validateBookData(),
-            () => this.getBookData(),
-            () => this.reset()
+          () => this.validateBookData(),
+          () => this.getBookData(),
+          () => this.reset(),
         ).instructions(),
-      ]
+      ],
     };
   }
 
@@ -60,13 +60,19 @@ class BaseDataPanel implements Component {
 
     if (this.upperClassLimit !== undefined) {
       if (this.lowerClassLimit > this.upperClassLimit) {
-        alert("Die untere Klassenstufe darf nicht größer als die obere Klassenstufe sein!");
+        alert(
+          "Die untere Klassenstufe darf nicht größer als die obere Klassenstufe sein!",
+        );
         return;
       }
 
-      this.setClasses([...Array(this.upperClassLimit - this.lowerClassLimit + 1).keys()].map(i => i + this.lowerClassLimit!));
+      this.setClasses(
+        [...Array(this.upperClassLimit - this.lowerClassLimit + 1).keys()].map(
+          (i) => i + this.lowerClassLimit!,
+        ),
+      );
     } else {
-        this.setClasses([this.lowerClassLimit]);
+      this.setClasses([this.lowerClassLimit]);
     }
   }
 
@@ -75,13 +81,19 @@ class BaseDataPanel implements Component {
 
     if (this.lowerClassLimit !== undefined) {
       if (this.lowerClassLimit > this.upperClassLimit) {
-        alert("Die obere Klassenstufe darf nicht kleiner als die untere Klassenstufe sein!");
+        alert(
+          "Die obere Klassenstufe darf nicht kleiner als die untere Klassenstufe sein!",
+        );
         return;
       }
 
-      this.setClasses([...Array(this.upperClassLimit - this.lowerClassLimit + 1).keys()].map(i => i + this.lowerClassLimit!));
+      this.setClasses(
+        [...Array(this.upperClassLimit - this.lowerClassLimit + 1).keys()].map(
+          (i) => i + this.lowerClassLimit!,
+        ),
+      );
     } else {
-        this.setClasses([this.upperClassLimit]);
+      this.setClasses([this.upperClassLimit]);
     }
   }
 
@@ -101,16 +113,18 @@ class BaseDataPanel implements Component {
   }
 
   private validateBookData(): boolean {
-    return this.bookData.name !== ""
-        && this.bookData.stock !== undefined
-        && this.bookData.price !== undefined
-        && this.bookData.classes.length > 0
-        && this.lowerClassLimit !== undefined
-        && this.upperClassLimit !== undefined
-        && this.lowerClassLimit <= this.upperClassLimit;
+    return (
+      this.bookData.name !== "" &&
+      this.bookData.stock !== undefined &&
+      this.bookData.price !== undefined &&
+      this.bookData.classes.length > 0 &&
+      this.lowerClassLimit !== undefined &&
+      this.upperClassLimit !== undefined &&
+      this.lowerClassLimit <= this.upperClassLimit
+    );
   }
 
-  private getBookData(): Book {
+  private getBookData(): CreateBook {
     return this.bookData;
   }
 
@@ -121,15 +135,17 @@ class BaseDataPanel implements Component {
       price: 0,
       classes: [],
       isGem: false,
-      isCalculateFee: false
+      isCalculateFee: false,
     };
     this.lowerClassLimit = undefined;
     this.upperClassLimit = undefined;
 
-    const self: edomElement[] = edom.allElements.filter((e: edomElement) => e.hasStyle("baseDataPanel"));
+    const self: edomElement[] = edom.allElements.filter((e: edomElement) =>
+      e.hasStyle("baseDataPanel"),
+    );
 
     if (self.length == 0) {
-        return;
+      return;
     }
 
     const firstSelf: edomElement = self[0];
