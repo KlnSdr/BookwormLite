@@ -31,7 +31,10 @@ class BaseDataPanel implements Component {
             (val: boolean) => this.setIsGem(val),
             (val: boolean) => this.setIsCalculateFee(val),
         ).instructions(),
-        new RightBaseDataPanel().instructions(),
+        new RightBaseDataPanel(
+            () => this.validateBookData(),
+            () => this.getBookData()
+        ).instructions(),
       ]
     };
   }
@@ -94,6 +97,20 @@ class BaseDataPanel implements Component {
   private setIsCalculateFee(isCalculateFee: boolean) {
     this.bookData = { ...this.bookData, isCalculateFee };
     console.log(this.bookData);
+  }
+
+  private validateBookData(): boolean {
+    return this.bookData.name !== ""
+        && this.bookData.stock > 0
+        && this.bookData.price > 0
+        && this.bookData.classes.length > 0
+        && this.lowerClassLimit !== undefined
+        && this.upperClassLimit !== undefined
+        && this.lowerClassLimit <= this.upperClassLimit;
+  }
+
+  private getBookData(): Book {
+    return this.bookData;
   }
 
   public unload() {}
