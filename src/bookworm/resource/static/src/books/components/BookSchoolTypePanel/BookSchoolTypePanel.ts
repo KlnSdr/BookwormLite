@@ -1,6 +1,7 @@
 class BookSchoolTypePanel implements Component {
   private readonly title: string;
   private readonly shortName: string;
+  private readonly containerId: string = Math.random().toString(36);
 
   constructor(title: string, shortName: string) {
     this.title = title;
@@ -23,8 +24,14 @@ class BookSchoolTypePanel implements Component {
           text: this.title,
         },
         {
-          tag: "p",
-          text: "...",
+          tag: "div",
+          id: this.containerId,
+          children: [
+            {
+              tag: "p",
+              text: "lade daten...",
+            },
+          ],
         },
       ],
     };
@@ -107,13 +114,30 @@ class BookSchoolTypePanel implements Component {
   }
 
   private renderWithData(data: Book[]) {
-    console.log(data);
-    console.log(BookSchoolTypePanel.splitIntoGrades(data));
+    const gradeBooks: GradeBooks = BookSchoolTypePanel.splitIntoGrades(data);
+
+    const container = edom.findById(this.containerId);
+    if (!container) {
+      console.error("Container not found");
+      return;
+    }
+
+    while (container.children.length > 0) {
+      container.children[0].delete();
+    }
+
+    edom.fromTemplate([this.instructionsWithData(gradeBooks)], container);
   }
 
-  private instructionsWithData(data: Book[]): edomTemplate {
+  private instructionsWithData(data: GradeBooks): edomTemplate {
     return {
       tag: "div",
+      children: Object.keys(data)
+        .map((k: string) => parseInt(k))
+        .filter((key: number) => data[key].length > 0)
+        .map((key: number) =>
+          new BookGradeSection(key, data[key]).instructions(),
+        ),
     };
   }
 
