@@ -1,0 +1,17 @@
+.studentsExplorer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 5px;
+    grid-row-gap: px;
+
+    width: 50vw;
+    height: 50vh;
+}
+
+.studentsExplorerColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow-y: scroll;
+}

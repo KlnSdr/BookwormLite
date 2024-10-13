@@ -8,10 +8,10 @@ class StudentsExplorerPopup implements Component {
   }
 
   public instructions(): edomTemplate {
-    return new Popup("Schüler*in auswählen", {
-      tag: "p",
-      text: "Hello World!",
-    }).instructions();
+    return new Popup(
+      "Schüler*in auswählen",
+      new StudentsExplorer().instructions(),
+    ).instructions();
   }
 
   public unload() {}

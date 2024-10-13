@@ -24,13 +24,13 @@ class Popup implements Component {
               tag: "div",
               classes: ["popupHeader"],
               children: [
-                new Button("x", (self: edomElement) =>
-                  Popup.close(self),
-                ).instructions(),
                 {
                   tag: "h1",
                   text: this.title,
                 },
+                new Button("x", (self: edomElement) =>
+                  Popup.close(self),
+                ).instructions(),
               ],
             },
             ...(this.body !== null ? [this.body] : []),
