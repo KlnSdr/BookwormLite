@@ -1,4 +1,13 @@
 class App implements Component {
+  private static readonly dynamicLinks: DynamicLink[] = [
+    {
+      text: "Schüler*in auswählen",
+      action: () => {
+        alert(1);
+      },
+    },
+  ];
+
   private studentData: StudentData = {
     name: "",
     bill: 0,
@@ -18,7 +27,7 @@ class App implements Component {
     return {
       tag: "div",
       children: [
-        new Navbar().instructions(),
+        new Navbar(App.dynamicLinks).instructions(),
         new BaseDataPanel(
           (val: string) => this.setName(val),
           (val: string) => this.setBill(val),
