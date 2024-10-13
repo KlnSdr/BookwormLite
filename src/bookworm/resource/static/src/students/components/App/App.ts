@@ -3,7 +3,7 @@ class App implements Component {
     {
       text: "Schüler*in auswählen",
       action: () => {
-        alert(1);
+        StudentsExplorerPopup.show();
       },
     },
   ];
