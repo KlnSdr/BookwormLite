@@ -4,6 +4,8 @@ import bookworm.books.Book;
 import bookworm.books.StudentBook;
 import bookworm.books.StudentBookAssociation;
 import bookworm.students.Student;
+import dobby.util.json.NewJson;
+import janus.Janus;
 import thot.connector.Connector;
 
 import java.util.Arrays;
@@ -29,10 +31,15 @@ public class StudentBookAssociationService {
     }
 
     public StudentBook[] getBooksForStudent(UUID studentId) {
-        final StudentBookAssociation[] bookAssoc = Connector.readPattern(BUCKET_NAME, studentId.toString() + "_.*", StudentBookAssociation.class);
+        final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, studentId.toString() + "_.*", NewJson.class);
 
-        if (bookAssoc == null) {
+        if (bookAssocJson == null) {
             return null;
+        }
+
+        final StudentBookAssociation[] bookAssoc = new StudentBookAssociation[bookAssocJson.length];
+        for (int i = 0; i < bookAssocJson.length; i++) {
+            bookAssoc[i] = Janus.parse(bookAssocJson[i], StudentBookAssociation.class);
         }
 
         final UUID[] bookIds = Arrays.stream(bookAssoc).map(StudentBookAssociation::getBookId).toArray(UUID[]::new);
