@@ -28,34 +28,23 @@ class StudentsExplorer implements Component {
   }
 
   private getBaseGSInstructions(): edomTemplate {
-    return {
-      tag: "div",
-      classes: ["studentsExplorer"],
-      children: [
-        {
-          tag: "div",
-          classes: ["studentsExplorerColumn"],
-          children: StudentsExplorer.GRADES_GS.map((grade: number) =>
-            new Button(grade.toString(), (self: edomElement) =>
-              this.openGsGrade(self),
-            ).instructions(),
-          ),
-        },
-        {
-          tag: "div",
-          classes: ["studentsExplorerColumn"],
-          children: [],
-        },
-        {
-          tag: "div",
-          classes: ["studentsExplorerColumn"],
-          children: [],
-        },
-      ],
-    };
+    return this.getBaseInstructions(
+      StudentsExplorer.GRADES_GS,
+      (self: edomElement) => this.openGsGrade(self),
+    );
   }
 
   private getBaseGymInstructions(): edomTemplate {
+    return this.getBaseInstructions(
+      StudentsExplorer.GRADES_GYM,
+      (self: edomElement) => this.openGymGrade(self),
+    );
+  }
+
+  private getBaseInstructions(
+    grades: number[],
+    onClick: (self: edomElement) => void,
+  ): edomTemplate {
     return {
       tag: "div",
       classes: ["studentsExplorer"],
@@ -64,9 +53,7 @@ class StudentsExplorer implements Component {
           tag: "div",
           classes: ["studentsExplorerColumn"],
           children: StudentsExplorer.GRADES_GYM.map((grade: number) =>
-            new Button(grade.toString(), (self: edomElement) =>
-              this.openGymGrade(self),
-            ).instructions(),
+            new Button(grade.toString(), onClick).instructions(),
           ),
         },
         {
@@ -84,23 +71,19 @@ class StudentsExplorer implements Component {
   }
 
   private openGsGrade(self: edomElement) {
-    this.clearClassadditionColumn(self);
-    const classadditionColumn: edomElement = self.parent!.parent!.children[1];
-
-    edom.fromTemplate(
-      StudentsExplorer.CLASS_ADDITIONS_GS.map((addition: string) =>
-        new Button(addition, () => {}).instructions(),
-      ),
-      classadditionColumn,
-    );
+    this.openGrade(StudentsExplorer.CLASS_ADDITIONS_GS, self);
   }
 
   private openGymGrade(self: edomElement) {
+    this.openGrade(StudentsExplorer.CLASS_ADDITIONS_GYM, self);
+  }
+
+  private openGrade(classAdditions: string[], self: edomElement) {
     this.clearClassadditionColumn(self);
     const classadditionColumn: edomElement = self.parent!.parent!.children[1];
 
     edom.fromTemplate(
-      StudentsExplorer.CLASS_ADDITIONS_GYM.map((addition: string) =>
+      classAdditions.map((addition: string) =>
         new Button(addition, () => {}).instructions(),
       ),
       classadditionColumn,
