@@ -52,7 +52,7 @@ class StudentsExplorer implements Component {
         {
           tag: "div",
           classes: ["studentsExplorerColumn"],
-          children: StudentsExplorer.GRADES_GYM.map((grade: number) =>
+          children: grades.map((grade: number) =>
             new Button(grade.toString(), onClick).instructions(),
           ),
         },
@@ -79,7 +79,7 @@ class StudentsExplorer implements Component {
   }
 
   private openGrade(classAdditions: string[], self: edomElement) {
-    this.clearClassadditionColumn(self);
+    this.clearClassadditionColumn(self.parent!.parent!.children[1]);
     const classadditionColumn: edomElement = self.parent!.parent!.children[1];
 
     edom.fromTemplate(
