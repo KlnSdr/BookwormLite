@@ -71,27 +71,42 @@ class StudentsExplorer implements Component {
   }
 
   private openGsGrade(self: edomElement) {
-    this.openGrade(StudentsExplorer.CLASS_ADDITIONS_GS, self);
+    this.openGrade(true, StudentsExplorer.CLASS_ADDITIONS_GS, self);
   }
 
   private openGymGrade(self: edomElement) {
-    this.openGrade(StudentsExplorer.CLASS_ADDITIONS_GYM, self);
+    this.openGrade(false, StudentsExplorer.CLASS_ADDITIONS_GYM, self);
   }
 
-  private openGrade(classAdditions: string[], eventTarget: edomElement) {
+  private openGrade(
+    isGem: boolean,
+    classAdditions: string[],
+    eventTarget: edomElement,
+  ) {
     const grade: string = eventTarget.text;
     this.clearClassadditionColumn(eventTarget.parent!.parent!.children[1]);
     const classadditionColumn: edomElement =
       eventTarget.parent!.parent!.children[1];
 
-    Popup.changeTitle(eventTarget, "Schüler*in auswählen -> " + grade);
+    Popup.changeTitle(
+      eventTarget,
+      "Schüler*in auswählen -> " +
+        (isGem ? "Gemeinschaftsschule" : "Gymnasium") +
+        " / " +
+        grade,
+    );
 
     edom.fromTemplate(
       classAdditions.map((addition: string) =>
         new Button(addition, (self: edomElement) => {
           Popup.changeTitle(
             eventTarget,
-            "Schüler*in auswählen -> " + grade + " / " + addition,
+            "Schüler*in auswählen -> " +
+              (isGem ? "Gemeinschaftsschule" : "Gymnasium") +
+              " / " +
+              +grade +
+              " / " +
+              addition,
           );
         }).instructions(),
       ),
@@ -99,10 +114,18 @@ class StudentsExplorer implements Component {
     );
   }
 
+  private loadStudents(isGem: boolean, grade: string, classAddition: string) {}
+
   private toggleGsGym(self: edomElement) {
     const isGem: boolean = (self.children[1].element as HTMLInputElement)
       .checked;
     this.clearColumns(self.parent!);
+
+    Popup.changeTitle(
+      self,
+      "Schüler*in auswählen -> " +
+        (isGem ? "Gemeinschaftsschule" : "Gymnasium"),
+    );
 
     if (isGem) {
       edom.fromTemplate([this.getBaseGSInstructions()], self.parent!);

@@ -9,7 +9,7 @@ class StudentsExplorerPopup implements Component {
 
   public instructions(): edomTemplate {
     return new Popup(
-      "Schüler*in auswählen",
+      "Schüler*in auswählen -> Gymnasium",
       new StudentsExplorer().instructions(),
     ).instructions();
   }
