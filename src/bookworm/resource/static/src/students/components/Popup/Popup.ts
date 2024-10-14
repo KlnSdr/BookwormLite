@@ -26,6 +26,7 @@ class Popup implements Component {
               children: [
                 {
                   tag: "h1",
+                  classes: ["popupTitle"],
                   text: this.title,
                 },
                 new Button("x", (self: edomElement) =>
@@ -40,7 +41,26 @@ class Popup implements Component {
     };
   }
 
-  private static close(self: edomElement) {
+  public static changeTitle(target: edomElement, title: string) {
+    if (target.classes.includes("popupBackground")) {
+      Popup.changeTitle(target.children[0].children[0].children[0], title);
+      return;
+    }
+
+    if (target.classes.includes("popupTitle")) {
+      target.text = title;
+      return;
+    }
+
+    if (target.tag.toLowerCase() === "body" || target.parent === undefined) {
+      console.error("can't change popup title");
+      return;
+    }
+
+    Popup.changeTitle(target.parent, title);
+  }
+
+  public static close(self: edomElement) {
     if (self.tag.toLowerCase() === "body" || self.parent === undefined) {
       return;
     }

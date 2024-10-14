@@ -78,13 +78,22 @@ class StudentsExplorer implements Component {
     this.openGrade(StudentsExplorer.CLASS_ADDITIONS_GYM, self);
   }
 
-  private openGrade(classAdditions: string[], self: edomElement) {
-    this.clearClassadditionColumn(self.parent!.parent!.children[1]);
-    const classadditionColumn: edomElement = self.parent!.parent!.children[1];
+  private openGrade(classAdditions: string[], eventTarget: edomElement) {
+    const grade: string = eventTarget.text;
+    this.clearClassadditionColumn(eventTarget.parent!.parent!.children[1]);
+    const classadditionColumn: edomElement =
+      eventTarget.parent!.parent!.children[1];
+
+    Popup.changeTitle(eventTarget, "Schüler*in auswählen -> " + grade);
 
     edom.fromTemplate(
       classAdditions.map((addition: string) =>
-        new Button(addition, () => {}).instructions(),
+        new Button(addition, (self: edomElement) => {
+          Popup.changeTitle(
+            eventTarget,
+            "Schüler*in auswählen -> " + grade + " / " + addition,
+          );
+        }).instructions(),
       ),
       classadditionColumn,
     );
