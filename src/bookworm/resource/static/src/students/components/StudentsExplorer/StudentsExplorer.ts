@@ -30,20 +30,20 @@ class StudentsExplorer implements Component {
   private getBaseGSInstructions(): edomTemplate {
     return this.getBaseInstructions(
       StudentsExplorer.GRADES_GS,
-      (self: edomElement) => this.openGsGrade(self),
+      (self: edomElement) => this.openGsGrade(self)
     );
   }
 
   private getBaseGymInstructions(): edomTemplate {
     return this.getBaseInstructions(
       StudentsExplorer.GRADES_GYM,
-      (self: edomElement) => this.openGymGrade(self),
+      (self: edomElement) => this.openGymGrade(self)
     );
   }
 
   private getBaseInstructions(
     grades: number[],
-    onClick: (self: edomElement) => void,
+    onClick: (self: edomElement) => void
   ): edomTemplate {
     return {
       tag: "div",
@@ -53,7 +53,7 @@ class StudentsExplorer implements Component {
           tag: "div",
           classes: ["studentsExplorerColumn"],
           children: grades.map((grade: number) =>
-            new Button(grade.toString(), onClick).instructions(),
+            new Button(grade.toString(), onClick).instructions()
           ),
         },
         {
@@ -81,7 +81,7 @@ class StudentsExplorer implements Component {
   private openGrade(
     isGem: boolean,
     classAdditions: string[],
-    eventTarget: edomElement,
+    eventTarget: edomElement
   ) {
     const grade: string = eventTarget.text;
     const classadditionColumn: edomElement =
@@ -97,7 +97,7 @@ class StudentsExplorer implements Component {
       "Schüler*in auswählen -> " +
         (isGem ? "Gemeinschaftsschule" : "Gymnasium") +
         " / " +
-        grade,
+        grade
     );
 
     edom.fromTemplate(
@@ -110,16 +110,16 @@ class StudentsExplorer implements Component {
               " / " +
               +grade +
               " / " +
-              addition,
+              addition
           );
           this.loadStudents(isGem, grade, addition).then(
             (data: StudentData[]) => {
               this.displayLoadedStudents(self, data);
-            },
+            }
           );
-        }).instructions(),
+        }).instructions()
       ),
-      classadditionColumn,
+      classadditionColumn
     );
   }
 
@@ -137,7 +137,7 @@ class StudentsExplorer implements Component {
             text: "Keine Schüler*innen gefunden.",
           },
         ],
-        colStudents,
+        colStudents
       );
       return;
     }
@@ -148,7 +148,7 @@ class StudentsExplorer implements Component {
           Popup.close(self);
 
           const appElement: edomElement | undefined = edom.allElements.find(
-            (element: edomElement) => element.classes.includes("app"),
+            (element: edomElement) => element.classes.includes("app")
           );
 
           if (appElement === undefined) {
@@ -159,27 +159,85 @@ class StudentsExplorer implements Component {
 
           const bookContainerElement: edomElement | undefined =
             edom.allElements.find((element: edomElement) =>
-              element.classes.includes("containerBooks"),
+              element.classes.includes("containerBooks")
             );
 
           if (bookContainerElement !== undefined) {
             bookContainerElement.delete();
           }
-          edom.fromTemplate([new App(student).instructions()], edom.body);
-        }).instructions(),
+
+          Promise.all([
+            this.loadBooksForStudent(student.id!),
+            this.loadBooksForGrade(student.grade, student.isGem),
+          ]).then(([studentBooks, books]: [StudentBook[], Book[]]) => {
+            edom.fromTemplate(
+              [
+                new App({
+                  ...student,
+                  books: studentBooks
+                }, books).instructions(),
+              ],
+              edom.body
+            );
+          });
+        }).instructions()
       ),
-      colStudents,
+      colStudents
     );
+  }
+
+  private async loadBooksForGrade(
+    grade: number,
+    isGem: boolean
+  ): Promise<Book[]> {
+    return fetch(
+      `{{CONTEXT}}/rest/books/${isGem ? "gem" : "gym"}/grade/${grade}`
+    )
+      .then((response: Response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
+        return response.json();
+      })
+      .then(({ books: data }: { books: Book[] }) => data)
+      .catch((reason) => {
+        console.error(reason);
+        throw reason;
+      });
+  }
+
+  private async loadBooksForStudent(studentId: string): Promise<StudentBook[]> {
+    return fetch(`{{CONTEXT}}/rest/students/id/${studentId}/books`)
+      .then((response: Response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
+        return response.json();
+      })
+      .then(({ books: data }: { books: { type: string; book: Book }[] }) =>
+        data.map((book: { type: string; book: Book }) => {
+          return {
+            type: bookUsageTypeFromBackendString(book.type),
+            id: book.book.id,
+          };
+        })
+      )
+      .catch((reason) => {
+        console.error(reason);
+        throw reason;
+      });
   }
 
   private loadStudents(
     isGem: boolean,
     grade: string,
-    classAddition: string,
+    classAddition: string
   ): Promise<StudentData[]> {
     return new Promise((resolve, reject) =>
       fetch(
-        `{{CONTEXT}}/rest/students/${isGem ? "gem" : "gym"}/grade/${grade}/class/${classAddition}`,
+        `{{CONTEXT}}/rest/students/${
+          isGem ? "gem" : "gym"
+        }/grade/${grade}/class/${classAddition}`
       )
         .then((response: Response) => {
           if (!response.ok) {
@@ -193,7 +251,7 @@ class StudentsExplorer implements Component {
         .catch((reason) => {
           console.error(reason);
           reject(reason);
-        }),
+        })
     );
   }
 
@@ -204,8 +262,7 @@ class StudentsExplorer implements Component {
 
     Popup.changeTitle(
       self,
-      "Schüler*in auswählen -> " +
-        (isGem ? "Gemeinschaftsschule" : "Gymnasium"),
+      "Schüler*in auswählen -> " + (isGem ? "Gemeinschaftsschule" : "Gymnasium")
     );
 
     if (isGem) {

@@ -13,6 +13,21 @@ function bookUsageTypeFromString(type: string): BookUsageType {
   }
 }
 
+function bookUsageTypeFromBackendString(type: string): BookUsageType {
+  switch (type) {
+    case "BUY":
+      return BookUsageType.BUY;
+    case "BORROW":
+      return BookUsageType.BORROW;
+    case "ALREADY_OWNED":
+      return BookUsageType.ALREADY_OWNED;
+    case "NOT_NEEDED":
+      return BookUsageType.NOT_NEEDED;
+    default:
+      return BookUsageType.UNKNOWN;
+  }
+}
+
 function bookUsageTypeToString(type: BookUsageType): string {
   switch (type) {
     case BookUsageType.BUY:

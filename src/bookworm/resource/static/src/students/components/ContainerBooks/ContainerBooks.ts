@@ -1,12 +1,15 @@
 class ContainerBooks implements Component {
   private readonly updateBooks: (book: string, option: BookUsageType) => void;
   private readonly books: Book[];
+  private readonly bookPresets: StudentBook[];
   public constructor(
     books: Book[],
     updateBooks: (book: string, option: BookUsageType) => void = () => {},
+    bookPresets: StudentBook[] = []
   ) {
     this.updateBooks = updateBooks;
     this.books = books;
+    this.bookPresets = bookPresets;
   }
 
   public render(parent: edomElement) {
@@ -17,11 +20,12 @@ class ContainerBooks implements Component {
     return {
       tag: "div",
       classes: ["containerBooks"],
-      children: this.books.map((book: Book) =>
-        new BookBox(book.name, (option: BookUsageType) => {
+      children: this.books.map((book: Book) => {
+          const preset: StudentBook | undefined = this.bookPresets.find((preset: StudentBook) => preset.id === book.id);
+        return new BookBox(book.name, (option: BookUsageType) => {
           this.updateBooks(book.id, option);
-        }).instructions(),
-      ),
+        }, preset ? preset.type : BookUsageType.UNKNOWN).instructions();
+      }),
     };
   }
 

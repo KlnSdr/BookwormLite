@@ -19,9 +19,18 @@ class App implements Component {
     books: [],
   };
 
-  public constructor(initialValue: StudentData | null = null) {
+  private initialBooks: Book[] = [];
+
+  public constructor(
+    initialValue: StudentData | null = null,
+    books: Book[] | null = null
+  ) {
     if (initialValue) {
       this.studentData = initialValue;
+    }
+
+    if (books) {
+      this.initialBooks = books;
     }
   }
 
@@ -30,6 +39,19 @@ class App implements Component {
   }
 
   public instructions(): edomTemplate {
+    setTimeout(() => {
+      edom.fromTemplate(
+        [
+          new ContainerBooks(
+            this.initialBooks,
+            (book: string, option: BookUsageType) =>
+              this.updateBooks(book, option),
+            this.studentData.books
+          ).instructions(),
+        ],
+        edom.body
+      );
+    }, 10);
     return {
       tag: "div",
       classes: ["app"],
@@ -43,7 +65,7 @@ class App implements Component {
           (val: string) => this.setGrade(val),
           (val: string) => this.setClassAddition(val),
           (val: boolean) => this.setIsGem(val),
-          () => this.getStudentData(),
+          () => this.getStudentData()
         ).instructions(),
       ],
     };
@@ -51,7 +73,7 @@ class App implements Component {
 
   private updateBookContainer() {
     const bookContainer: edomElement[] = edom.allElements.filter(
-      (elm: edomElement) => elm.classes.includes("containerBooks"),
+      (elm: edomElement) => elm.classes.includes("containerBooks")
     );
 
     if (bookContainer.length > 0) {
@@ -63,7 +85,9 @@ class App implements Component {
     }
 
     fetch(
-      `{{CONTEXT}}/rest/books/${this.studentData.isGem ? "gem" : "gym"}/grade/${this.studentData.grade}`,
+      `{{CONTEXT}}/rest/books/${this.studentData.isGem ? "gem" : "gym"}/grade/${
+        this.studentData.grade
+      }`
     )
       .then((response) => {
         if (!response.ok) {
@@ -75,10 +99,10 @@ class App implements Component {
         edom.fromTemplate(
           [
             new ContainerBooks(data, (book: string, option: BookUsageType) =>
-              this.updateBooks(book, option),
+              this.updateBooks(book, option)
             ).instructions(),
           ],
-          edom.body,
+          edom.body
         );
       })
       .catch((error) => {
@@ -143,7 +167,7 @@ class App implements Component {
   private updateBooks(book: string, option: BookUsageType) {
     const books = this.studentData.books;
     const bookIndex = books.findIndex(
-      (studentBook: StudentBook) => studentBook.id === book,
+      (studentBook: StudentBook) => studentBook.id === book
     );
     if (bookIndex === -1) {
       books.push({
