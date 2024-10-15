@@ -110,10 +110,7 @@ class RightBaseDataPanel implements Component {
         if (!response.ok) {
           throw new Error("HTTP error, status = " + response.status);
         }
-        return response.json();
-      })
-      .then((data: any) => {
-        console.log("Books saved", data);
+        console.log("Books saved");
       })
       .catch((reason) => {
         console.error("Error:", reason);
