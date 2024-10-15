@@ -41,6 +41,10 @@ class RightBaseDataPanel implements Component {
           "secondaryButton",
           "smallFlexButton",
         ]).instructions(),
+        new Button("zurücksetzen", () => App.reset(), [
+          "dangerButton",
+          "smallFlexButton",
+        ]).instructions(),
       ],
     };
   }
@@ -63,9 +67,10 @@ class RightBaseDataPanel implements Component {
 
     if (studentData.id === undefined) {
       this.saveNewStudentData(studentData);
-      return;
+    } else {
+      this.updateExistingStudent(studentData);
     }
-    this.updateExistingStudent(studentData);
+    App.reset();
   }
 
   private updateExistingStudent(data: StudentData) {

@@ -147,24 +147,7 @@ class StudentsExplorer implements Component {
         new Button(student.name, (self: edomElement) => {
           Popup.close(self);
 
-          const appElement: edomElement | undefined = edom.allElements.find(
-            (element: edomElement) => element.classes.includes("app")
-          );
-
-          if (appElement === undefined) {
-            console.error("no app element found!");
-            return;
-          }
-          appElement.delete();
-
-          const bookContainerElement: edomElement | undefined =
-            edom.allElements.find((element: edomElement) =>
-              element.classes.includes("containerBooks")
-            );
-
-          if (bookContainerElement !== undefined) {
-            bookContainerElement.delete();
-          }
+          App.remove();
 
           Promise.all([
             this.loadBooksForStudent(student.id!),

@@ -199,4 +199,29 @@ class App implements Component {
   }
 
   public unload() {}
+
+  public static reset() {
+      App.remove();
+      edom.fromTemplate([new App().instructions()], edom.body);
+  }
+
+  public static remove() {
+    const appElement: edomElement | undefined = edom.allElements.find(
+      (element: edomElement) => element.classes.includes("app")
+    );
+
+    if (appElement === undefined) {
+      console.error("no app element found!");
+      return;
+    }
+    appElement.delete();
+
+    const bookContainerElement: edomElement | undefined = edom.allElements.find(
+      (element: edomElement) => element.classes.includes("containerBooks")
+    );
+
+    if (bookContainerElement !== undefined) {
+      bookContainerElement.delete();
+    }
+  }
 }

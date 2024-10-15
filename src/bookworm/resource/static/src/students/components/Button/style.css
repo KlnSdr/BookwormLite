@@ -19,3 +19,8 @@
     background-color: var(--secondary-color);
     color: var(--font-dark);
 }
+
+.dangerButton {
+    background-color: var(--danger-color);
+    color: var(--font-light);
+}
