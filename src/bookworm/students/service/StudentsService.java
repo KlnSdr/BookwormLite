@@ -49,4 +49,19 @@ public class StudentsService {
         }
         return students.toArray(new Student[0]);
     }
+
+    public Student[] getForGradeAndClassAddition(int grade, String classAddition, boolean isGem) {
+        final NewJson[] allStudents = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
+        final ArrayList<Student> students = new ArrayList<>();
+        for (NewJson studentJson : allStudents) {
+            final Student student = Janus.parse(studentJson, Student.class);
+            if (student == null) {
+                continue;
+            }
+            if (student.getGrade() == grade && student.isGem() == isGem && student.getClassAddition().equalsIgnoreCase(classAddition)) {
+                students.add(student);
+            }
+        }
+        return students.toArray(new Student[0]);
+    }
 }

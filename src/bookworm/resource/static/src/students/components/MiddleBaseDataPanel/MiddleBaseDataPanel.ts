@@ -7,16 +7,19 @@ class MiddleBaseDataPanel implements Component {
   private readonly setGrade: (val: string) => void;
   private readonly setClassAddition: (val: string) => void;
   private readonly setIsGem: (val: boolean) => void;
+  private readonly getStudentData: () => StudentData;
   public constructor(
     setFee: (val: string) => void,
     setGrade: (val: string) => void,
     setClassAddition: (val: string) => void,
-    setIsGem: (val: boolean) => void
+    setIsGem: (val: boolean) => void,
+    getStudentData: () => StudentData,
   ) {
     this.setFee = setFee;
     this.setGrade = setGrade;
     this.setClassAddition = setClassAddition;
     this.setIsGem = setIsGem;
+    this.getStudentData = getStudentData;
   }
 
   public render(parent: edomElement) {
@@ -27,11 +30,30 @@ class MiddleBaseDataPanel implements Component {
     return {
       tag: "div",
       children: [
-        new LabeledDropdown("Leihgebühr (€):", this.setFee, MiddleBaseDataPanel.FEES).instructions(),
-        new LabeledDropdown("Klassestufe:", this.setGrade, MiddleBaseDataPanel.GRADES).instructions(),
-        new LabeledDropdown("Klassenzusatz:", this.setClassAddition, MiddleBaseDataPanel.CLASS_ADDITIONS).instructions(),
-        new Checkbox("Gemeinschaftsschule: ", this.setIsGem).instructions(),
-      ]
+        new LabeledDropdown(
+          "Leihgebühr (€):",
+          this.setFee,
+          MiddleBaseDataPanel.FEES,
+          this.getStudentData().fee.toString(),
+        ).instructions(),
+        new LabeledDropdown(
+          "Klassestufe:",
+          this.setGrade,
+          MiddleBaseDataPanel.GRADES,
+          this.getStudentData().grade.toString(),
+        ).instructions(),
+        new LabeledDropdown(
+          "Klassenzusatz:",
+          this.setClassAddition,
+          MiddleBaseDataPanel.CLASS_ADDITIONS,
+          this.getStudentData().classAddition,
+        ).instructions(),
+        new Checkbox(
+          "Gemeinschaftsschule: ",
+          this.setIsGem,
+          this.getStudentData().isGem,
+        ).instructions(),
+      ],
     };
   }
 

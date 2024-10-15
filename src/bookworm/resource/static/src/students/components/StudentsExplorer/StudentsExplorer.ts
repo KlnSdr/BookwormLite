@@ -108,13 +108,77 @@ class StudentsExplorer implements Component {
               " / " +
               addition,
           );
+          this.loadStudents(isGem, grade, addition).then(
+            (data: StudentData[]) => {
+              this.displayLoadedStudents(self, data);
+            },
+          );
         }).instructions(),
       ),
       classadditionColumn,
     );
   }
 
-  private loadStudents(isGem: boolean, grade: string, classAddition: string) {}
+  private displayLoadedStudents(eventTarget: edomElement, data: StudentData[]) {
+    const colStudents: edomElement = eventTarget.parent!.parent!.children[2];
+    while (colStudents.children.length > 1) {
+      colStudents.children[0].delete();
+    }
+
+    edom.fromTemplate(
+      data.map((student) =>
+        new Button(student.name, (self: edomElement) => {
+          Popup.close(self);
+
+          const appElement: edomElement | undefined = edom.allElements.find(
+            (element: edomElement) => element.classes.includes("app"),
+          );
+
+          if (appElement === undefined) {
+            console.error("no app element found!");
+            return;
+          }
+          appElement.delete();
+
+          const bookContainerElement: edomElement | undefined =
+            edom.allElements.find((element: edomElement) =>
+              element.classes.includes("containerBooks"),
+            );
+
+          if (bookContainerElement !== undefined) {
+            bookContainerElement.delete();
+          }
+          edom.fromTemplate([new App(student).instructions()], edom.body);
+        }).instructions(),
+      ),
+      colStudents,
+    );
+  }
+
+  private loadStudents(
+    isGem: boolean,
+    grade: string,
+    classAddition: string,
+  ): Promise<StudentData[]> {
+    return new Promise((resolve, reject) =>
+      fetch(
+        `{{CONTEXT}}/rest/students/${isGem ? "gem" : "gym"}/grade/${grade}/class/${classAddition}`,
+      )
+        .then((response: Response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
+          }
+          return response.json();
+        })
+        .then(({ students: data }: { students: StudentData[] }) => {
+          resolve(data);
+        })
+        .catch((reason) => {
+          console.error(reason);
+          reject(reason);
+        }),
+    );
+  }
 
   private toggleGsGym(self: edomElement) {
     const isGem: boolean = (self.children[1].element as HTMLInputElement)

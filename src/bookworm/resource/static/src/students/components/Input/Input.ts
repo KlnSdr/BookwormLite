@@ -1,8 +1,13 @@
 class Input implements Component {
   private readonly onInput: (val: string) => void;
-    public constructor(onInput: (val: string) => void = () => {}) {
-        this.onInput = onInput;
-    }
+  private readonly initialValue: string;
+  public constructor(
+    onInput: (val: string) => void = () => {},
+    initialValue: string = "",
+  ) {
+    this.onInput = onInput;
+    this.initialValue = initialValue;
+  }
 
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
@@ -12,15 +17,16 @@ class Input implements Component {
     return {
       tag: "input",
       classes: ["input"],
+      value: this.initialValue,
       handler: [
         {
           id: "onChange",
           type: "input",
           body: (self: edomElement) => {
             this.onInput((self as edomInputElement).value);
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
   }
 

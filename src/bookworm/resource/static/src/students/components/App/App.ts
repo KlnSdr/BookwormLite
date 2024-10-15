@@ -19,6 +19,12 @@ class App implements Component {
     books: [],
   };
 
+  public constructor(initialValue: StudentData | null = null) {
+    if (initialValue) {
+      this.studentData = initialValue;
+    }
+  }
+
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
   }
@@ -26,6 +32,7 @@ class App implements Component {
   public instructions(): edomTemplate {
     return {
       tag: "div",
+      classes: ["app"],
       children: [
         new Navbar(App.dynamicLinks).instructions(),
         new BaseDataPanel(

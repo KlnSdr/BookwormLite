@@ -228,6 +228,41 @@ public class StudentResource {
         context.getResponse().setBody(payload);
     }
 
+    @Get(BASE_PATH + "/{type}/grade/{grade}/class/{classAddition}")
+    public void getAllByGradeAndClassAddition(HttpContext context) {
+        final String schoolType = context.getRequest().getParam("type");
+
+        if (schoolType == null || (!schoolType.equalsIgnoreCase("gym") && !schoolType.equalsIgnoreCase("gem"))) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Invalid school type");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final int grade;
+        try {
+            grade = Integer.parseInt(context.getRequest().getParam("grade"));
+        } catch (NumberFormatException e) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Invalid grade");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final String classAddition = context.getRequest().getParam("classAddition");
+
+        final boolean isGem = schoolType.equalsIgnoreCase("gem");
+
+        final Student[] students = studentService.getForGradeAndClassAddition(grade, classAddition, isGem);
+
+        final NewJson payload = new NewJson();
+        payload.setList("students", Arrays.stream(students).map(Student::toJson).collect(Collectors.toList()));
+
+        context.getResponse().setBody(payload);
+    }
+
     @Get(BASE_PATH + "/id/{id}/books")
     public void getBooksForStudent(HttpContext context) {
         final String id = context.getRequest().getParam("id");
