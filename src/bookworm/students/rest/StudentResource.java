@@ -137,6 +137,8 @@ public class StudentResource {
         student.setGem(body.getBoolean("isGem"));
         student.setFee(body.getInt("fee"));
         student.setName(body.getString("name"));
+        student.setEBookLicense(body.getInt("eBookLicense"));
+        student.setBill(body.getInt("bill"));
 
         final boolean success = studentService.save(student);
 

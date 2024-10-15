@@ -59,9 +59,43 @@ class RightBaseDataPanel implements Component {
   }
 
   private saveStudentData() {
-    const studentData: CreateStudentData = RightBaseDataPanel.transform(
-      this.getStudentData(),
-    );
+    const studentData: StudentData = this.getStudentData();
+
+    if (studentData.id === undefined) {
+      this.saveNewStudentData(studentData);
+      return;
+    }
+    this.updateExistingStudent(studentData);
+  }
+
+  private updateExistingStudent(data: StudentData) {
+    fetch(`{{CONTEXT}}/rest/students/id/${data.id!}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response: Response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error, status = " + response.status);
+        }
+
+        return response.json();
+      })
+      .then((data: StudentData) => {
+        if (data.id === undefined) {
+          throw new Error("No id returned");
+        }
+        this.saveBooksForStudent(data.id);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
+  private saveNewStudentData(data: StudentData) {
+    const studentData: CreateStudentData = RightBaseDataPanel.transform(data);
 
     fetch("{{CONTEXT}}/rest/students", {
       method: "POST",
@@ -118,6 +152,7 @@ class RightBaseDataPanel implements Component {
   }
 
   private static transform(data: StudentData): CreateStudentData {
+    console.log(data);
     return {
       name: data.name,
       bill: data.bill,
