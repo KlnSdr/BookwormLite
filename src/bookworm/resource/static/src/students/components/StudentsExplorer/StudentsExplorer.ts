@@ -84,9 +84,13 @@ class StudentsExplorer implements Component {
     eventTarget: edomElement,
   ) {
     const grade: string = eventTarget.text;
-    this.clearClassadditionColumn(eventTarget.parent!.parent!.children[1]);
     const classadditionColumn: edomElement =
       eventTarget.parent!.parent!.children[1];
+    this.clearClassadditionColumn(classadditionColumn);
+
+    while (eventTarget.parent!.parent!.children[2].children.length > 0) {
+      eventTarget.parent!.parent!.children[2].children[0].delete();
+    }
 
     Popup.changeTitle(
       eventTarget,
