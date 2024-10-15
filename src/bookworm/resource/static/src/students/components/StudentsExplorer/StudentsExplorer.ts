@@ -121,8 +121,21 @@ class StudentsExplorer implements Component {
 
   private displayLoadedStudents(eventTarget: edomElement, data: StudentData[]) {
     const colStudents: edomElement = eventTarget.parent!.parent!.children[2];
-    while (colStudents.children.length > 1) {
+    while (colStudents.children.length > 0) {
       colStudents.children[0].delete();
+    }
+
+    if (data.length === 0) {
+      edom.fromTemplate(
+        [
+          {
+            tag: "p",
+            text: "Keine Schüler*innen gefunden.",
+          },
+        ],
+        colStudents,
+      );
+      return;
     }
 
     edom.fromTemplate(
