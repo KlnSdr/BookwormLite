@@ -147,18 +147,20 @@ class StudentsExplorer implements Component {
         new Button(student.name, (self: edomElement) => {
           Popup.close(self);
 
-          App.remove();
-
           Promise.all([
             this.loadBooksForStudent(student.id!),
             this.loadBooksForGrade(student.grade, student.isGem),
           ]).then(([studentBooks, books]: [StudentBook[], Book[]]) => {
+            App.remove();
             edom.fromTemplate(
               [
-                new App({
-                  ...student,
-                  books: studentBooks
-                }, books).instructions(),
+                new App(
+                  {
+                    ...student,
+                    books: studentBooks,
+                  },
+                  books
+                ).instructions(),
               ],
               edom.body
             );
