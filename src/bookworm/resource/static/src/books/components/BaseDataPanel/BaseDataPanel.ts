@@ -57,7 +57,8 @@ class BaseDataPanel implements Component {
 
     if (this.upperClassLimit !== undefined) {
       if (this.lowerClassLimit > this.upperClassLimit) {
-        alert(
+        // @ts-ignore included from students project
+        Alert.show(
           "Die untere Klassenstufe darf nicht größer als die obere Klassenstufe sein!",
         );
         return;
@@ -78,7 +79,8 @@ class BaseDataPanel implements Component {
 
     if (this.lowerClassLimit !== undefined) {
       if (this.lowerClassLimit > this.upperClassLimit) {
-        alert(
+        // @ts-ignore included from students project
+        Alert.show(
           "Die obere Klassenstufe darf nicht kleiner als die untere Klassenstufe sein!",
         );
         return;

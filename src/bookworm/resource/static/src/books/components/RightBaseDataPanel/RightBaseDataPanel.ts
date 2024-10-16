@@ -33,7 +33,8 @@ class RightBaseDataPanel implements Component {
 
   private doSave() {
     if (!this.validateBookData()) {
-      alert("Bitte füllen Sie alle Felder aus.");
+        // @ts-ignore included from students project
+      Alert.show("Bitte füllen Sie alle Felder aus.");
       return;
     }
 
@@ -51,12 +52,14 @@ class RightBaseDataPanel implements Component {
         if (!response.ok) {
           throw new Error("HTTP error, status = " + response.status);
         }
-        alert("Daten erfolgreich gespeichert.");
+        // @ts-ignore included from students project
+        Alert.show("Daten erfolgreich gespeichert.");
         this.resetPanel();
       })
       .catch((reason: any) => {
         console.error(reason);
-        alert("Fehler beim Speichern der Daten.");
+        // @ts-ignore included from students project
+        Alert.show("Fehler beim Speichern der Daten.");
       });
   }
 
