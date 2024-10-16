@@ -108,7 +108,7 @@ class App implements Component {
       })
       .catch((error) => {
         console.error("Error fetching books:", error);
-        alert("Error fetching books");
+        Alert.show("Error fetching books");
       });
   }
 

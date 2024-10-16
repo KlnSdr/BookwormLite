@@ -41,7 +41,7 @@ class RightBaseDataPanel implements Component {
         },
         new Button("speichern", () => {
             if (!this.validateStudentData()) {
-                alert("Bitte füllen Sie alle Felder aus.");
+                Alert.show("Bitte füllen Sie alle Felder aus.");
                 return;
             }
             this.saveStudentData();
@@ -78,6 +78,7 @@ class RightBaseDataPanel implements Component {
     } else {
       this.updateExistingStudent(studentData);
     }
+    Alert.show("Daten gespeichert!");
     App.reset();
   }
 
@@ -104,6 +105,7 @@ class RightBaseDataPanel implements Component {
       })
       .catch((error) => {
         console.error("Error:", error);
+        Alert.show("Schüler*in konnte nicht gespeichert werden.");
       });
   }
 
@@ -132,6 +134,7 @@ class RightBaseDataPanel implements Component {
       })
       .catch((error) => {
         console.error("Error:", error);
+        Alert.show("Schüler*in konnte nicht gespeichert werden.");
       });
   }
 
@@ -161,6 +164,7 @@ class RightBaseDataPanel implements Component {
       })
       .catch((reason) => {
         console.error("Error:", reason);
+        Alert.show("Die Bücher für den*die Schüler*in konnten nicht gespeichert werden.");
       });
   }
 
