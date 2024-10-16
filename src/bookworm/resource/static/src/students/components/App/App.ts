@@ -65,7 +65,8 @@ class App implements Component {
           (val: string) => this.setGrade(val),
           (val: string) => this.setClassAddition(val),
           (val: boolean) => this.setIsGem(val),
-          () => this.getStudentData()
+          () => this.getStudentData(),
+          () => this.validateStudentData()
         ).instructions(),
       ],
     };
@@ -196,6 +197,14 @@ class App implements Component {
 
   private getStudentData(): StudentData {
     return this.studentData;
+  }
+
+  private validateStudentData(): boolean {
+      return this.studentData.name.trim() !== ""
+      && this.studentData.books.length > 0
+      && this.studentData.classAddition.trim() !== ""
+      && this.studentData.grade >= 5 && this.studentData.grade <= 12
+      && [1, 2, 3].includes(this.studentData.fee);
   }
 
   public unload() {}

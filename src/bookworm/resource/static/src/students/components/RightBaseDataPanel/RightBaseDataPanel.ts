@@ -1,12 +1,14 @@
 class RightBaseDataPanel implements Component {
   private readonly getStudentData: () => StudentData;
+  private readonly validateStudentData: () => boolean;
   private readonly idBorrowLabel: string = Math.random().toString(36);
   private readonly idBuyLabel: string = Math.random().toString(36);
   private readonly idResultLabel: string = Math.random().toString(36);
   private timer: number | null = null;
 
-  public constructor(getStudentData: () => StudentData) {
+  public constructor(getStudentData: () => StudentData, validateStudentData: () => boolean) {
     this.getStudentData = getStudentData;
+    this.validateStudentData = validateStudentData;
     this.timer = setInterval(() => this.updateLabels(), 1000);
   }
 
@@ -37,7 +39,13 @@ class RightBaseDataPanel implements Component {
           classes: ["label"],
           id: this.idResultLabel,
         },
-        new Button("speichern", () => this.saveStudentData(), [
+        new Button("speichern", () => {
+            if (!this.validateStudentData()) {
+                alert("Bitte füllen Sie alle Felder aus.");
+                return;
+            }
+            this.saveStudentData();
+        }, [
           "secondaryButton",
           "smallFlexButton",
         ]).instructions(),

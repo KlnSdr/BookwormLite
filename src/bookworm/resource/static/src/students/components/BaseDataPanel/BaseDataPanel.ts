@@ -7,6 +7,7 @@ class BaseDataPanel implements Component {
   private readonly setClassAddition: (val: string) => void;
   private readonly setIsGem: (val: boolean) => void;
   private readonly getStudentData: () => StudentData;
+  private readonly validateStudentData: () => boolean;
   public constructor(
     setName: (val: string) => void,
     setBill: (val: string) => void,
@@ -16,6 +17,7 @@ class BaseDataPanel implements Component {
     setClassAddition: (val: string) => void,
     setIsGem: (val: boolean) => void,
     getStudentData: () => StudentData,
+    validateStudentData: () => boolean
   ) {
     this.setName = setName;
     this.setBill = setBill;
@@ -25,6 +27,7 @@ class BaseDataPanel implements Component {
     this.setClassAddition = setClassAddition;
     this.setIsGem = setIsGem;
     this.getStudentData = getStudentData;
+    this.validateStudentData = validateStudentData;
   }
 
   public render(parent: edomElement) {
@@ -49,7 +52,7 @@ class BaseDataPanel implements Component {
           this.setIsGem,
           this.getStudentData,
         ).instructions(),
-        new RightBaseDataPanel(() => this.getStudentData()).instructions(),
+        new RightBaseDataPanel(() => this.getStudentData(), () => this.validateStudentData()).instructions(),
       ],
     };
   }
