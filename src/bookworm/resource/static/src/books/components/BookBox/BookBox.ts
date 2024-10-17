@@ -1,11 +1,13 @@
 class BookBox implements Component {
   private readonly data: Book;
+  private readonly onStockWarning: () => void;
   private readonly demandBorrowId: string = Math.random().toString(36);
   private readonly demandBuyId: string = Math.random().toString(36);
   private readonly stockId: string = Math.random().toString(36);
 
-  constructor(data: Book) {
+  constructor(data: Book, onStockWarning: () => void) {
     this.data = data;
+    this.onStockWarning = onStockWarning;
   }
 
   public render(parent: edomElement) {
@@ -69,6 +71,7 @@ class BookBox implements Component {
         );
         if (this.data.stock < data.demandBorrow) {
           this.colorStockDanger();
+          this.onStockWarning();
         }
       })
       .catch((reason) => {
