@@ -30,9 +30,19 @@ public class StudentBookAssociationService {
         return Connector.write(BUCKET_NAME, association.getKey(), association.toJson());
     }
 
+    public StudentBook[] getUsageOfBook(UUID bookId) {
+        final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, ".*_" + bookId.toString(), NewJson.class);
+
+        return getStudentBooks(bookAssocJson);
+    }
+
     public StudentBook[] getBooksForStudent(UUID studentId) {
         final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, studentId.toString() + "_.*", NewJson.class);
 
+        return getStudentBooks(bookAssocJson);
+    }
+
+    private StudentBook[] getStudentBooks(NewJson[] bookAssocJson) {
         if (bookAssocJson == null) {
             return null;
         }

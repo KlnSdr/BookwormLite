@@ -1,7 +1,10 @@
 package bookworm.books.rest;
 
 import bookworm.books.Book;
+import bookworm.books.BookUsageType;
+import bookworm.books.StudentBook;
 import bookworm.books.service.BooksService;
+import bookworm.books.service.StudentBookAssociationService;
 import dobby.annotations.Delete;
 import dobby.annotations.Get;
 import dobby.annotations.Post;
@@ -10,12 +13,14 @@ import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class BooksResource {
     private static final BooksService service = BooksService.getInstance();
+    private static final StudentBookAssociationService assocService = StudentBookAssociationService.getInstance();
     private static final String BASE_PATH = "/rest/books";
 
     @Get(BASE_PATH + "/id/{id}")
@@ -48,6 +53,55 @@ public class BooksResource {
         }
 
         context.getResponse().setBody(book.toJson());
+    }
+
+    @Get(BASE_PATH + "/id/{id}/demand")
+    public void getDemandForBook(HttpContext context) {
+        final String id = context.getRequest().getParam("id");
+        UUID uuid;
+
+        try {
+            uuid = UUID.fromString(id);
+        } catch (IllegalArgumentException e) {
+            uuid = null;
+        }
+
+        if (uuid == null) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "No id provided");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final Book book = service.find(uuid);
+
+        if (book == null) {
+            context.getResponse().setCode(ResponseCodes.NOT_FOUND);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Book not found");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final StudentBook[] studentBooks = assocService.getUsageOfBook(uuid);
+
+        if (studentBooks == null) {
+            context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Failed to get student book associations");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final StudentBook[] buyBooks = Arrays.stream(studentBooks).filter(sb -> sb.getUsageType() == BookUsageType.BUY).toArray(StudentBook[]::new);
+        final StudentBook[] borrowBooks = Arrays.stream(studentBooks).filter(sb -> sb.getUsageType() == BookUsageType.BORROW).toArray(StudentBook[]::new);
+
+        final NewJson payload = new NewJson();
+        payload.setInt("demandBuy", buyBooks.length);
+        payload.setInt("demandBorrow", borrowBooks.length);
+
+        context.getResponse().setBody(payload);
     }
 
     @Post(BASE_PATH)
