@@ -2,6 +2,7 @@ class BookBox implements Component {
   private readonly data: Book;
   private readonly demandBorrowId: string = Math.random().toString(36);
   private readonly demandBuyId: string = Math.random().toString(36);
+  private readonly stockId: string = Math.random().toString(36);
 
   constructor(data: Book) {
     this.data = data;
@@ -37,6 +38,7 @@ class BookBox implements Component {
         {
           tag: "label",
           text: "Bestand: " + this.data.stock,
+          id: this.stockId,
         },
         {
           tag: "label",
@@ -60,16 +62,26 @@ class BookBox implements Component {
         }
         return response.json();
       })
-      .then((data: { demandBorrow: number; demandBuy: number }) =>
+      .then((data: { demandBorrow: number; demandBuy: number }) => {
         this.updateDemandLabels(
           data.demandBorrow.toString(),
           data.demandBuy.toString(),
-        ),
-      )
+        );
+        if (this.data.stock < data.demandBorrow) {
+          this.colorStockDanger();
+        }
+      })
       .catch((reason) => {
         console.error("Error fetching demand data: ", reason);
         this.updateDemandLabels("Fehler", "Fehler");
       });
+  }
+
+  private colorStockDanger() {
+    const stockLabel: edomElement | undefined = edom.findById(this.stockId);
+    if (stockLabel) {
+      stockLabel.applyStyle("demandExceedsStock");
+    }
   }
 
   private updateDemandLabels(demandBorrow: string, demandBuy: string) {
