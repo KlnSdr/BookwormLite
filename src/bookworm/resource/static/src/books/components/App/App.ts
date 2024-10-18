@@ -7,11 +7,15 @@ class App implements Component {
     return {
       tag: "div",
       children: [
-          // @ts-ignore included from students project
-          new Navbar().instructions(),
-          new BaseDataPanel().instructions(),
-          new BookOutputPanel().instructions()
-      ]
+        // @ts-ignore included from students project
+        new Navbar().instructions(),
+        {
+          tag: "div",
+          id: "appContainerBasePanel",
+          children: [new BaseDataPanel().instructions()],
+        },
+        new BookOutputPanel().instructions(),
+      ],
     };
   }
 

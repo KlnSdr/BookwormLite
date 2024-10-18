@@ -1,15 +1,21 @@
 class BaseDataPanel implements Component {
-  private bookData: CreateBook = {
+  private bookData: Book = {
     name: "",
     stock: 0,
     price: 0,
-    classes: [],
-    isGem: false,
-    isCalculateFee: false,
+    grades: [],
+    forGem: false,
+    applyFee: false,
   };
 
   private lowerClassLimit: number | undefined = undefined;
   private upperClassLimit: number | undefined = undefined;
+
+  public constructor(initalData: Book | null = null) {
+    if (initalData) {
+      this.bookData = initalData;
+    }
+  }
 
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
@@ -24,12 +30,14 @@ class BaseDataPanel implements Component {
           (val: string) => this.setName(val),
           (val: number) => this.setStock(val),
           (val: number) => this.setPrice(val),
+          () => this.getBookData(),
         ).instructions(),
         new MiddleBaseDataPanel(
           (val: number) => this.setLowerClassLimit(val),
           (val: number) => this.setUpperClassLimit(val),
           (val: boolean) => this.setIsGem(val),
           (val: boolean) => this.setIsCalculateFee(val),
+          () => this.getBookData(),
         ).instructions(),
         new RightBaseDataPanel(
           () => this.validateBookData(),
@@ -97,15 +105,15 @@ class BaseDataPanel implements Component {
   }
 
   private setClasses(classes: number[]) {
-    this.bookData = { ...this.bookData, classes };
+    this.bookData = { ...this.bookData, grades: classes };
   }
 
   private setIsGem(isGem: boolean) {
-    this.bookData = { ...this.bookData, isGem };
+    this.bookData = { ...this.bookData, forGem: isGem };
   }
 
   private setIsCalculateFee(isCalculateFee: boolean) {
-    this.bookData = { ...this.bookData, isCalculateFee };
+    this.bookData = { ...this.bookData, applyFee: isCalculateFee };
   }
 
   private validateBookData(): boolean {
@@ -113,14 +121,14 @@ class BaseDataPanel implements Component {
       this.bookData.name !== "" &&
       this.bookData.stock !== undefined &&
       this.bookData.price !== undefined &&
-      this.bookData.classes.length > 0 &&
+      this.bookData.grades.length > 0 &&
       this.lowerClassLimit !== undefined &&
       this.upperClassLimit !== undefined &&
       this.lowerClassLimit <= this.upperClassLimit
     );
   }
 
-  private getBookData(): CreateBook {
+  private getBookData(): Book {
     return this.bookData;
   }
 
@@ -129,9 +137,9 @@ class BaseDataPanel implements Component {
       name: "",
       stock: 0,
       price: 0,
-      classes: [],
-      isGem: false,
-      isCalculateFee: false,
+      grades: [],
+      forGem: false,
+      applyFee: false,
     };
     this.lowerClassLimit = undefined;
     this.upperClassLimit = undefined;

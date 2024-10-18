@@ -6,6 +6,14 @@
     padding: 5px;
 }
 
+.bookBox * {
+    cursor: pointer;
+}
+
+.bookBox:hover {
+    background-color: var(--primary-color);
+}
+
 .demandExceedsStock {
     color: var(--danger-color);
 }

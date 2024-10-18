@@ -20,6 +20,15 @@ class BookBox implements Component {
     return {
       tag: "div",
       classes: ["bookBox"],
+      handler: [
+        {
+          id: "editBook",
+          type: "click",
+          body: (self: edomElement) => {
+            this.openBook();
+          },
+        },
+      ],
       children: [
         {
           tag: "h2",
@@ -102,6 +111,23 @@ class BookBox implements Component {
     if (demandBuyLabel) {
       demandBuyLabel.text = "Bedarf (kauf): " + demandBuy;
     }
+  }
+
+  private openBook() {
+    const basePanel: edomElement | undefined = edom.allElements.find(
+      (e: edomElement) => e.hasStyle("baseDataPanel"),
+    );
+
+    if (!basePanel) {
+      console.error("No base panel found");
+      return;
+    }
+
+    basePanel.delete();
+
+    new BaseDataPanel(this.data).render(
+      edom.findById("appContainerBasePanel")!,
+    );
   }
 
   public unload() {}

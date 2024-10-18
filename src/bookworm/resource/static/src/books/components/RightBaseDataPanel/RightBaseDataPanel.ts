@@ -33,20 +33,19 @@ class RightBaseDataPanel implements Component {
 
   private doSave() {
     if (!this.validateBookData()) {
-        // @ts-ignore included from students project
+      // @ts-ignore included from students project
       Alert.show("Bitte füllen Sie alle Felder aus.");
       return;
     }
 
     const bookData = this.getBookData();
-    const mappedData = this.map(bookData);
 
     fetch("{{CONTEXT}}/rest/books", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(mappedData),
+      body: JSON.stringify(bookData),
     })
       .then((response) => {
         if (!response.ok) {
@@ -61,18 +60,6 @@ class RightBaseDataPanel implements Component {
         // @ts-ignore included from students project
         Alert.show("Fehler beim Speichern der Daten.");
       });
-  }
-
-  // transform bookdata to what the backend expects, because i don't want to change either for now (this is temporary *wink*)
-  private map(bookData: CreateBook) {
-    return {
-      name: bookData.name,
-      stock: bookData.stock,
-      price: bookData.price,
-      grades: bookData.classes,
-      forGem: bookData.isGem,
-      applyFee: bookData.isCalculateFee,
-    };
   }
 
   public unload() {}
