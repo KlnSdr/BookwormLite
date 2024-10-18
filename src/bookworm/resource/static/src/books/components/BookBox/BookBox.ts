@@ -6,7 +6,11 @@ class BookBox implements Component {
   private readonly stockId: string = Math.random().toString(36);
 
   constructor(data: Book, onStockWarning: () => void) {
-    this.data = data;
+    this.data = {
+      ...data,
+      stock: parseInt(data.stock.toString()),
+      price: parseFloat(data.price.toString()),
+    };
     this.onStockWarning = onStockWarning;
   }
 
