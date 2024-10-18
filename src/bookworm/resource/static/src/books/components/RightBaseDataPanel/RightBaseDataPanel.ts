@@ -27,6 +27,11 @@ class RightBaseDataPanel implements Component {
           "secondaryButton",
           "smallFlexButton",
         ]).instructions(),
+        // @ts-ignore included from students project
+        new Button("zurücksetzen", () => this.resetPanel(), [
+          "dangerButton",
+          "smallFlexButton",
+        ]).instructions(),
       ],
     };
   }
