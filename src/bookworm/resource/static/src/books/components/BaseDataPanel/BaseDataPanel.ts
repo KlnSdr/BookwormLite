@@ -14,6 +14,8 @@ class BaseDataPanel implements Component {
   public constructor(initalData: Book | null = null) {
     if (initalData) {
       this.bookData = initalData;
+      this.lowerClassLimit = initalData.grades[0];
+      this.upperClassLimit = initalData.grades[initalData.grades.length - 1];
     }
   }
 

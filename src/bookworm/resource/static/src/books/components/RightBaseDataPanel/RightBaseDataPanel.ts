@@ -1,11 +1,11 @@
 class RightBaseDataPanel implements Component {
   private readonly validateBookData: () => boolean;
-  private readonly getBookData: () => CreateBook;
+  private readonly getBookData: () => Book;
   private readonly resetPanel: () => void;
 
   constructor(
     validateBookData: () => boolean,
-    getBookData: () => CreateBook,
+    getBookData: () => Book,
     resetPanel: () => void,
   ) {
     this.validateBookData = validateBookData;
@@ -40,6 +40,37 @@ class RightBaseDataPanel implements Component {
 
     const bookData = this.getBookData();
 
+    if (bookData.id === undefined) {
+      this.saveNewBook(bookData);
+    } else {
+      this.updateBook(bookData);
+    }
+  }
+
+  private updateBook(bookData: Book) {
+    fetch(`{{CONTEXT}}/rest/books/id/${bookData.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bookData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error, status = " + response.status);
+        }
+        // @ts-ignore included from students project
+        Alert.show("Daten erfolgreich gespeichert.");
+        this.resetPanel();
+      })
+      .catch((reason: any) => {
+        console.error(reason);
+        // @ts-ignore included from students project
+        Alert.show("Fehler beim Speichern der Daten.");
+      });
+  }
+
+  private saveNewBook(bookData: CreateBook) {
     fetch("{{CONTEXT}}/rest/books", {
       method: "POST",
       headers: {

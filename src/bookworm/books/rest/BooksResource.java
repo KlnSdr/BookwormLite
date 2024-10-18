@@ -188,6 +188,7 @@ public class BooksResource {
 
         book.setApplyFee(body.getBoolean("applyFee"));
         book.setForGem(body.getBoolean("forGem"));
+        book.setStock(body.getInt("stock"));
 
         if (!service.save(book)) {
             context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
