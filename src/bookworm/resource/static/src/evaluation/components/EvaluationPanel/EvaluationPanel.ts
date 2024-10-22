@@ -1,8 +1,12 @@
 class EvaluationPanel implements Component {
   private readonly schoolType: string;
+  private readonly isGem: boolean;
+  private readonly grades: string[];
 
-  constructor(schoolType: string) {
+  constructor(schoolType: string, isGem: boolean, grades: string[] = []) {
     this.schoolType = schoolType;
+    this.isGem = isGem;
+    this.grades = grades;
   }
 
   public render(parent: edomElement) {
@@ -17,8 +21,8 @@ class EvaluationPanel implements Component {
           tag: "h1",
           text: this.schoolType,
         },
-        ...["5", "6", "7", "8", "9", "10", "11", "12"].map((grade: string) =>
-          new GradeSection(grade).instructions(),
+        ...this.grades.map((grade: string) =>
+          new GradeSection(grade, this.isGem).instructions(),
         ),
       ],
     };
