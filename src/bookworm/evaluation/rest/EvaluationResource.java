@@ -10,7 +10,6 @@ import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class EvaluationResource {
     private static final String BASE_PATH = "/rest/evaluation";
@@ -70,5 +69,71 @@ public class EvaluationResource {
         payload.setInt("studentCount", students.length);
 
         context.getResponse().setBody(payload);
+    }
+
+    @Get(BASE_PATH + "/{type}/grade/{grade}/students")
+    public void getStudentEvaluation(HttpContext context) {
+        final String schoolType = context.getRequest().getParam("type");
+        final boolean isGem = schoolType.equalsIgnoreCase("gem");
+
+        if (!(schoolType.equalsIgnoreCase("gem") || schoolType.equalsIgnoreCase("gym"))) {
+            final NewJson payload = new NewJson();
+            payload.setString("msg", "Invalid school form.");
+
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final String stringGrade = context.getRequest().getParam("grade");
+        final int grade;
+        try {
+            grade = Integer.parseInt(stringGrade);
+        } catch (Exception e) {
+            final NewJson payload = new NewJson();
+            payload.setString("msg", "Could not transform provided grade to int.");
+
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final Student[] students = studentService.getForGrade(grade, isGem);
+        final ArrayList<NewJson> responseList = new ArrayList<>();
+
+        for (Student student : students) {
+            final StudentBook[] studentBooks = assocService.getBooksForStudent(student.getId());
+            double sumBuy = 0.0;
+            double sumBorrow = 0.0;
+            final ArrayList<NewJson> bookInfo = new ArrayList<>();
+
+            for (StudentBook book : studentBooks) {
+                switch (book.getUsageType()) {
+                    case BUY -> sumBuy += book.getBook().getPrice();
+                    case BORROW -> sumBorrow += book.getBook().isApplyFee() ? student.getFee() : 0.0;
+                }
+                final NewJson bookJson = new NewJson();
+                bookJson.setString("name", book.getBook().getName());
+                bookJson.setString("type", book.getUsageType().toString());
+
+                bookInfo.add(bookJson);
+            }
+
+            final NewJson studentJson = new NewJson();
+            studentJson.setString("name", student.getName());
+            studentJson.setString("classAddition", student.getClassAddition());
+            studentJson.setFloat("sumBuy", sumBuy);
+            studentJson.setFloat("sumBorrow", sumBorrow);
+            studentJson.setFloat("eBook", student.getEBookLicense());
+            studentJson.setFloat("bill", student.getBill());
+            studentJson.setList("books", bookInfo.stream().map(e -> (Object) e).toList());
+
+            responseList.add(studentJson);
+        }
+
+        final NewJson payload = new NewJson();
+        payload.setList("students", responseList.stream().map(e -> (Object) e).toList());
+        context.getResponse().setBody(payload);
+        context.getResponse().setHeader("Content-Type", "application/json");
     }
 }
