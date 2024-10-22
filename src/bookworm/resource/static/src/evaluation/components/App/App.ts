@@ -6,7 +6,9 @@ class App implements Component {
   public instructions(): edomTemplate {
     return {
       tag: "div",
-      text: "Hello World!",
+      children: ["Gymnasium", "Gemeinschaftsschule"].map((schoolType: string) =>
+        new EvaluationPanel(schoolType).instructions(),
+      ),
     };
   }
 
