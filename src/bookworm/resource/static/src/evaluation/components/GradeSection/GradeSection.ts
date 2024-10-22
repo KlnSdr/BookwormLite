@@ -17,6 +17,11 @@ class GradeSection implements Component {
           tag: "summary",
           text: `Klasse ${this.grade}`,
         },
+        {
+          tag: "div",
+          classes: ["gradeSection"],
+          children: [new FinancialBaseDataPanel().instructions()],
+        },
       ],
     };
   }

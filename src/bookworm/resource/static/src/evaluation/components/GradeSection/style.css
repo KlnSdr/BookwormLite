@@ -1,0 +1,5 @@
+.gradeSection {
+    border: 1px solid var(--font-dark);
+    border-radius: 5px;
+    padding: 5px;
+}

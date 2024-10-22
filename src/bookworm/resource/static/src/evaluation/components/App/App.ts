@@ -9,9 +9,14 @@ class App implements Component {
       children: [
         // @ts-ignore included from students project
         new Navbar().instructions(),
-        ...["Gymnasium", "Gemeinschaftsschule"].map((schoolType: string) =>
-          new EvaluationPanel(schoolType).instructions(),
-        ),
+        {
+          tag: "div",
+          classes: ["appContainer"],
+          children: ["Gymnasium", "Gemeinschaftsschule"].map(
+            (schoolType: string) =>
+              new EvaluationPanel(schoolType).instructions(),
+          ),
+        },
       ],
     };
   }
