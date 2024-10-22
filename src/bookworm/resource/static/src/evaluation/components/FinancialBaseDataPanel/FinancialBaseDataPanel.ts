@@ -29,6 +29,7 @@ class FinancialBaseDataPanel implements Component {
         },
         {
           tag: "p",
+          classes: ["bold"],
           text: "Gesamtbetrag: ?? €",
         },
       ],
