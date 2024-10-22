@@ -6,9 +6,13 @@ class App implements Component {
   public instructions(): edomTemplate {
     return {
       tag: "div",
-      children: ["Gymnasium", "Gemeinschaftsschule"].map((schoolType: string) =>
-        new EvaluationPanel(schoolType).instructions(),
-      ),
+      children: [
+        // @ts-ignore included from students project
+        new Navbar().instructions(),
+        ...["Gymnasium", "Gemeinschaftsschule"].map((schoolType: string) =>
+          new EvaluationPanel(schoolType).instructions(),
+        ),
+      ],
     };
   }
 
