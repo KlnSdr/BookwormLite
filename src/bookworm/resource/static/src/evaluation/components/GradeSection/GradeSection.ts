@@ -20,7 +20,11 @@ class GradeSection implements Component {
         {
           tag: "div",
           classes: ["gradeSection"],
-          children: [new FinancialBaseDataPanel().instructions()],
+          children: [
+            new FinancialBaseDataPanel().instructions(),
+            new StudentSection().instructions(),
+            new BookSection().instructions(),
+          ],
         },
       ],
     };
