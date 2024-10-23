@@ -1,0 +1,11 @@
+.studentTable {
+    border-collapse: collapse;
+}
+
+.studentTable tr:nth-child(odd) {
+    background-color: var(--primary-color);
+}
+
+.studentTable tr:hover {
+    font-weight: bold;
+}

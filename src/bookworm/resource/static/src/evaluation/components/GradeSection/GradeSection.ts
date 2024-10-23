@@ -24,7 +24,7 @@ class GradeSection implements Component {
           classes: ["gradeSection"],
           children: [
             new FinancialBaseDataPanel(this.grade, this.isGem).instructions(),
-            new StudentSection().instructions(),
+            new StudentSection(this.grade, this.isGem).instructions(),
             new BookSection().instructions(),
           ],
         },

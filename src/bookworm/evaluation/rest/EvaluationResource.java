@@ -134,6 +134,5 @@ public class EvaluationResource {
         final NewJson payload = new NewJson();
         payload.setList("students", responseList.stream().map(e -> (Object) e).toList());
         context.getResponse().setBody(payload);
-        context.getResponse().setHeader("Content-Type", "application/json");
     }
 }
