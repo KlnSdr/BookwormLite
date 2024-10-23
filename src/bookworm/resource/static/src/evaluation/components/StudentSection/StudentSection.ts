@@ -46,14 +46,26 @@ class StudentSection implements Component {
         "Leih",
         "E-Book",
         "Rechn.",
-        "Summe",
       ];
+
+      const books: string[] = [];
+
+      data.forEach((student: EvaluationStudentData) => {
+        student.books.forEach((book: EvaluationStudentBook) => {
+          if (!books.includes(book.name)) {
+            books.push(book.name);
+          }
+        });
+      });
+      books.sort();
+
+      tableHeadCols.push(...books, "Summe");
 
       const table: edomTemplate = {
         tag: "table",
         classes: ["studentTable"],
         children: data.map((student: EvaluationStudentData) =>
-          new StudentRow(student).instructions(),
+          new StudentRow(student, books).instructions(),
         ),
       };
 
