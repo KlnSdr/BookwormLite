@@ -39,6 +39,16 @@ class StudentSection implements Component {
 
   private generateTable(data: EvaluationStudentData[]): Promise<edomTemplate> {
     return new Promise((resolve, reject) => {
+      const tableHeadCols: string[] = [
+        "Name",
+        "Klasse",
+        "Kauf",
+        "Leih",
+        "E-Book",
+        "Rechn.",
+        "Summe",
+      ];
+
       const table: edomTemplate = {
         tag: "table",
         classes: ["studentTable"],
@@ -46,6 +56,16 @@ class StudentSection implements Component {
           new StudentRow(student).instructions(),
         ),
       };
+
+      const tableHead: edomTemplate = {
+        tag: "tr",
+        children: tableHeadCols.map((col: string) => ({
+          tag: "th",
+          text: col,
+        })),
+      };
+
+      table.children = [tableHead, ...(table.children ?? [])];
 
       resolve(table);
     });
