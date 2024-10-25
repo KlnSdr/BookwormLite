@@ -18,14 +18,20 @@ class CenterInfoPanel implements Component {
         },
         {
           tag: "p",
-          text: "Autor: " + BookwormInfo.appInfo.author,
+          text: "Autor: ",
+          children: [
+            new Link(
+              "https://github.com/" + BookwormInfo.appInfo.author,
+              BookwormInfo.appInfo.author,
+            ).instructions(),
+          ],
         },
         {
           tag: "p",
           text: "Lizenz: ",
           children: [
             new Link(
-              BookwormInfo.appInfo.vcsLink + "/LICENSE",
+              BookwormInfo.appInfo.vcsLink + "/blob/main/LICENSE",
               BookwormInfo.appInfo.license,
             ).instructions(),
           ],
