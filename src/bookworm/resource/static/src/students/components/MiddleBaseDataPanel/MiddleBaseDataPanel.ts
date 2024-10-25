@@ -37,7 +37,7 @@ class MiddleBaseDataPanel implements Component {
           this.getStudentData().fee.toString(),
         ).instructions(),
         new LabeledDropdown(
-          "Klassestufe:",
+          "Klassenstufe:",
           this.setGrade,
           MiddleBaseDataPanel.GRADES,
           this.getStudentData().grade.toString(),
