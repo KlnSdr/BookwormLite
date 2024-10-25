@@ -1,3 +1,7 @@
 .appContainer {
     padding: 5px;
 }
+
+.emptyTableCellMarker {
+    background-color: var(--danger-color);
+}

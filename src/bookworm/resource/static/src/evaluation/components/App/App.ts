@@ -25,26 +25,71 @@ class App implements Component {
           tag: "div",
           classes: ["appContainer"],
           children: [
-            { text: "Gymnasium", isGem: false, grades: App.GRADES_GYM },
             {
-              text: "Gemeinschaftsschule",
-              isGem: true,
-              grades: App.GRADES_GEM,
+              tag: "div",
+              children: [
+                {
+                  tag: "h1",
+                  text: "Anzeigeeinstellungen",
+                },
+                // @ts-ignore included from students project
+                new Checkbox(
+                  "nicht eingetragene Bücher markieren",
+                  (val: boolean) => {
+                    if (val) {
+                      this.markEmptyTableCells();
+                    } else {
+                      this.resetMarkedTableCells();
+                    }
+                  },
+                  false,
+                ).instructions(),
+              ],
             },
-          ].map(
-            ({
-              text,
-              isGem,
-              grades,
-            }: {
-              text: string;
-              isGem: boolean;
-              grades: string[];
-            }) => new EvaluationPanel(text, isGem, grades).instructions(),
-          ),
+            ...[
+              { text: "Gymnasium", isGem: false, grades: App.GRADES_GYM },
+              {
+                text: "Gemeinschaftsschule",
+                isGem: true,
+                grades: App.GRADES_GEM,
+              },
+            ].map(
+              ({
+                text,
+                isGem,
+                grades,
+              }: {
+                text: string;
+                isGem: boolean;
+                grades: string[];
+              }) => new EvaluationPanel(text, isGem, grades).instructions(),
+            ),
+          ],
         },
       ],
     };
+  }
+
+  private markEmptyTableCells() {
+    edom.allElements
+      .filter(
+        (element: edomElement) =>
+          element.tag.toLowerCase() === "td" && element.text === "",
+      )
+      .forEach((element: edomElement) => {
+        element.applyStyle("emptyTableCellMarker");
+      });
+  }
+
+  private resetMarkedTableCells() {
+    edom.allElements
+      .filter(
+        (element: edomElement) =>
+          element.tag.toLowerCase() === "td" && element.text === "",
+      )
+      .forEach((element: edomElement) => {
+        element.removeStyle("emptyTableCellMarker");
+      });
   }
 
   public unload() {}
