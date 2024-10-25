@@ -25,19 +25,19 @@ class StudentRow implements Component {
         },
         {
           tag: "td",
-          text: this.data.sumBuy.toFixed(2) + "€",
+          text: this.data.sumBuy.toFixed(2) + " €",
         },
         {
           tag: "td",
-          text: this.data.sumBorrow.toFixed(2) + "€",
+          text: this.data.sumBorrow.toFixed(2) + " €",
         },
         {
           tag: "td",
-          text: this.data.eBook.toFixed(2) + "€",
+          text: this.data.eBook.toFixed(2) + " €",
         },
         {
           tag: "td",
-          text: this.data.bill.toFixed(2) + "€",
+          text: this.data.bill.toFixed(2) + " €",
         },
         ...this.allBooks.map((bookName: string) => {
           const book: EvaluationStudentBook = this.data.books.find(
@@ -56,7 +56,7 @@ class StudentRow implements Component {
               this.data.sumBorrow +
               this.data.eBook +
               this.data.bill
-            ).toFixed(2) + "€",
+            ).toFixed(2) + " €",
         },
       ],
     };

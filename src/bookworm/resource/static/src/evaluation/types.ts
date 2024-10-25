@@ -20,3 +20,11 @@ interface EvaluationStudentData {
   bill: number;
   books: EvaluationStudentBook[];
 }
+
+interface EvaluationBookData {
+  name: string;
+  sumPriceBuy: number;
+  sumPriceBorrow: number;
+  buyCount: number;
+  borrowCount: number;
+}
