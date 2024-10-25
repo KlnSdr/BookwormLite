@@ -12,6 +12,7 @@ interface EvaluationStudentBook {
 }
 
 interface EvaluationStudentData {
+  id: string;
   name: string;
   classAddition: string;
   sumBuy: number;

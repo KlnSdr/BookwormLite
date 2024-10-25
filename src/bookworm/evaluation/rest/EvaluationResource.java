@@ -124,6 +124,7 @@ public class EvaluationResource {
             }
 
             final NewJson studentJson = new NewJson();
+            studentJson.setString("id", student.getId().toString());
             studentJson.setString("name", student.getName());
             studentJson.setString("classAddition", student.getClassAddition());
             studentJson.setFloat("sumBuy", sumBuy);

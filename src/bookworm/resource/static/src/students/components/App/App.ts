@@ -23,7 +23,7 @@ class App implements Component {
 
   public constructor(
     initialValue: StudentData | null = null,
-    books: Book[] | null = null
+    books: Book[] | null = null,
   ) {
     if (initialValue) {
       this.studentData = initialValue;
@@ -32,6 +32,8 @@ class App implements Component {
     if (books) {
       this.initialBooks = books;
     }
+
+    this.checkUrlParam();
   }
 
   public render(parent: edomElement) {
@@ -46,10 +48,10 @@ class App implements Component {
             this.initialBooks,
             (book: string, option: BookUsageType) =>
               this.updateBooks(book, option),
-            this.studentData.books
+            this.studentData.books,
           ).instructions(),
         ],
-        edom.body
+        edom.body,
       );
     }, 10);
     return {
@@ -66,7 +68,7 @@ class App implements Component {
           (val: string) => this.setClassAddition(val),
           (val: boolean) => this.setIsGem(val),
           () => this.getStudentData(),
-          () => this.validateStudentData()
+          () => this.validateStudentData(),
         ).instructions(),
       ],
     };
@@ -74,7 +76,7 @@ class App implements Component {
 
   private updateBookContainer() {
     const bookContainer: edomElement[] = edom.allElements.filter(
-      (elm: edomElement) => elm.classes.includes("containerBooks")
+      (elm: edomElement) => elm.classes.includes("containerBooks"),
     );
 
     if (bookContainer.length > 0) {
@@ -88,7 +90,7 @@ class App implements Component {
     fetch(
       `{{CONTEXT}}/rest/books/${this.studentData.isGem ? "gem" : "gym"}/grade/${
         this.studentData.grade
-      }`
+      }`,
     )
       .then((response) => {
         if (!response.ok) {
@@ -100,10 +102,10 @@ class App implements Component {
         edom.fromTemplate(
           [
             new ContainerBooks(data, (book: string, option: BookUsageType) =>
-              this.updateBooks(book, option)
+              this.updateBooks(book, option),
             ).instructions(),
           ],
-          edom.body
+          edom.body,
         );
       })
       .catch((error) => {
@@ -168,7 +170,7 @@ class App implements Component {
   private updateBooks(book: string, option: BookUsageType) {
     const books = this.studentData.books;
     const bookIndex = books.findIndex(
-      (studentBook: StudentBook) => studentBook.id === book
+      (studentBook: StudentBook) => studentBook.id === book,
     );
     if (bookIndex === -1) {
       books.push({
@@ -200,23 +202,120 @@ class App implements Component {
   }
 
   private validateStudentData(): boolean {
-      return this.studentData.name.trim() !== ""
-      && this.studentData.books.length > 0
-      && this.studentData.classAddition.trim() !== ""
-      && this.studentData.grade >= 5 && this.studentData.grade <= 12
-      && [1, 2, 3].includes(this.studentData.fee);
+    return (
+      this.studentData.name.trim() !== "" &&
+      this.studentData.books.length > 0 &&
+      this.studentData.classAddition.trim() !== "" &&
+      this.studentData.grade >= 5 &&
+      this.studentData.grade <= 12 &&
+      [1, 2, 3].includes(this.studentData.fee)
+    );
   }
 
   public unload() {}
 
   public static reset() {
-      App.remove();
-      edom.fromTemplate([new App().instructions()], edom.body);
+    App.remove();
+    edom.fromTemplate([new App().instructions()], edom.body);
+  }
+
+  private checkUrlParam() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentId = urlParams.get("open");
+    if (!studentId) {
+      return;
+    }
+    window.history.replaceState({}, document.title, window.location.pathname);
+
+    this.loadStudent(studentId)
+      .then((studentData: StudentData) => {
+        Promise.all([
+          this.loadBooksForStudent(studentData.id!),
+          this.loadBooksForGrade(studentData.grade, studentData.isGem),
+        ]).then(([studentBooks, books]: [StudentBook[], Book[]]) => {
+          App.remove();
+          edom.fromTemplate(
+            [
+              new App(
+                {
+                  ...studentData,
+                  books: studentBooks,
+                },
+                books,
+              ).instructions(),
+            ],
+            edom.body,
+          );
+        });
+      })
+      .catch((error: Error) => {
+        Alert.show("Ein Fehler beim Laden des/der Schüler*in ist aufgetreten.");
+      });
+  }
+
+  private loadStudent(id: string): Promise<StudentData> {
+    return new Promise((resolve, reject) => {
+      fetch(`{{CONTEXT}}/rest/students/id/${id}`)
+        .then((response: Response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error " + response.status);
+          }
+          return response.json();
+        })
+        .then((student: StudentData) => resolve(student))
+        .catch((error: Error) => {
+          console.error("Error fetching student:", error);
+          reject(error);
+        });
+    });
+  }
+
+  // todo copied fom StudentsExplorer -> make pretty/non redundant
+  private async loadBooksForGrade(
+    grade: number,
+    isGem: boolean,
+  ): Promise<Book[]> {
+    return fetch(
+      `{{CONTEXT}}/rest/books/${isGem ? "gem" : "gym"}/grade/${grade}`,
+    )
+      .then((response: Response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
+        return response.json();
+      })
+      .then(({ books: data }: { books: Book[] }) => data)
+      .catch((reason) => {
+        console.error(reason);
+        throw reason;
+      });
+  }
+
+  private async loadBooksForStudent(studentId: string): Promise<StudentBook[]> {
+    return fetch(`{{CONTEXT}}/rest/students/id/${studentId}/books`)
+      .then((response: Response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error " + response.status);
+        }
+        return response.json();
+      })
+      .then(({ books: data }: { books: { type: string; book: Book }[] }) =>
+        data.map((book: { type: string; book: Book }) => {
+          return {
+            type: bookUsageTypeFromBackendString(book.type),
+            id: book.book.id,
+          };
+        }),
+      )
+      .catch((reason) => {
+        console.error(reason);
+        throw reason;
+      });
   }
 
   public static remove() {
     const appElement: edomElement | undefined = edom.allElements.find(
-      (element: edomElement) => element.classes.includes("app")
+      (element: edomElement) => element.classes.includes("app"),
     );
 
     if (appElement === undefined) {
@@ -226,7 +325,7 @@ class App implements Component {
     appElement.delete();
 
     const bookContainerElement: edomElement | undefined = edom.allElements.find(
-      (element: edomElement) => element.classes.includes("containerBooks")
+      (element: edomElement) => element.classes.includes("containerBooks"),
     );
 
     if (bookContainerElement !== undefined) {

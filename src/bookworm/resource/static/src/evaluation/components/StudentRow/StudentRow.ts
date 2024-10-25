@@ -14,6 +14,14 @@ class StudentRow implements Component {
   public instructions(): edomTemplate {
     return {
       tag: "tr",
+      handler: [
+        {
+          id: "dbClickOpenStudend",
+          type: "dblclick",
+          body: (self: edomElement) =>
+            window.location.assign("{{CONTEXT}}/students?open=" + this.data.id),
+        },
+      ],
       children: [
         {
           tag: "td",
