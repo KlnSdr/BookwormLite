@@ -72,3 +72,17 @@ perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT
 mkdir ../../out/info
 cp -r docs/* ../../out/info
 rm -rf docs
+
+echo "building /settings ======================"
+cd ../settings || exit
+ed pack
+
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/settings\//g' index.html
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/settings\//g' docs/index.html
+
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/settings\//g' index.html
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/settings\//g' docs/index.html
+
+mkdir ../../out/settings
+cp -r docs/* ../../out/settings
+rm -rf docs

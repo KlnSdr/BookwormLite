@@ -36,6 +36,22 @@ public class BooksService {
         return Connector.delete(BUCKET_NAME, id.toString());
     }
 
+    public boolean deleteAll() {
+        final NewJson[] allBooks = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
+
+        for (NewJson bookJson : allBooks) {
+            final Book book = Janus.parse(bookJson, Book.class);
+            if (book == null) {
+                continue;
+            }
+
+            if (!delete(book.getId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public List<Book> getForGrade(int grade, boolean isGem) {
         final NewJson[] allBooks = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
         final ArrayList<Book> books = new ArrayList<>();

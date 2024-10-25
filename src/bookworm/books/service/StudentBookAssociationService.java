@@ -33,6 +33,27 @@ public class StudentBookAssociationService {
         return Connector.write(BUCKET_NAME, association.getKey(), association.toJson());
     }
 
+    public boolean delete(String associationId) {
+        return Connector.delete(BUCKET_NAME, associationId);
+    }
+
+    public boolean deleteAll() {
+        final NewJson[] associations = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
+        for (NewJson association : associations) {
+            final StudentBookAssociation assoc = Janus.parse(association, StudentBookAssociation.class);
+
+            if (assoc == null) {
+                continue;
+            }
+
+            if (!delete(assoc.getKey())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public StudentBook[] getUsageOfBook(UUID bookId) {
         final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, ".*_" + bookId.toString(), NewJson.class);
 

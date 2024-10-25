@@ -64,7 +64,10 @@ class Navbar implements Component {
         {
           tag: "div",
           classes: ["navRight"],
-          children: [new NavbarButton("🛈", "{{CONTEXT}}/info").instructions()],
+          children: [
+            new NavbarButton("⚙", "{{CONTEXT}}/settings").instructions(),
+            new NavbarButton("🛈", "{{CONTEXT}}/info").instructions(),
+          ],
         },
       ],
     };
