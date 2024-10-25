@@ -13,11 +13,29 @@ class CenterPanel implements Component {
           text: "Einstellungen",
         },
         // @ts-ignore imported from students project
+        new Button("Backup erstellen", () => this.doBackup()).instructions(),
+        // @ts-ignore imported from students project
         new Button("alle Daten löschen", () => DeleteDataPopup.show(), [
           "dangerButton",
         ]).instructions(),
       ],
     };
+  }
+
+  private doBackup() {
+    fetch("{{CONTEXT}}/rest/settings/backup")
+      .then((response: Response) => {
+        if (!response.ok) {
+          throw new Error("Backup konnte nicht erstellt werden");
+        }
+        return response.json();
+      })
+      .then((data: any) => {
+        DownloadBackupPopup.show(data);
+      })
+      .catch((error: Error) => {
+        console.error(error);
+      });
   }
 
   public unload() {}

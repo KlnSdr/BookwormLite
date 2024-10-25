@@ -38,20 +38,29 @@ public class StudentBookAssociationService {
     }
 
     public boolean deleteAll() {
+        for (StudentBookAssociation association : getAll()) {
+            if (!delete(association.getKey())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public StudentBookAssociation[] getAll() {
         final NewJson[] associations = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
+        final List<StudentBookAssociation> assocs = new ArrayList<>();
+
         for (NewJson association : associations) {
             final StudentBookAssociation assoc = Janus.parse(association, StudentBookAssociation.class);
 
             if (assoc == null) {
                 continue;
             }
-
-            if (!delete(assoc.getKey())) {
-                return false;
-            }
+            assocs.add(assoc);
         }
 
-        return true;
+        return assocs.toArray(new StudentBookAssociation[0]);
     }
 
     public StudentBook[] getUsageOfBook(UUID bookId) {

@@ -36,13 +36,7 @@ public class StudentsService {
     }
 
     public boolean deleteAll() {
-        final NewJson[] allStudents = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
-
-        for (NewJson studentJson : allStudents) {
-            final Student student = Janus.parse(studentJson, Student.class);
-            if (student == null) {
-                continue;
-            }
+        for (Student student: getAll()) {
             if (!delete(student.getId())) {
                 return false;
             }
@@ -50,7 +44,7 @@ public class StudentsService {
         return true;
     }
 
-    public Student[] getForGrade(int grade, boolean isGem) {
+    public Student[] getAll() {
         final NewJson[] allStudents = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
         final ArrayList<Student> students = new ArrayList<>();
         for (NewJson studentJson : allStudents) {
@@ -58,6 +52,14 @@ public class StudentsService {
             if (student == null) {
                 continue;
             }
+            students.add(student);
+        }
+        return students.toArray(new Student[0]);
+    }
+
+    public Student[] getForGrade(int grade, boolean isGem) {
+        final ArrayList<Student> students = new ArrayList<>();
+        for (Student student: getAll()) {
             if (student.getGrade() == grade && student.isGem() == isGem) {
                 students.add(student);
             }
@@ -66,13 +68,8 @@ public class StudentsService {
     }
 
     public Student[] getForGradeAndClassAddition(int grade, String classAddition, boolean isGem) {
-        final NewJson[] allStudents = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
         final ArrayList<Student> students = new ArrayList<>();
-        for (NewJson studentJson : allStudents) {
-            final Student student = Janus.parse(studentJson, Student.class);
-            if (student == null) {
-                continue;
-            }
+        for (Student student: getAll()) {
             if (student.getGrade() == grade && student.isGem() == isGem && student.getClassAddition().equalsIgnoreCase(classAddition)) {
                 students.add(student);
             }
