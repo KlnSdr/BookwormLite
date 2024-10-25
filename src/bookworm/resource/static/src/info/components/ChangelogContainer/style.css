@@ -1,0 +1,9 @@
+.changelog {
+    width: 50%;
+    text-align: left;
+    margin-left: 25%;
+}
+
+.changelog div p {
+    font-weight: bold;
+}

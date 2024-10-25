@@ -9,6 +9,7 @@ class App implements Component {
       children: [
         // @ts-ignore included from students project
         new Navbar().instructions(),
+        new CenterInfoPanel().instructions(),
       ],
     };
   }
