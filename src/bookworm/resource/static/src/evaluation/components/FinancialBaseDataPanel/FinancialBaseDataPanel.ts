@@ -8,10 +8,12 @@ class FinancialBaseDataPanel implements Component {
 
   private readonly grade: string;
   private readonly isGem: boolean;
+  private readonly onLoaded: () => void;
 
-  constructor(grade: string, isGem: boolean) {
+  constructor(grade: string, isGem: boolean, onLoaded: () => void) {
     this.grade = grade;
     this.isGem = isGem;
+    this.onLoaded = onLoaded;
   }
 
   public render(parent: edomElement) {
@@ -115,9 +117,11 @@ class FinancialBaseDataPanel implements Component {
           return response.json();
         })
         .then((data: BaseFinancialData) => {
+          this.onLoaded();
           resolve(data);
         })
         .catch((reason: any) => {
+          this.onLoaded();
           reject(reason);
         });
     });

@@ -1,11 +1,13 @@
 class BookSection implements Component {
   private readonly grade: string;
   private readonly isGem: boolean;
+  private readonly onLoaded: () => void;
   private readonly idOutTable: string = Math.random().toString(36);
 
-  constructor(grade: string, isGem: boolean) {
+  constructor(grade: string, isGem: boolean, onLoaded: () => void) {
     this.grade = grade;
     this.isGem = isGem;
+    this.onLoaded = onLoaded;
   }
 
   public render(parent: edomElement) {
@@ -49,10 +51,12 @@ class BookSection implements Component {
           return response.json();
         })
         .then(({ books: data }: { books: EvaluationBookData[] }) => {
+          this.onLoaded();
           resolve(data);
         })
         .catch((error: any) => {
           console.error("Error: ", error);
+          this.onLoaded();
           reject(error);
         });
     });

@@ -1,11 +1,13 @@
 class StudentSection implements Component {
   private readonly grade: string;
   private readonly isGem: boolean;
+  private readonly onLoaded: () => void;
   private readonly idOutTable: string = Math.random().toString(36);
 
-  constructor(grade: string, isGem: boolean) {
+  constructor(grade: string, isGem: boolean, onLoaded: () => void) {
     this.grade = grade;
     this.isGem = isGem;
+    this.onLoaded = onLoaded;
   }
 
   public render(parent: edomElement) {
@@ -95,10 +97,12 @@ class StudentSection implements Component {
           return response.json();
         })
         .then(({ students: data }: { students: EvaluationStudentData[] }) => {
+          this.onLoaded();
           resolve(data);
         })
         .catch((error: Error) => {
           console.error("Error fetching student data", error);
+          this.onLoaded();
           reject(error);
         });
     });
