@@ -5,8 +5,23 @@ class ExportComponent implements Component {
 
   public instructions(): edomTemplate {
     return {
-      tag: "p",
-      text: "Hello World!"
+      tag: "div",
+      children: [
+        {
+          tag: "p",
+          text: "Exportieren als:",
+        },
+        {
+          tag: "div",
+          classes: ["exportButtons"],
+          children: [
+            // @ts-ignore included from students project
+            new Button("Excel", () => {}).instructions(),
+            // @ts-ignore included from students project
+            new Button("Pdf", () => {}).instructions(),
+          ],
+        },
+      ],
     };
   }
 
