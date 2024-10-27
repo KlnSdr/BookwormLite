@@ -2,7 +2,7 @@ class StudentSection implements Component {
   private readonly grade: string;
   private readonly isGem: boolean;
   private readonly onLoaded: () => void;
-  private readonly idOutTable: string = Math.random().toString(36);
+  private readonly idOutTable: string = Math.random().toString(36).substring(2);
 
   constructor(grade: string, isGem: boolean, onLoaded: () => void) {
     this.grade = grade;
@@ -37,6 +37,36 @@ class StudentSection implements Component {
       return;
     }
     edom.fromTemplate([table], container);
+
+    setTimeout(() => {
+      // @ts-ignore
+      new DataTable(`#${this.idOutTable}TABLE`, {
+        paging: false,
+        searching: false,
+        order: false,
+        info: false,
+        layout: {
+          topStart: {
+            buttons: [
+              {
+                extend: "excelHtml5",
+                title: `students_${this.isGem ? "gem" : "gym"}_${this.grade}`,
+                text: "Exportieren als Excel",
+              },
+            ],
+          },
+        },
+      });
+
+      // cursed hack to style the export buttons
+      setTimeout(() => {
+        Array.from(document.getElementsByClassName("dt-button")).forEach(
+          (e: Element) => {
+            e.classList.add("button");
+          },
+        );
+      }, 10);
+    }, 10);
   }
 
   private generateTable(data: EvaluationStudentData[]): Promise<edomTemplate> {
@@ -66,6 +96,7 @@ class StudentSection implements Component {
       const table: edomTemplate = {
         tag: "table",
         classes: ["studentTable"],
+        id: this.idOutTable + "TABLE",
         children: [
           {
             tag: "tbody",
