@@ -29,3 +29,12 @@
 .studentTable tr:hover {
     font-weight: bold;
 }
+
+.dt-button {
+    margin-bottom: 5px;
+}
+
+.dt-button span:hover {
+    background-color: var(--font-dark);
+    color: var(--primary-color);
+}
