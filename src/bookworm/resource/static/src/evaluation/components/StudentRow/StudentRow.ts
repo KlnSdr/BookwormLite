@@ -66,6 +66,7 @@ class StudentRow implements Component {
               this.data.bill
             ).toFixed(2) + " €",
         },
+        { tag: "td" },
       ],
     };
   }

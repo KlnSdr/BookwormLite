@@ -61,7 +61,7 @@ class StudentSection implements Component {
       });
       books.sort();
 
-      tableHeadCols.push(...books, "Summe");
+      tableHeadCols.push(...books, "Summe", "Unterschrift");
 
       const table: edomTemplate = {
         tag: "table",
