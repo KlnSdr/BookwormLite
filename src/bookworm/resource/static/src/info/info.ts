@@ -27,6 +27,7 @@ const BookwormInfo: Info = {
         "Eingabemaske für Schüler*innendaten hinzugefügt",
         "Eingabemaske für Bücherdaten hinzugefügt",
         "Auswertungsübersicht hinzugefügt",
+        "Auswertungstabellen können exportiert werden",
         "Infoseite hinzugefügt",
       ],
     },
