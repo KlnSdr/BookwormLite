@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{{CONTEXT}}/evaluation/components/BookSection/style.css" />
     <link rel="stylesheet" href="{{CONTEXT}}/evaluation/components/StudentRow/style.css" />
     <link rel="stylesheet" href="{{CONTEXT}}/evaluation/components/BookRow/style.css" />
+    <link rel="stylesheet" href="{{CONTEXT}}/evaluation/components/ExportPopup/style.css" />
+    <link rel="stylesheet" href="{{CONTEXT}}/evaluation/components/ExportComponent/style.css" />
     <!--CUSTOM-->
     <link rel="stylesheet" href="{{CONTEXT}}/evaluation/index.css" />
     <link rel="stylesheet" href="{{CONTEXT}}/students/index.css" />
@@ -34,6 +36,7 @@
         rel="stylesheet"
         href="{{CONTEXT}}/students/components/Checkbox/style.css"
     />
+    <link rel="stylesheet" href="{{CONTEXT}}/students/components/Popup/style.css" />
     <!--GENERATED-->
     <script src="{{CONTEXT}}/evaluation/components/App/App.js"></script>
     <script src="{{CONTEXT}}/evaluation/components/EvaluationPanel/EvaluationPanel.js"></script>
@@ -43,12 +46,24 @@
     <script src="{{CONTEXT}}/evaluation/components/BookSection/BookSection.js"></script>
     <script src="{{CONTEXT}}/evaluation/components/StudentRow/StudentRow.js"></script>
     <script src="{{CONTEXT}}/evaluation/components/BookRow/BookRow.js"></script>
+    <script src="{{CONTEXT}}/evaluation/components/ExportPopup/ExportPopup.js"></script>
+    <script src="{{CONTEXT}}/evaluation/components/ExportComponent/ExportComponent.js"></script>
     <!--CUSTOM-->
     <script src="{{CONTEXT}}/evaluation/index.js"></script>
     <script src="{{CONTEXT}}/students/components/Button/Button.js"></script>
     <script src="{{CONTEXT}}/students/components/NavbarButton/NavbarButton.js"></script>
     <script src="{{CONTEXT}}/students/components/Navbar/Navbar.js"></script>
     <script src="{{CONTEXT}}/students/components/Checkbox/Checkbox.js"></script>
+    <script src="{{CONTEXT}}/students/components/Popup/Popup.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.1.2/js/buttons.html5.min.js"></script>
+    <script src="{{CONTEXT}}/lib/jszip.min.js"></script>
     
   </head>
   <body onload="startup()"></body>

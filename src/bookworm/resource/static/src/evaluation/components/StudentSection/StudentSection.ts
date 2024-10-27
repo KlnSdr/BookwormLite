@@ -66,17 +66,27 @@ class StudentSection implements Component {
       const table: edomTemplate = {
         tag: "table",
         classes: ["studentTable"],
-        children: data.map((student: EvaluationStudentData) =>
-          new StudentRow(student, books).instructions(),
-        ),
+        children: [
+          {
+            tag: "tbody",
+            children: data.map((student: EvaluationStudentData) =>
+              new StudentRow(student, books).instructions(),
+            ),
+          },
+        ],
       };
 
       const tableHead: edomTemplate = {
-        tag: "tr",
-        children: tableHeadCols.map((col: string) => ({
-          tag: "th",
-          text: col,
-        })),
+        tag: "thead",
+        children: [
+          {
+            tag: "tr",
+            children: tableHeadCols.map((col: string) => ({
+              tag: "th",
+              text: col,
+            })),
+          },
+        ],
       };
 
       table.children = [tableHead, ...(table.children ?? [])];

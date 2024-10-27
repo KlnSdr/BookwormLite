@@ -20,7 +20,9 @@ class App implements Component {
       tag: "div",
       children: [
         // @ts-ignore included from students project
-        new Navbar().instructions(),
+        new Navbar([
+          { text: "Export", action: () => ExportPopup.show() },
+        ]).instructions(),
         {
           tag: "div",
           classes: ["appContainer"],
