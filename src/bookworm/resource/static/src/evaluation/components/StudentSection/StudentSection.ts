@@ -1,13 +1,20 @@
 class StudentSection implements Component {
   private readonly grade: string;
   private readonly isGem: boolean;
+  private readonly setLoading: () => void;
   private readonly onLoaded: () => void;
   private loadedData: boolean = false;
   private readonly idOutTable: string = Math.random().toString(36).substring(2);
 
-  constructor(grade: string, isGem: boolean, onLoaded: () => void) {
+  constructor(
+    grade: string,
+    isGem: boolean,
+    setLoading: () => void,
+    onLoaded: () => void,
+  ) {
     this.grade = grade;
     this.isGem = isGem;
+    this.setLoading = setLoading;
     this.onLoaded = onLoaded;
   }
 
@@ -140,6 +147,7 @@ class StudentSection implements Component {
   }
 
   private loadData(): Promise<EvaluationStudentData[]> {
+    this.setLoading();
     return new Promise((resolve, reject) => {
       fetch(
         `{{CONTEXT}}/rest/evaluation/${this.isGem ? "gem" : "gym"}/grade/${this.grade}/students`,

@@ -4,9 +4,9 @@ class GradeSection implements Component {
   private readonly idSummary: string = Math.random().toString(36);
 
   private loadingData: { money: boolean; students: boolean; books: boolean } = {
-    money: true,
-    students: true,
-    books: true,
+    money: false,
+    students: false,
+    books: false,
   };
 
   constructor(grade: string, isGem: boolean) {
@@ -25,6 +25,10 @@ class GradeSection implements Component {
       this.grade,
       this.isGem,
       () => {
+        this.loadingData.money = true;
+        this.updateSummary();
+      },
+      () => {
         this.loadingData.money = false;
         this.updateSummary();
       },
@@ -33,6 +37,10 @@ class GradeSection implements Component {
       this.grade,
       this.isGem,
       () => {
+        this.loadingData.students = true;
+        this.updateSummary();
+      },
+      () => {
         this.loadingData.students = false;
         this.updateSummary();
       },
@@ -40,6 +48,10 @@ class GradeSection implements Component {
     const bookSection: BookSection = new BookSection(
       this.grade,
       this.isGem,
+      () => {
+        this.loadingData.books = true;
+        this.updateSummary();
+      },
       () => {
         this.loadingData.books = false;
         this.updateSummary();
@@ -88,7 +100,20 @@ class GradeSection implements Component {
       this.loadingData.students ||
       this.loadingData.books
     ) {
-      summary.text = `Klasse ${this.grade} (${this.loadingData.money ? "Finanzen: 🔄" : ""} ${this.loadingData.students ? "Schüler*innen: 🔄" : ""} ${this.loadingData.books ? "Bücher: 🔄" : ""})`;
+      const loading: string[] = [];
+      if (this.loadingData.money) {
+        loading.push("Finanzen: 🔄");
+      }
+
+      if (this.loadingData.students) {
+        loading.push("Schüler*innen: 🔄");
+      }
+
+      if (this.loadingData.books) {
+        loading.push("Bücher: 🔄");
+      }
+
+      summary.text = `Klasse ${this.grade} (${loading.join(", ")})`;
     } else {
       summary.text = `Klasse ${this.grade}`;
     }
