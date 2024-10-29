@@ -92,17 +92,27 @@ class BookSection implements Component {
       const table: edomTemplate = {
         tag: "table",
         classes: ["studentTable"],
-        children: data.map((book: EvaluationBookData) =>
-          new BookRow(book).instructions(),
-        ),
+        children: [
+          {
+            tag: "tbody",
+            children: data.map((book: EvaluationBookData) =>
+              new BookRow(book).instructions(),
+            ),
+          },
+        ],
       };
 
       const tableHead: edomTemplate = {
-        tag: "tr",
-        children: tableHeadCols.map((col: string) => ({
-          tag: "th",
-          text: col,
-        })),
+        tag: "thead",
+        children: [
+          {
+            tag: "tr",
+            children: tableHeadCols.map((col: string) => ({
+              tag: "th",
+              text: col,
+            })),
+          },
+        ],
       };
 
       table.children = [tableHead, ...(table.children ?? [])];

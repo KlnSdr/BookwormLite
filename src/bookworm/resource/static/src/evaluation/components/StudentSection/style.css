@@ -22,7 +22,11 @@
     border-right: none;
 }
 
-.studentTable tr:nth-child(odd) {
+.studentTable thead th {
+    background-color: var(--primary-color);
+}
+
+.studentTable tbody tr:nth-child(even) {
     background-color: var(--primary-color);
 }
 
