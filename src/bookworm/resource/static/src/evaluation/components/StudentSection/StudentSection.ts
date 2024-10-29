@@ -34,7 +34,7 @@ class StudentSection implements Component {
       ],
       children: [
         { tag: "summary", text: "Schüler*innen" },
-        { tag: "div", id: this.idOutTable },
+        { tag: "div", id: this.idOutTable, text: "Lade Daten..." },
       ],
     };
   }
@@ -56,6 +56,7 @@ class StudentSection implements Component {
       console.error("Container not found");
       return;
     }
+    container.text = "";
     edom.fromTemplate([table], container);
 
     setTimeout(() => {

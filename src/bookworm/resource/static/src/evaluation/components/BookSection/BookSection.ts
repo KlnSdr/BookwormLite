@@ -44,7 +44,7 @@ class BookSection implements Component {
       ],
       children: [
         { tag: "summary", text: "Bücher" },
-        { tag: "div", id: this.idOutTable },
+        { tag: "div", id: this.idOutTable, text: "Lade Daten..." },
       ],
     };
   }
@@ -56,6 +56,7 @@ class BookSection implements Component {
       console.error("Container not found");
       return;
     }
+    container.text = "";
     edom.fromTemplate([table], container);
   }
 
