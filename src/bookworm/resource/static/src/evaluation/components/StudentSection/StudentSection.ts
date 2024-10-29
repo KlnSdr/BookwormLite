@@ -2,6 +2,7 @@ class StudentSection implements Component {
   private readonly grade: string;
   private readonly isGem: boolean;
   private readonly onLoaded: () => void;
+  private loadedData: boolean = false;
   private readonly idOutTable: string = Math.random().toString(36).substring(2);
 
   constructor(grade: string, isGem: boolean, onLoaded: () => void) {
@@ -15,18 +16,30 @@ class StudentSection implements Component {
   }
 
   public instructions(): edomTemplate {
-    this.loadData()
-      .then((data: EvaluationStudentData[]) => this.generateTable(data))
-      .then((table: edomTemplate) => this.renderTable(table))
-      .catch((_) => {});
-
     return {
       tag: "details",
+      handler: [
+        {
+          id: "click",
+          type: "click",
+          body: (self: edomElement) => this.populateTable(),
+        },
+      ],
       children: [
         { tag: "summary", text: "Schüler*innen" },
         { tag: "div", id: this.idOutTable },
       ],
     };
+  }
+
+  private populateTable() {
+    if (this.loadedData) {
+      return;
+    }
+    this.loadData()
+      .then((data: EvaluationStudentData[]) => this.generateTable(data))
+      .then((table: edomTemplate) => this.renderTable(table))
+      .catch((_) => {});
   }
 
   private renderTable(table: edomTemplate) {
@@ -138,6 +151,7 @@ class StudentSection implements Component {
           return response.json();
         })
         .then(({ students: data }: { students: EvaluationStudentData[] }) => {
+          this.loadedData = true;
           this.onLoaded();
           resolve(data);
         })

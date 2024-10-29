@@ -19,10 +19,44 @@ class GradeSection implements Component {
   }
 
   public instructions(): edomTemplate {
-    setTimeout(() => this.updateSummary(), 10);
+    // setTimeout(() => this.updateSummary(), 10);
+
+    const financePanel: FinancialBaseDataPanel = new FinancialBaseDataPanel(
+      this.grade,
+      this.isGem,
+      () => {
+        this.loadingData.money = false;
+        this.updateSummary();
+      },
+    );
+    const studentSection: StudentSection = new StudentSection(
+      this.grade,
+      this.isGem,
+      () => {
+        this.loadingData.students = false;
+        this.updateSummary();
+      },
+    );
+    const bookSection: BookSection = new BookSection(
+      this.grade,
+      this.isGem,
+      () => {
+        this.loadingData.books = false;
+        this.updateSummary();
+      },
+    );
 
     return {
       tag: "details",
+      handler: [
+        {
+          id: "click",
+          type: "click",
+          body: (self: edomElement) => {
+            financePanel.populateData();
+          },
+        },
+      ],
       children: [
         {
           tag: "summary",
@@ -33,18 +67,9 @@ class GradeSection implements Component {
           tag: "div",
           classes: ["gradeSection"],
           children: [
-            new FinancialBaseDataPanel(this.grade, this.isGem, () => {
-              this.loadingData.money = false;
-              this.updateSummary();
-            }).instructions(),
-            new StudentSection(this.grade, this.isGem, () => {
-              this.loadingData.students = false;
-              this.updateSummary();
-            }).instructions(),
-            new BookSection(this.grade, this.isGem, () => {
-              this.loadingData.books = false;
-              this.updateSummary();
-            }).instructions(),
+            financePanel.instructions(),
+            studentSection.instructions(),
+            bookSection.instructions(),
           ],
         },
       ],

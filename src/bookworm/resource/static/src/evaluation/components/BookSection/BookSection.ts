@@ -2,6 +2,7 @@ class BookSection implements Component {
   private readonly grade: string;
   private readonly isGem: boolean;
   private readonly onLoaded: () => void;
+  private loadedData: boolean = false;
   private readonly idOutTable: string = Math.random().toString(36);
 
   constructor(grade: string, isGem: boolean, onLoaded: () => void) {
@@ -14,14 +15,26 @@ class BookSection implements Component {
     edom.fromTemplate([this.instructions()], parent);
   }
 
-  public instructions(): edomTemplate {
+  private populateTable() {
+    if (this.loadedData) {
+      return;
+    }
     this.loadData()
       .then((data: EvaluationBookData[]) => this.generateTable(data))
       .then((table: edomTemplate) => this.renderTable(table))
       .catch((_) => {});
+  }
 
+  public instructions(): edomTemplate {
     return {
       tag: "details",
+      handler: [
+        {
+          id: "click",
+          type: "click",
+          body: (self: edomElement) => this.populateTable(),
+        },
+      ],
       children: [
         { tag: "summary", text: "Bücher" },
         { tag: "div", id: this.idOutTable },
@@ -51,6 +64,7 @@ class BookSection implements Component {
           return response.json();
         })
         .then(({ books: data }: { books: EvaluationBookData[] }) => {
+          this.loadedData = true;
           this.onLoaded();
           resolve(data);
         })
