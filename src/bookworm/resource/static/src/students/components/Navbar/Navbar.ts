@@ -67,6 +67,7 @@ class Navbar implements Component {
           children: [
             new NavbarButton("⚙", "{{CONTEXT}}/settings").instructions(),
             new NavbarButton("🛈", "{{CONTEXT}}/info").instructions(),
+            new NavbarButton("abmelden", "{{CONTEXT}}/logout").instructions(),
           ],
         },
       ],

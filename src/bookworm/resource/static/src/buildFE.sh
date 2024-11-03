@@ -86,3 +86,17 @@ perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT
 mkdir ../../out/settings
 cp -r docs/* ../../out/settings
 rm -rf docs
+
+echo "building /logout ======================"
+cd ../logout || exit
+ed pack
+
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/logout\//g' index.html
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/logout\//g' docs/index.html
+
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/logout\//g' index.html
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/logout\//g' docs/index.html
+
+mkdir ../../out/logout
+cp -r docs/* ../../out/logout
+rm -rf docs
