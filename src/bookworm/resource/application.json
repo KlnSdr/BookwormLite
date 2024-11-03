@@ -22,6 +22,23 @@
         "success": "/",
         "successAdmin": "/hades"
       }
-    }
+    },
+    "unauthorizedRedirectTarget": "/hades/login",
+    "unauthorizedRedirectPaths": [
+      "/",
+      "/index.html",
+      "/students",
+      "/students/",
+      "/students/index.html",
+      "/books",
+      "/books/",
+      "/books/index.html",
+      "/evaluation",
+      "/evaluation/",
+      "/evaluation/index.html",
+      "/settings",
+      "/settings/",
+      "/settings/index.html"
+    ]
   }
 }

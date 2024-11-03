@@ -25,6 +25,8 @@ public class Student implements DataClass {
     private String name;
     @JanusUUID("id")
     private final UUID id;
+    @JanusUUID("owner")
+    private UUID owner;
     @JanusInteger("bill")
     private int bill;
     @JanusInteger("eBookLicense")
@@ -94,9 +96,17 @@ public class Student implements DataClass {
         return id;
     }
 
+    public UUID getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
+
     @Override
     public String getKey() {
-        return id.toString();
+        return  owner.toString() + "_" + id.toString();
     }
 
     @Override
@@ -121,6 +131,7 @@ public class Student implements DataClass {
         json.setInt("fee", fee);
         json.setString("name", name);
         json.setString("id", id.toString());
+        json.setString("owner", owner.toString());
         json.setInt("eBookLicense", eBookLicense);
         json.setInt("bill", bill);
         return json;

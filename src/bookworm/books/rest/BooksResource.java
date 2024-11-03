@@ -12,6 +12,7 @@ import dobby.annotations.Put;
 import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
+import hades.annotations.AuthorizedOnly;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,7 @@ public class BooksResource {
     private static final StudentBookAssociationService assocService = StudentBookAssociationService.getInstance();
     private static final String BASE_PATH = "/rest/books";
 
+    @AuthorizedOnly
     @Get(BASE_PATH + "/id/{id}")
     public void getBookById(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -42,7 +44,7 @@ public class BooksResource {
             return;
         }
 
-        final Book book = service.find(uuid);
+        final Book book = service.find(getUserId(context), uuid);
 
         if (book == null) {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
@@ -55,6 +57,7 @@ public class BooksResource {
         context.getResponse().setBody(book.toJson());
     }
 
+    @AuthorizedOnly
     @Get(BASE_PATH + "/id/{id}/demand")
     public void getDemandForBook(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -74,7 +77,7 @@ public class BooksResource {
             return;
         }
 
-        final Book book = service.find(uuid);
+        final Book book = service.find(getUserId(context), uuid);
 
         if (book == null) {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
@@ -84,7 +87,7 @@ public class BooksResource {
             return;
         }
 
-        final StudentBook[] studentBooks = assocService.getUsageOfBook(uuid);
+        final StudentBook[] studentBooks = assocService.getUsageOfBook(getUserId(context), uuid);
 
         if (studentBooks == null) {
             context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -104,6 +107,7 @@ public class BooksResource {
         context.getResponse().setBody(payload);
     }
 
+    @AuthorizedOnly
     @Post(BASE_PATH)
     public void createBook(HttpContext context) {
         final NewJson body = context.getRequest().getBody();
@@ -127,6 +131,7 @@ public class BooksResource {
         book.setForGem(body.getBoolean("forGem"));
 
         book.setStock(body.getInt("stock"));
+        book.setOwner(getUserId(context));
 
         if (!service.save(book)) {
             context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -141,6 +146,7 @@ public class BooksResource {
         context.getResponse().setHeader("Location", BASE_PATH + "/id/" + book.getId());
     }
 
+    @AuthorizedOnly
     @Put(BASE_PATH + "/id/{id}")
     public void updateBook(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -160,7 +166,7 @@ public class BooksResource {
             return;
         }
 
-        final Book book = service.find(uuid);
+        final Book book = service.find(getUserId(context), uuid);
 
         if (book == null) {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
@@ -203,6 +209,7 @@ public class BooksResource {
         context.getResponse().setHeader("Location", BASE_PATH + "/id/" + book.getId());
     }
 
+    @AuthorizedOnly
     @Delete(BASE_PATH + "/id/{id}")
     public void deleteBook(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -222,7 +229,7 @@ public class BooksResource {
             return;
         }
 
-        if (!service.delete(uuid)) {
+        if (!service.delete(getUserId(context), uuid)) {
             context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
             final NewJson payload = new NewJson();
             payload.setString("error", "Failed to delete book");
@@ -233,6 +240,7 @@ public class BooksResource {
         context.getResponse().setCode(ResponseCodes.NO_CONTENT);
     }
 
+    @AuthorizedOnly
     @Get(BASE_PATH + "/{type}/grade/{grade}")
     public void getBooksForGrade(HttpContext context) {
         final String schoolType = context.getRequest().getParam("type");
@@ -258,7 +266,7 @@ public class BooksResource {
 
         final boolean isGem = schoolType.equalsIgnoreCase("gem");
 
-        final List<Book> books = service.getForGrade(grade, isGem);
+        final List<Book> books = service.getForGrade(getUserId(context), grade, isGem);
 
         final NewJson payload = new NewJson();
         payload.setList("books", books.stream().map(Book::toJson).collect(Collectors.toList()));
@@ -268,5 +276,9 @@ public class BooksResource {
 
     private boolean verifyCreateRequest(NewJson body) {
         return body.hasKeys("name", "price", "grades", "applyFee", "forGem", "stock");
+    }
+
+    private UUID getUserId(HttpContext context) {
+        return UUID.fromString(context.getSession().get("userId"));
     }
 }

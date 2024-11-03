@@ -37,8 +37,8 @@ public class StudentBookAssociationService {
         return Connector.delete(BUCKET_NAME, associationId);
     }
 
-    public boolean deleteAll() {
-        for (StudentBookAssociation association : getAll()) {
+    public boolean deleteAll(UUID owner) {
+        for (StudentBookAssociation association : getAll(owner)) {
             if (!delete(association.getKey())) {
                 return false;
             }
@@ -47,8 +47,8 @@ public class StudentBookAssociationService {
         return true;
     }
 
-    public StudentBookAssociation[] getAll() {
-        final NewJson[] associations = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
+    public StudentBookAssociation[] getAll(UUID owner) {
+        final NewJson[] associations = Connector.readPattern(BUCKET_NAME, owner + "_.*", NewJson.class);
         final List<StudentBookAssociation> assocs = new ArrayList<>();
 
         for (NewJson association : associations) {
@@ -63,29 +63,29 @@ public class StudentBookAssociationService {
         return assocs.toArray(new StudentBookAssociation[0]);
     }
 
-    public StudentBook[] getUsageOfBook(UUID bookId) {
-        final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, ".*_" + bookId.toString(), NewJson.class);
+    public StudentBook[] getUsageOfBook(UUID owner, UUID bookId) {
+        final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, owner + "_.*_" + bookId.toString(), NewJson.class);
 
-        return getStudentBooks(bookAssocJson);
+        return getStudentBooks(owner, bookAssocJson);
     }
 
-    public StudentBook[] getUsageOfBook(UUID bookId, int grade) {
-        final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, ".*_" + bookId.toString(), NewJson.class);
+    public StudentBook[] getUsageOfBook(UUID owner, UUID bookId, int grade) {
+        final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, owner + "_.*_" + bookId.toString(), NewJson.class);
 
-        return getStudentBooks(bookAssocJson, true, grade);
+        return getStudentBooks(owner, bookAssocJson, true, grade);
     }
 
-    public StudentBook[] getBooksForStudent(UUID studentId) {
-        final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, studentId.toString() + "_.*", NewJson.class);
+    public StudentBook[] getBooksForStudent(UUID owner, UUID studentId) {
+        final NewJson[] bookAssocJson = Connector.readPattern(BUCKET_NAME, owner + "_" + studentId.toString() + "_.*", NewJson.class);
 
-        return getStudentBooks(bookAssocJson);
+        return getStudentBooks(owner, bookAssocJson);
     }
 
-    private StudentBook[] getStudentBooks(NewJson[] bookAssocJson) {
-        return getStudentBooks(bookAssocJson, false, -1);
+    private StudentBook[] getStudentBooks(UUID owner, NewJson[] bookAssocJson) {
+        return getStudentBooks(owner, bookAssocJson, false, -1);
     }
 
-    private StudentBook[] getStudentBooks(NewJson[] bookAssocJson, boolean doFilter, int grade) {
+    private StudentBook[] getStudentBooks(UUID owner, NewJson[] bookAssocJson, boolean doFilter, int grade) {
         if (bookAssocJson == null) {
             return null;
         }
@@ -100,7 +100,7 @@ public class StudentBookAssociationService {
             final List<StudentBookAssociation> arrBookAssocFiltered = new ArrayList<>();
             for (StudentBookAssociation assoc : bookAssoc) {
                 final UUID studentId = assoc.getStudentId();
-                final Student student = StudentsService.getInstance().find(studentId);
+                final Student student = StudentsService.getInstance().find(owner, studentId);
 
                 if (student == null) {
                     continue;
@@ -120,7 +120,7 @@ public class StudentBookAssociationService {
 
         final StudentBook[] result = new StudentBook[bookIds.length];
         for (int i = 0; i < bookIds.length; i++) {
-            final Book book = BooksService.getInstance().find(bookIds[i]);
+            final Book book = BooksService.getInstance().find(owner, bookIds[i]);
             result[i] = new StudentBook(book, bookAssocFiltered[i].getType());
         }
 

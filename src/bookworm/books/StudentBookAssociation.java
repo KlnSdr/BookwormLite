@@ -11,6 +11,8 @@ import java.util.UUID;
 
 @Bucket(StudentBookAssociationService.BUCKET_NAME)
 public class StudentBookAssociation implements DataClass {
+    @JanusUUID("owner")
+    private UUID owner;
     @JanusUUID("studentId")
     private UUID studentId;
     @JanusUUID("bookId")
@@ -21,7 +23,8 @@ public class StudentBookAssociation implements DataClass {
     public StudentBookAssociation() {
     }
 
-    public StudentBookAssociation(UUID studentId, UUID bookId, BookUsageType type) {
+    public StudentBookAssociation(UUID owner, UUID studentId, UUID bookId, BookUsageType type) {
+        this.owner = owner;
         this.studentId = studentId;
         this.bookId = bookId;
         this.type = type.toString();
@@ -43,6 +46,14 @@ public class StudentBookAssociation implements DataClass {
         this.bookId = bookId;
     }
 
+    public UUID getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
+
     public BookUsageType getType() {
         return BookUsageType.fromString(type);
     }
@@ -53,13 +64,14 @@ public class StudentBookAssociation implements DataClass {
 
     @Override
     public String getKey() {
-        return studentId.toString() + "_" + bookId.toString();
+        return owner.toString() + "_" + studentId.toString() + "_" + bookId.toString();
     }
 
     @Override
     public NewJson toJson() {
         final NewJson json = new NewJson();
         json.setString("studentId", studentId.toString());
+        json.setString("owner", owner.toString());
         json.setString("bookId", bookId.toString());
         json.setString("type", type);
         return json;

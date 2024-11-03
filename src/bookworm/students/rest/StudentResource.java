@@ -13,6 +13,7 @@ import dobby.annotations.Put;
 import dobby.io.HttpContext;
 import dobby.io.response.ResponseCodes;
 import dobby.util.json.NewJson;
+import hades.annotations.AuthorizedOnly;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +26,7 @@ public class StudentResource {
     private static final StudentBookAssociationService associationService = StudentBookAssociationService.getInstance();
     private static final String BASE_PATH = "/rest/students";
 
+    @AuthorizedOnly
     @Get(BASE_PATH + "/id/{id}")
     public void getStudentById(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -44,7 +46,7 @@ public class StudentResource {
             return;
         }
 
-        final Student student = studentService.find(uuid);
+        final Student student = studentService.find(getUserId(context), uuid);
 
         if (student == null) {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
@@ -57,6 +59,7 @@ public class StudentResource {
         context.getResponse().setBody(student.toJson());
     }
 
+    @AuthorizedOnly
     @Post(BASE_PATH)
     public void createStudent(HttpContext context) {
         final NewJson body = context.getRequest().getBody();
@@ -77,6 +80,7 @@ public class StudentResource {
         student.setName(body.getString("name"));
         student.setEBookLicense(body.getInt("eBookLicense"));
         student.setBill(body.getInt("bill"));
+        student.setOwner(getUserId(context));
 
         final boolean success = studentService.save(student);
 
@@ -93,6 +97,7 @@ public class StudentResource {
         context.getResponse().setBody(student.toJson());
     }
 
+    @AuthorizedOnly
     @Put(BASE_PATH + "/id/{id}")
     public void updateStudent(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -112,7 +117,7 @@ public class StudentResource {
             return;
         }
 
-        final Student student = studentService.find(uuid);
+        final Student student = studentService.find(getUserId(context), uuid);
 
         if (student == null) {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
@@ -155,6 +160,7 @@ public class StudentResource {
         context.getResponse().setHeader("Location", BASE_PATH + "/id/" + student.getId());
     }
 
+    @AuthorizedOnly
     @Delete(BASE_PATH + "/id/{id}")
     public void deleteStudent(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -174,7 +180,7 @@ public class StudentResource {
             return;
         }
 
-        final Student student = studentService.find(uuid);
+        final Student student = studentService.find(getUserId(context), uuid);
 
         if (student == null) {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
@@ -184,7 +190,7 @@ public class StudentResource {
             return;
         }
 
-        final boolean success = studentService.delete(uuid);
+        final boolean success = studentService.delete(getUserId(context), uuid);
 
         if (!success) {
             context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
@@ -197,6 +203,7 @@ public class StudentResource {
         context.getResponse().setCode(ResponseCodes.NO_CONTENT);
     }
 
+    @AuthorizedOnly
     @Get(BASE_PATH + "/{type}/grade/{grade}")
     public void getAllByGrade(HttpContext context) {
         final String schoolType = context.getRequest().getParam("type");
@@ -222,7 +229,7 @@ public class StudentResource {
 
         final boolean isGem = schoolType.equalsIgnoreCase("gem");
 
-        final Student[] students = studentService.getForGrade(grade, isGem);
+        final Student[] students = studentService.getForGrade(getUserId(context), grade, isGem);
 
         final NewJson payload = new NewJson();
         payload.setList("students", Arrays.stream(students).map(Student::toJson).collect(Collectors.toList()));
@@ -230,6 +237,7 @@ public class StudentResource {
         context.getResponse().setBody(payload);
     }
 
+    @AuthorizedOnly
     @Get(BASE_PATH + "/{type}/grade/{grade}/class/{classAddition}")
     public void getAllByGradeAndClassAddition(HttpContext context) {
         final String schoolType = context.getRequest().getParam("type");
@@ -257,7 +265,7 @@ public class StudentResource {
 
         final boolean isGem = schoolType.equalsIgnoreCase("gem");
 
-        final Student[] students = studentService.getForGradeAndClassAddition(grade, classAddition, isGem);
+        final Student[] students = studentService.getForGradeAndClassAddition(getUserId(context), grade, classAddition, isGem);
 
         final NewJson payload = new NewJson();
         payload.setList("students", Arrays.stream(students).map(Student::toJson).collect(Collectors.toList()));
@@ -265,6 +273,7 @@ public class StudentResource {
         context.getResponse().setBody(payload);
     }
 
+    @AuthorizedOnly
     @Get(BASE_PATH + "/id/{id}/books")
     public void getBooksForStudent(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -284,7 +293,7 @@ public class StudentResource {
             return;
         }
 
-        final Student student = studentService.find(uuid);
+        final Student student = studentService.find(getUserId(context), uuid);
 
         if (student == null) {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
@@ -294,7 +303,7 @@ public class StudentResource {
             return;
         }
 
-        final StudentBook[] books = associationService.getBooksForStudent(uuid);
+        final StudentBook[] books = associationService.getBooksForStudent(getUserId(context), uuid);
 
         final NewJson payload = new NewJson();
         payload.setList("books", Arrays.stream(books).map(StudentBook::toJson).collect(Collectors.toList()));
@@ -302,6 +311,7 @@ public class StudentResource {
         context.getResponse().setBody(payload);
     }
 
+    @AuthorizedOnly
     @Put(BASE_PATH + "/id/{id}/books")
     public void setBooksForStudent(HttpContext context) {
         final String id = context.getRequest().getParam("id");
@@ -329,7 +339,7 @@ public class StudentResource {
             return;
         }
 
-        final Student student = studentService.find(uuid);
+        final Student student = studentService.find(getUserId(context), uuid);
 
         if (student == null) {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
@@ -345,7 +355,7 @@ public class StudentResource {
             final NewJson bookJson = (NewJson) book;
             final UUID bookId = UUID.fromString(bookJson.getString("id"));
             final String bookType = bookJson.getString("type");
-            final StudentBookAssociation association = new StudentBookAssociation(student.getId(), bookId, BookUsageType.fromString(bookType));
+            final StudentBookAssociation association = new StudentBookAssociation(getUserId(context), student.getId(), bookId, BookUsageType.fromString(bookType));
             if (association.getType() == BookUsageType.UNKNOWN) {
                 sendMalformedRequestResponse(context);
                 return;
@@ -401,5 +411,9 @@ public class StudentResource {
 
         context.getResponse().setBody(payload);
         context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
+    }
+
+    private UUID getUserId(HttpContext context) {
+        return UUID.fromString(context.getSession().get("userId"));
     }
 }

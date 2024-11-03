@@ -29,6 +29,9 @@ public class Book implements DataClass {
     private boolean forGem;
     @JanusUUID("id")
     private UUID id;
+    @JanusUUID("owner")
+    private UUID owner;
+
 
     public Book() {
         this.id = UUID.randomUUID();
@@ -79,6 +82,14 @@ public class Book implements DataClass {
         return id;
     }
 
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
+
+    public UUID getOwner() {
+        return owner;
+    }
+
     public int getStock() {
         return stock;
     }
@@ -89,7 +100,7 @@ public class Book implements DataClass {
 
     @Override
     public String getKey() {
-        return id.toString();
+        return owner.toString() + "_" + id.toString();
     }
 
     @Override
@@ -114,6 +125,7 @@ public class Book implements DataClass {
         json.setString("applyFee", applyFee ? "true" : "false");
         json.setString("forGem", forGem ? "true" : "false");
         json.setString("id", id.toString());
+        json.setString("owner", owner.toString());
         json.setInt("stock", stock);
         return json;
     }

@@ -24,29 +24,29 @@ public class BooksService {
         return instance;
     }
 
-    public Book find(UUID id) {
-        return Janus.parse(Connector.read(BUCKET_NAME, id.toString(), NewJson.class), Book.class);
+    public Book find(UUID owner, UUID id) {
+        return Janus.parse(Connector.read(BUCKET_NAME, owner + "_" + id.toString(), NewJson.class), Book.class);
     }
 
     public boolean save(Book book) {
-        return Connector.write(BUCKET_NAME, book.getId().toString(), book.toStoreJson());
+        return Connector.write(BUCKET_NAME, book.getKey(), book.toStoreJson());
     }
 
-    public boolean delete(UUID id) {
-        return Connector.delete(BUCKET_NAME, id.toString());
+    public boolean delete(UUID owner, UUID id) {
+        return Connector.delete(BUCKET_NAME, owner + "_" + id.toString());
     }
 
-    public boolean deleteAll() {
-        for (Book book: getAll()) {
-            if (!delete(book.getId())) {
+    public boolean deleteAll(UUID owner) {
+        for (Book book: getAll(owner)) {
+            if (!delete(owner, book.getId())) {
                 return false;
             }
         }
         return true;
     }
 
-    public Book[] getAll() {
-        final NewJson[] allBooks = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
+    public Book[] getAll(UUID owner) {
+        final NewJson[] allBooks = Connector.readPattern(BUCKET_NAME, owner + "_.*", NewJson.class);
         final List<Book> books = new ArrayList<>();
 
         for (NewJson bookJson : allBooks) {
@@ -59,8 +59,8 @@ public class BooksService {
         return books.toArray(new Book[0]);
     }
 
-    public List<Book> getForGrade(int grade, boolean isGem) {
-        final NewJson[] allBooks = Connector.readPattern(BUCKET_NAME, ".*", NewJson.class);
+    public List<Book> getForGrade(UUID owner, int grade, boolean isGem) {
+        final NewJson[] allBooks = Connector.readPattern(BUCKET_NAME, owner + "_.*", NewJson.class);
         final ArrayList<Book> books = new ArrayList<>();
 
         for (NewJson bookJson : allBooks) {
