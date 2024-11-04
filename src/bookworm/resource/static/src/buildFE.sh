@@ -100,3 +100,18 @@ perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT
 mkdir ../../out/logout
 cp -r docs/* ../../out/logout
 rm -rf docs
+
+echo "building /hades/login ======================"
+cd ../login || exit
+ed pack
+
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/hades\/login\//g' index.html
+perl -i -pe 'next if /src="https/; next if /src="{{/; s/src="/src="{{CONTEXT}}\/hades\/login\//g' docs/index.html
+
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/hades\/login\//g' index.html
+perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT}}\/hades\/login\//g' docs/index.html
+
+mkdir ../../out/hades
+mkdir ../../out/hades/login
+cp -r docs/* ../../out/hades/login
+rm -rf docs
