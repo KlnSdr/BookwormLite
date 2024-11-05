@@ -1,0 +1,19 @@
+.loginPanel {
+    background-color: var(--primary-color);
+    border-radius: 5px;
+    width: 25%;
+    padding: 5px;
+}
+
+@media (max-width: 900px) {
+    .loginPanel {
+        width: 50%;
+    }
+}
+
+@media (max-width: 600px) {
+    .loginPanel {
+        width: 100%;
+        margin: 0 5px;
+    }
+}
