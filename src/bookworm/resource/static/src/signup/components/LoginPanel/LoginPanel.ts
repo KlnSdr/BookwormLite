@@ -8,6 +8,10 @@ class LoginPanel implements Component {
       tag: "div",
       classes: ["loginPanel"],
       children: [
+        {
+          tag: "h1",
+          text: "Registrierung",
+        },
         // @ts-ignore include from students project
         new LabeledInput(
           "Loginname:",
@@ -16,12 +20,7 @@ class LoginPanel implements Component {
           "inputUsername"
         ).instructions(),
         // @ts-ignore include from students project
-        new LabeledInput(
-          "E-Mail:",
-          () => {},
-          "",
-          "inputMail"
-        ).instructions(),
+        new LabeledInput("E-Mail:", () => {}, "", "inputMail").instructions(),
         // @ts-ignore include from students project
         new LabeledInput(
           "Passwort:",
@@ -38,8 +37,16 @@ class LoginPanel implements Component {
           "inputPasswordRepeat",
           "password"
         ).instructions(),
+        {
+            tag: "a",
+            classes: ["blocklikeLink"],
+            text: "bereits einen Account?",
+            target: "{{CONTEXT}}/hades/login"
+        },
         // @ts-ignore include from students project
-        new Button("anmelden", () => doLogin(), ["secondaryButton"]).instructions(),
+        new Button("anmelden", () => doSignup(), [
+          "secondaryButton",
+        ]).instructions(),
       ],
     };
   }

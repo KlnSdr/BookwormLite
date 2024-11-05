@@ -8,6 +8,10 @@ class LoginPanel implements Component {
       tag: "div",
       classes: ["loginPanel"],
       children: [
+        {
+          tag: "h1",
+          text: "Anmeldung",
+        },
         // @ts-ignore include from students project
         new LabeledInput(
           "Loginname:",
@@ -23,6 +27,12 @@ class LoginPanel implements Component {
           "inputPassword",
           "password"
         ).instructions(),
+        {
+            tag: "a",
+            classes: ["blocklikeLink"],
+            text: "noch keinen Account?",
+            target: "{{CONTEXT}}/hades/signup"
+        },
         // @ts-ignore include from students project
         new Button("anmelden", () => doLogin(), ["secondaryButton"]).instructions(),
       ],
