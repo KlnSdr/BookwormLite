@@ -37,16 +37,16 @@ class SignupPanel implements Component {
           "inputPasswordRepeat",
           "password"
         ).instructions(),
+        // @ts-ignore include from students project
+        new Button("anmelden", () => doSignup(), [
+          "secondaryButton",
+        ]).instructions(),
         {
             tag: "a",
             classes: ["blocklikeLink"],
             text: "bereits einen Account?",
             target: "{{CONTEXT}}/hades/login"
         },
-        // @ts-ignore include from students project
-        new Button("anmelden", () => doSignup(), [
-          "secondaryButton",
-        ]).instructions(),
       ],
     };
   }

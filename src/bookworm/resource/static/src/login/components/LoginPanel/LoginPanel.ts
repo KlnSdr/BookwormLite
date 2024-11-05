@@ -27,14 +27,14 @@ class LoginPanel implements Component {
           "inputPassword",
           "password"
         ).instructions(),
+        // @ts-ignore include from students project
+        new Button("anmelden", () => doLogin(), ["secondaryButton"]).instructions(),
         {
             tag: "a",
             classes: ["blocklikeLink"],
             text: "noch keinen Account?",
             target: "{{CONTEXT}}/hades/signup"
         },
-        // @ts-ignore include from students project
-        new Button("anmelden", () => doLogin(), ["secondaryButton"]).instructions(),
       ],
     };
   }
