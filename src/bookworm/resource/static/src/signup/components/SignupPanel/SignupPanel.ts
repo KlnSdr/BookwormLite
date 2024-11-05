@@ -1,4 +1,4 @@
-class LoginPanel implements Component {
+class SignupPanel implements Component {
   public render(parent: edomElement) {
     edom.fromTemplate([this.instructions()], parent);
   }

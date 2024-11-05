@@ -8,7 +8,7 @@ class App implements Component {
         tag: "div",
         classes: ["app"],
         children: [
-            new LoginPanel().instructions()
+            new SignupPanel().instructions()
         ]
     };
   }
