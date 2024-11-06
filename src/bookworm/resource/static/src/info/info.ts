@@ -21,7 +21,7 @@ const BookwormInfo: Info = {
   changelog: [
     {
       version: "3.0.0",
-      date: "dd.mm.yyyy",
+      date: "06.11.2024",
       changes: [
         "erster Release von Bookworm Version 3",
         "Eingabemaske für Schüler*innendaten hinzugefügt",
