@@ -8,10 +8,12 @@
       "directory": "static/out"
     },
     "session": {
-      "age": 5
+      "age": 5,
+      "store": "hades.session.HadesSessionStore"
     },
     "port": 2711,
     "threads": 10,
+    "logLevel": "WARN",
     "mode": "http"
   },
   "hades": {
