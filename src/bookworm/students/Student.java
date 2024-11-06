@@ -27,29 +27,35 @@ public class Student implements DataClass {
     private final UUID id;
     @JanusUUID("owner")
     private UUID owner;
-    @JanusInteger("bill")
-    private int bill;
-    @JanusInteger("eBookLicense")
-    private int eBookLicense;
+    @JanusInteger("billEur")
+    private int billEur;
+    @JanusInteger("billCts")
+    private int billCts;
+    @JanusInteger("eBookLicenseEur")
+    private int eBookLicenseEur;
+    @JanusInteger("eBookLicenseCts")
+    private int eBookLicenseCts;
 
     public Student() {
         this.id = UUID.randomUUID();
     }
 
-    public int getBill() {
-        return bill;
+    public float getBill() {
+        return billEur + billCts / 100f;
     }
 
-    public void setBill(int bill) {
-        this.bill = bill;
+    public void setBill(double bill) {
+        this.billEur = (int) bill;
+        this.billCts = (int) ((bill - billEur) * 100);
     }
 
-    public int getEBookLicense() {
-        return eBookLicense;
+    public float getEBookLicense() {
+        return eBookLicenseEur + eBookLicenseCts / 100f;
     }
 
-    public void setEBookLicense(int eBookLicense) {
-        this.eBookLicense = eBookLicense;
+    public void setEBookLicense(double eBookLicense) {
+        this.eBookLicenseEur = (int) eBookLicense;
+        this.eBookLicenseCts = (int) ((eBookLicense - eBookLicenseEur) * 100);
     }
 
     public int getGrade() {
@@ -118,8 +124,8 @@ public class Student implements DataClass {
         json.setInt("fee", fee);
         json.setString("name", name);
         json.setString("id", id.toString());
-        json.setInt("eBookLicense", eBookLicense);
-        json.setInt("bill", bill);
+        json.setFloat("eBookLicense", getEBookLicense());
+        json.setFloat("bill", getBill());
         return json;
     }
 
@@ -132,8 +138,10 @@ public class Student implements DataClass {
         json.setString("name", name);
         json.setString("id", id.toString());
         json.setString("owner", owner.toString());
-        json.setInt("eBookLicense", eBookLicense);
-        json.setInt("bill", bill);
+        json.setInt("eBookLicenseEur", eBookLicenseEur);
+        json.setInt("eBookLicenseCts", eBookLicenseCts);
+        json.setInt("billEur", billEur);
+        json.setInt("billCts", billCts);
         return json;
     }
 }
