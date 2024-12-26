@@ -28,8 +28,8 @@ public class IndexService {
         saveIndex(index, CLASS_ADDITION_INDEX_BUCKET_NAME);
     }
 
-    public void dropClassAdditionIndex(StudentsClassAdditionIndex index) {
-        dropIndex(index, CLASS_ADDITION_INDEX_BUCKET_NAME);
+    public boolean dropClassAdditionIndex(StudentsClassAdditionIndex index) {
+        return dropIndex(index, CLASS_ADDITION_INDEX_BUCKET_NAME);
     }
 
     public StudentsClassAdditionIndex getClassAdditionIndex(UUID owner) {
@@ -47,8 +47,8 @@ public class IndexService {
         saveIndex(index, GRADE_INDEX_BUCKET_NAME);
     }
 
-    public void dropGradeIndex(StudentsGradeIndex index) {
-        dropIndex(index, GRADE_INDEX_BUCKET_NAME);
+    public boolean dropGradeIndex(StudentsGradeIndex index) {
+        return dropIndex(index, GRADE_INDEX_BUCKET_NAME);
     }
 
     public StudentsGradeIndex getGradeIndex(UUID owner) {
@@ -62,8 +62,8 @@ public class IndexService {
         return index;
     }
 
-    private <T, K> void dropIndex(DatabaseIndex<T, K> index, String bucketName) {
-        Connector.delete(bucketName, index.getKey());
+    private <T, K> boolean dropIndex(DatabaseIndex<T, K> index, String bucketName) {
+        return Connector.delete(bucketName, index.getKey());
     }
 
     private <T, K> void saveIndex(DatabaseIndex<T, K> index, String bucketName) {

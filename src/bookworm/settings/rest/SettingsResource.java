@@ -4,6 +4,7 @@ import bookworm.books.Book;
 import bookworm.books.StudentBookAssociation;
 import bookworm.books.service.BooksService;
 import bookworm.books.service.StudentBookAssociationService;
+import bookworm.index.service.IndexService;
 import bookworm.students.Student;
 import bookworm.students.service.StudentsService;
 import dobby.annotations.Delete;
@@ -23,13 +24,20 @@ public class SettingsResource {
     private static final BooksService bookService = BooksService.getInstance();
     private static final StudentsService studentsService = StudentsService.getInstance();
     private static final StudentBookAssociationService assocService = StudentBookAssociationService.getInstance();
+    private static final IndexService indexService = IndexService.getInstance();
 
     @AuthorizedOnly
     @Delete(BASE_PATH + "/all-data")
     public void deleteAllData(HttpContext context) {
         LOGGER.warn("deleting all data");
 
-        final boolean success = assocService.deleteAll(getUserId(context)) && bookService.deleteAll(getUserId(context)) && studentsService.deleteAll(getUserId(context));
+        final UUID userId = getUserId(context);
+
+        final boolean success = assocService.deleteAll(userId)
+                && bookService.deleteAll(userId)
+                && studentsService.deleteAll(userId)
+                && indexService.dropClassAdditionIndex(indexService.getClassAdditionIndex(userId))
+                && indexService.dropGradeIndex(indexService.getGradeIndex(userId));
 
         if (!success) {
             final NewJson payload = new NewJson();
