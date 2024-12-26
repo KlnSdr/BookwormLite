@@ -18,6 +18,8 @@ class CenterPanel implements Component {
         new Button("alle Daten löschen", () => DeleteDataPopup.show(), [
           "dangerButton",
         ]).instructions(),
+        // @ts-ignore imported from students project
+        new Button("Daten importieren", () => LoadBackupPopup.show()).instructions(),
       ],
     };
   }
