@@ -15,15 +15,14 @@ class LoadBackup implements Component {
         },
         // @ts-ignore imported from students project
         new Button("Datei verifizieren und hochladen", (self: edomElement) => {
-          this.verifyAndUploadBackup();
-          // @ts-ignore imported from students project
-          Popup.close(self);
+          this.verifyAndUploadBackup(self);
         }).instructions(),
       ],
     };
   }
 
-  private verifyAndUploadBackup() {
+  private verifyAndUploadBackup(source: edomElement) {
+    source.text = "...";
     const fileInput: edomElement | undefined = edom.findById(
       "fileUploadDataBackup"
     );
@@ -32,6 +31,9 @@ class LoadBackup implements Component {
       // TODO show error message
       return;
     }
+
+    // @ts-ignore imported from students project
+    Popup.changeTitle(source, "Analysiere Backupdatei...");
 
     const files: FileList | null = (fileInput.element as HTMLInputElement)
       .files;
@@ -43,22 +45,37 @@ class LoadBackup implements Component {
 
     const file: File = files[0];
     LoadBackup.readFile(file)
-      .then(LoadBackup.verifyContent)
-      .then(LoadBackup.uploadData)
+      .then((content: string) => {
+        // @ts-ignore imported from students project
+        Popup.changeTitle(source, "Verfiziere Backupdatei...");
+        return LoadBackup.verifyContent(content);
+      })
+      .then((jsonData) => {
+        return LoadBackup.uploadData(jsonData, source);
+      })
       .then(() => {
-        console.log("done!");
+        // @ts-ignore imported from students project
+        Popup.close(source);
+        // @ts-ignore imported from students project
+        Alert.show("Daten erfolgreich importiert!");
       })
       .catch((err) => {
         console.error(err);
       });
   }
 
-  private static uploadData(data: {
-    students: Student[];
-    books: Book[];
-    associations: Association[];
-  }): Promise<void> {
+  private static uploadData(
+    data: {
+      students: Student[];
+      books: Book[];
+      associations: Association[];
+    },
+    eventSource: edomElement
+  ): Promise<void> {
     return new Promise((resolve, reject) => {
+      // @ts-ignore imported from students project
+      Popup.changeTitle(eventSource, "Lade Bücher hoch...");
+
       Promise.all(data.books.map(LoadBackup.uploadBook))
         .then((newIds: string[][]) => {
           const idMap: { [key: string]: string } = {};
@@ -66,27 +83,40 @@ class LoadBackup implements Component {
             idMap[newId[0]] = newId[1];
           });
 
-          data.associations = data.associations.map((assoc: Association, index: number) => {
-            return {
-              ...data.associations[index],
-              bookId: idMap[assoc.bookId],
-            };
-          });
+          data.associations = data.associations.map(
+            (assoc: Association, index: number) => {
+              return {
+                ...data.associations[index],
+                bookId: idMap[assoc.bookId],
+              };
+            }
+          );
+
+          // @ts-ignore imported from students project
+          Popup.changeTitle(eventSource, "Lade Schüler*innen hoch...");
 
           return Promise.all(data.students.map(LoadBackup.uploadStudent));
         })
         .then((newIds: string[][]) => {
+          // @ts-ignore imported from students project
+          Popup.changeTitle(
+            eventSource,
+            "Lade Bücher für Schüler*innen hoch..."
+          );
+
           const idMap: { [key: string]: string } = {};
           newIds.forEach((newId: string[]) => {
             idMap[newId[0]] = newId[1];
           });
 
-          data.associations = data.associations.map((assoc: Association, index: number) => {
-            return {
-              ...data.associations[index],
-              studentId: idMap[assoc.studentId],
-            };
-          });
+          data.associations = data.associations.map(
+            (assoc: Association, index: number) => {
+              return {
+                ...data.associations[index],
+                studentId: idMap[assoc.studentId],
+              };
+            }
+          );
 
           data.students.forEach((s: Student) => {
             s.id = idMap[s.id];
@@ -96,7 +126,9 @@ class LoadBackup implements Component {
             data.students.map((s: Student) => {
               LoadBackup.uploadAssocs(
                 s,
-                data.associations.filter((a: Association) => a.studentId === s.id)
+                data.associations.filter(
+                  (a: Association) => a.studentId === s.id
+                )
               );
             })
           );
