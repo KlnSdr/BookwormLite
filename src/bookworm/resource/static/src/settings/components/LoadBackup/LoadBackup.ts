@@ -28,7 +28,8 @@ class LoadBackup implements Component {
     );
 
     if (!fileInput) {
-      // TODO show error message
+      // @ts-ignore imported from students project
+      Alert.show("Fehler: Datei konnte nicht gelesen werden!");
       return;
     }
 
@@ -39,7 +40,8 @@ class LoadBackup implements Component {
       .files;
 
     if (files === null || files.length === 0) {
-      // TODO show error message
+      // @ts-ignore imported from students project
+      Alert.show("Fehler: Datei konnte nicht gelesen werden!");
       return;
     }
 
@@ -61,6 +63,8 @@ class LoadBackup implements Component {
       })
       .catch((err) => {
         console.error(err);
+        // @ts-ignore imported from students project
+        Alert.show("Fehler: Backup konnte nicht vollständig hochgeladen werden!");
       });
   }
 
@@ -265,7 +269,6 @@ class LoadBackup implements Component {
         jsonData = JSON.parse(content);
       } catch (error) {
         console.error(error);
-        // TODO show error message because of wrong file content
         reject(error);
       }
       if (
