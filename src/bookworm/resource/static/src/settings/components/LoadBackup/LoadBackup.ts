@@ -82,7 +82,7 @@ class LoadBackup implements Component {
       // @ts-ignore imported from students project
       Popup.changeTitle(eventSource, "Lade Bücher hoch...");
 
-      Promise.all(data.books.map(LoadBackup.uploadBook))
+      LoadBackup.uploadBooks(data.books)
         .then((newIds: string[][]) => {
           const idMap: { [key: string]: string } = {};
           newIds.forEach((newId: string[]) => {
@@ -147,20 +147,24 @@ class LoadBackup implements Component {
     });
   }
 
-  private static uploadBook(book: Book): Promise<string[]> {
+  private static uploadBooks(books: Book[]): Promise<string[][]> {
     return new Promise((resolve, reject) => {
-      fetch("{{CONTEXT}}/rest/books", {
+      fetch("{{CONTEXT}}/rest/books/batch", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: book.name,
-          price: parseFloat(book.price),
-          grades: book.grades,
-          applyFee: book.applyFee,
-          forGem: book.forGem,
-          stock: book.stock,
+          books: books.map((b) => {
+            return {
+              name: b.name,
+              price: parseFloat(b.price),
+              grades: b.grades,
+              applyFee: b.applyFee,
+              forGem: b.forGem,
+              stock: b.stock,
+            };
+          }),
         }),
       })
         .then((response: Response) => {
@@ -176,8 +180,14 @@ class LoadBackup implements Component {
           }
           return response.json();
         })
-        .then((val: Book) => {
-          resolve([book.id, val.id]);
+        .then((val: { books: Book[] }) => {
+          const res: string[][] = [];
+
+          for (let i = 0; i < books.length; i++) {
+            res.push([books[i].id, val.books[i].id]);
+          }
+
+          resolve(res);
         })
         .catch(reject);
     });
@@ -218,7 +228,6 @@ class LoadBackup implements Component {
           return response.json();
         })
         .then((val: { students: Student[] }) => {
-          // resolve([student.id, val.id]);
           const res: string[][] = [];
 
           for (let i = 0; i < students.length; i++) {

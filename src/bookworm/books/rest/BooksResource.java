@@ -120,6 +120,63 @@ public class BooksResource {
             return;
         }
 
+        final Book book = createBookFromJson(body, context);
+
+        if (!service.save(book)) {
+            context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Failed to save book");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        context.getResponse().setCode(ResponseCodes.CREATED);
+        context.getResponse().setBody(book.toJson());
+        context.getResponse().setHeader("Location", BASE_PATH + "/id/" + book.getId());
+    }
+
+    @AuthorizedOnly
+    @Post(BASE_PATH + "/batch")
+    public void createBookBatch(HttpContext context) {
+        final NewJson body = context.getRequest().getBody();
+
+        if (!verifyCreateBatchRequest(body)) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Invalid request body");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final List<Object> books = body.getList("books");
+
+        final List<Book> bookList = books.stream().map(o -> createBookFromJson((NewJson) o, context)).toList();
+
+        boolean success = true;
+
+        for (Book book : bookList) {
+            if (!service.save(book)) {
+                success = false;
+                break;
+            }
+        }
+
+        if (!success) {
+            context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Failed to save books");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final NewJson payload = new NewJson();
+        payload.setList("books", bookList.stream().map(Book::toJson).collect(Collectors.toList()));
+
+        context.getResponse().setCode(ResponseCodes.CREATED);
+        context.getResponse().setBody(payload);
+    }
+
+    private Book createBookFromJson(NewJson body, HttpContext context) {
         final Book book = new Book();
         book.setName(body.getString("name"));
         book.setPrice(body.getFloat("price"));
@@ -133,17 +190,7 @@ public class BooksResource {
         book.setStock(body.getInt("stock"));
         book.setOwner(getUserId(context));
 
-        if (!service.save(book)) {
-            context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
-            final NewJson payload = new NewJson();
-            payload.setString("error", "Failed to save book");
-            context.getResponse().setBody(payload);
-            return;
-        }
-
-        context.getResponse().setCode(ResponseCodes.CREATED);
-        context.getResponse().setBody(book.toJson());
-        context.getResponse().setHeader("Location", BASE_PATH + "/id/" + book.getId());
+        return book;
     }
 
     @AuthorizedOnly
@@ -276,6 +323,30 @@ public class BooksResource {
 
     private boolean verifyCreateRequest(NewJson body) {
         return body.hasKeys("name", "price", "grades", "applyFee", "forGem", "stock");
+    }
+
+    private boolean verifyCreateBatchRequest(NewJson body) {
+        if (!body.hasKey("books")) {
+            return false;
+        }
+
+        final List<Object> books = body.getList("books");
+
+        if (books == null) {
+            return false;
+        }
+
+        for (Object o : books) {
+            if (!(o instanceof NewJson book)) {
+                return false;
+            }
+
+            if (!verifyCreateRequest(book)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private UUID getUserId(HttpContext context) {
