@@ -387,17 +387,73 @@ public class StudentResource {
             return;
         }
 
-        final Student student = studentService.find(getUserId(context), uuid);
+        final List<StudentBookAssociation> booksToStore = prepareAssocsForStudent(uuid, context.getRequest().getBody().getList("books"), context);
+
+        if (booksToStore == null) { // http response is already set in prepareAssocsForStudent
+            return;
+        }
+
+        if (!storeStudentBooksAssociation(booksToStore)) {
+            sendPartialStoreResponse(context);
+        }
+    }
+
+    @AuthorizedOnly
+    @Put(BASE_PATH + "/batch/books")
+    public void setBooksForStudentBatch(HttpContext context) {
+        final NewJson body = context.getRequest().getBody();
+        if (!verifyBatchBookRequest(body)) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Invalid request body");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final List<Object> assocs = body.getList("assocs");
+        final List<StudentBookAssociation> booksToStore = new ArrayList<>();
+
+        for (Object assoc : assocs) {
+            final NewJson assocJson = (NewJson) assoc;
+            final UUID studentId = UUID.fromString(assocJson.getString("studentId"));
+            final List<Object> bookData = assocJson.getList("books");
+
+            final List<StudentBookAssociation> assocsForStudent = prepareAssocsForStudent(studentId, bookData, context);
+
+            if (assocsForStudent == null) { // http response is already set in prepareAssocsForStudent
+                return;
+            }
+
+            booksToStore.addAll(assocsForStudent);
+        }
+
+        if (!storeStudentBooksAssociation(booksToStore)) {
+            sendPartialStoreResponse(context);
+        }
+    }
+
+    private boolean storeStudentBooksAssociation(List<StudentBookAssociation> booksToStore) {
+        for (StudentBookAssociation association : booksToStore) {
+            final boolean didStore = associationService.save(association);
+            if (!didStore) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private List<StudentBookAssociation> prepareAssocsForStudent(UUID studentId, List<Object> bookData, HttpContext context) {
+        final Student student = studentService.find(getUserId(context), studentId);
 
         if (student == null) {
             context.getResponse().setCode(ResponseCodes.NOT_FOUND);
             final NewJson payload = new NewJson();
             payload.setString("error", "Student not found");
             context.getResponse().setBody(payload);
-            return;
+            return null;
         }
 
-        final List<Object> bookData = context.getRequest().getBody().getList("books");
         final List<StudentBookAssociation> booksToStore = new ArrayList<>();
         for (Object book : bookData) {
             final NewJson bookJson = (NewJson) book;
@@ -406,18 +462,12 @@ public class StudentResource {
             final StudentBookAssociation association = new StudentBookAssociation(getUserId(context), student.getId(), bookId, BookUsageType.fromString(bookType));
             if (association.getType() == BookUsageType.UNKNOWN) {
                 sendMalformedRequestResponse(context);
-                return;
+                return null;
             }
             booksToStore.add(association);
         }
 
-        for (StudentBookAssociation association : booksToStore) {
-            final boolean didStore = associationService.save(association);
-            if (!didStore) {
-                sendPartialStoreResponse(context);
-                return;
-            }
-        }
+        return booksToStore;
     }
 
     private boolean verifyCreateRequest(NewJson body) {
@@ -441,6 +491,36 @@ public class StudentResource {
             }
 
             if (!verifyCreateRequest(studentJson)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean verifyBatchBookRequest(NewJson body) {
+        if (!body.hasKey("assocs")) {
+            return false;
+        }
+
+        final List<Object> assocs = body.getList("assocs");
+
+        for (Object assoc : assocs) {
+            if (!(assoc instanceof NewJson assocJson)) {
+                return false;
+            }
+
+            if (!assocJson.hasKeys("studentId", "books")) {
+                return false;
+            }
+
+            try {
+                UUID.fromString(assocJson.getString("studentId"));
+            } catch (IllegalArgumentException e) {
+                return false;
+            }
+
+            if (!verifyBookRequest(assocJson)) {
                 return false;
             }
         }

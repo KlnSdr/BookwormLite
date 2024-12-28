@@ -129,16 +129,17 @@ class LoadBackup implements Component {
             s.id = idMap[s.id];
           });
 
-          return Promise.all(
-            data.students.map((s: Student) => {
-              LoadBackup.uploadAssocs(
-                s,
-                data.associations.filter(
-                  (a: Association) => a.studentId === s.id
-                )
-              );
-            })
-          );
+          const assocs: Association[][] = [];
+
+          data.students.map((student: Student) => {
+            assocs.push(
+              data.associations.filter(
+                (a: Association) => a.studentId === student.id
+              )
+            );
+          });
+
+          return LoadBackup.uploadAssocs(data.students, assocs);
         })
         .then(() => {
           resolve();
@@ -241,22 +242,34 @@ class LoadBackup implements Component {
   }
 
   private static uploadAssocs(
-    student: Student,
-    assocs: Association[]
+    students: Student[],
+    assocs: Association[][]
   ): Promise<void> {
+    const payloadContent: {
+      studentId: string;
+      books: { id: string; type: string }[];
+    }[] = [];
+
+    for (let i = 0; i < students.length; i++) {
+      payloadContent.push({
+        studentId: students[i].id,
+        books: assocs[i].map((a: Association) => {
+          return {
+            id: a.bookId,
+            type: a.type,
+          };
+        }),
+      });
+    }
+
     return new Promise((resolve, reject) => {
-      fetch(`{{CONTEXT}}/rest/students/id/${student.id}/books`, {
+      fetch(`{{CONTEXT}}/rest/students/batch/books`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          books: assocs.map((a: Association) => {
-            return {
-              id: a.bookId,
-              type: a.type,
-            };
-          }),
+          assocs: payloadContent,
         }),
       })
         .then((response: Response) => {
