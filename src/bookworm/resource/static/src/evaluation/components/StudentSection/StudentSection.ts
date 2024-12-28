@@ -10,7 +10,7 @@ class StudentSection implements Component {
     grade: string,
     isGem: boolean,
     setLoading: () => void,
-    onLoaded: () => void,
+    onLoaded: () => void
   ) {
     this.grade = grade;
     this.isGem = isGem;
@@ -29,7 +29,7 @@ class StudentSection implements Component {
         {
           id: "click",
           type: "click",
-          body: (self: edomElement) => this.populateTable(),
+          body: (_self: edomElement) => this.populateTable(),
         },
       ],
       children: [
@@ -44,9 +44,12 @@ class StudentSection implements Component {
       return;
     }
     this.loadData()
+      .then(this.sortStudentsByClassAndName)
       .then((data: EvaluationStudentData[]) => this.generateTable(data))
       .then((table: edomTemplate) => this.renderTable(table))
-      .catch((_) => {});
+      .catch((err: any) => {
+        console.error(err);
+      });
   }
 
   private renderTable(table: edomTemplate) {
@@ -84,14 +87,28 @@ class StudentSection implements Component {
         Array.from(document.getElementsByClassName("dt-button")).forEach(
           (e: Element) => {
             e.classList.add("button");
-          },
+          }
         );
       }, 10);
     }, 10);
   }
 
+  private sortStudentsByClassAndName(
+    data: EvaluationStudentData[]
+  ): Promise<EvaluationStudentData[]> {
+    return new Promise((resolve, _reject) => {
+      data.sort((a: EvaluationStudentData, b: EvaluationStudentData) => {
+        return (
+          a.classAddition.localeCompare(b.classAddition) ||
+          a.name.localeCompare(b.name)
+        );
+      });
+      resolve(data);
+    });
+  }
+
   private generateTable(data: EvaluationStudentData[]): Promise<edomTemplate> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const tableHeadCols: string[] = [
         "Name",
         "Klasse",
@@ -122,7 +139,7 @@ class StudentSection implements Component {
           {
             tag: "tbody",
             children: data.map((student: EvaluationStudentData) =>
-              new StudentRow(student, books).instructions(),
+              new StudentRow(student, books).instructions()
             ),
           },
         ],
@@ -151,7 +168,9 @@ class StudentSection implements Component {
     this.setLoading();
     return new Promise((resolve, reject) => {
       fetch(
-        `{{CONTEXT}}/rest/evaluation/${this.isGem ? "gem" : "gym"}/grade/${this.grade}/students`,
+        `{{CONTEXT}}/rest/evaluation/${this.isGem ? "gem" : "gym"}/grade/${
+          this.grade
+        }/students`
       )
         .then((response: Response) => {
           if (!response.ok) {
