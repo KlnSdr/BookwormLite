@@ -72,15 +72,7 @@ public class StudentResource {
             return;
         }
 
-        final Student student = new Student();
-        student.setGrade(body.getInt("grade"));
-        student.setClassAddition(body.getString("classAddition"));
-        student.setGem(body.getBoolean("isGem"));
-        student.setFee(body.getInt("fee"));
-        student.setName(body.getString("name"));
-        student.setEBookLicense(body.getFloat("eBookLicense"));
-        student.setBill(body.getFloat("bill"));
-        student.setOwner(getUserId(context));
+        final Student student = createStudentFromJson(body, context);
 
         final boolean success = studentService.save(student);
 
@@ -95,6 +87,62 @@ public class StudentResource {
         context.getResponse().setCode(ResponseCodes.CREATED);
         context.getResponse().setHeader("Location", BASE_PATH + "/id/" + student.getId());
         context.getResponse().setBody(student.toJson());
+    }
+
+    @AuthorizedOnly
+    @Post(BASE_PATH + "/batch")
+    public void createStudentBatch(HttpContext context) {
+        final NewJson body = context.getRequest().getBody();
+
+        if (!verifyBatchCreateRequest(body)) {
+            context.getResponse().setCode(ResponseCodes.BAD_REQUEST);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Invalid request body");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        final List<Object> studentData = body.getList("students");
+
+        final List<Student> students = new ArrayList<>();
+        for (Object student : studentData) {
+            final Student newStudent = createStudentFromJson((NewJson) student, context);
+            students.add(newStudent);
+        }
+
+        boolean success = true;
+
+        for (Student student : students) {
+            success = success && studentService.save(student);
+        }
+
+        if (!success) {
+            context.getResponse().setCode(ResponseCodes.INTERNAL_SERVER_ERROR);
+            final NewJson payload = new NewJson();
+            payload.setString("error", "Failed to save students");
+            context.getResponse().setBody(payload);
+            return;
+        }
+
+        context.getResponse().setCode(ResponseCodes.CREATED);
+
+        final NewJson payload = new NewJson();
+        payload.setList("students", students.stream().map(Student::toJson).collect(Collectors.toList()));
+        context.getResponse().setBody(payload);
+    }
+
+    private Student createStudentFromJson(NewJson body, HttpContext context) {
+        final Student student = new Student();
+        student.setGrade(body.getInt("grade"));
+        student.setClassAddition(body.getString("classAddition"));
+        student.setGem(body.getBoolean("isGem"));
+        student.setFee(body.getInt("fee"));
+        student.setName(body.getString("name"));
+        student.setEBookLicense(body.getFloat("eBookLicense"));
+        student.setBill(body.getFloat("bill"));
+        student.setOwner(getUserId(context));
+
+        return student;
     }
 
     @AuthorizedOnly
@@ -374,6 +422,30 @@ public class StudentResource {
 
     private boolean verifyCreateRequest(NewJson body) {
         return body.hasKeys("grade", "classAddition", "isGem", "fee", "name", "eBookLicense", "bill");
+    }
+
+    private boolean verifyBatchCreateRequest(NewJson body) {
+        if (!body.hasKey("students")) {
+            return false;
+        }
+
+        final List<Object> studentData = body.getList("students");
+
+        if (studentData == null) {
+            return false;
+        }
+
+        for (Object student : studentData) {
+            if (!(student instanceof NewJson studentJson)) {
+                return false;
+            }
+
+            if (!verifyCreateRequest(studentJson)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private boolean verifyBookRequest(NewJson body) {

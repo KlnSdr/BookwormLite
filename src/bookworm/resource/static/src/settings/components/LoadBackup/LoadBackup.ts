@@ -64,7 +64,9 @@ class LoadBackup implements Component {
       .catch((err) => {
         console.error(err);
         // @ts-ignore imported from students project
-        Alert.show("Fehler: Backup konnte nicht vollständig hochgeladen werden!");
+        Alert.show(
+          "Fehler: Backup konnte nicht vollständig hochgeladen werden!"
+        );
       });
   }
 
@@ -99,7 +101,8 @@ class LoadBackup implements Component {
           // @ts-ignore imported from students project
           Popup.changeTitle(eventSource, "Lade Schüler*innen hoch...");
 
-          return Promise.all(data.students.map(LoadBackup.uploadStudent));
+          // return Promise.all(data.students.map(LoadBackup.uploadStudent));
+          return LoadBackup.uploadStudents(data.students);
         })
         .then((newIds: string[][]) => {
           // @ts-ignore imported from students project
@@ -180,21 +183,25 @@ class LoadBackup implements Component {
     });
   }
 
-  private static uploadStudent(student: Student): Promise<string[]> {
+  private static uploadStudents(students: Student[]): Promise<string[][]> {
     return new Promise((resolve, reject) => {
-      fetch("{{CONTEXT}}/rest/students", {
+      fetch("{{CONTEXT}}/rest/students/batch", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          grade: student.grade,
-          classAddition: student.classAddition,
-          isGem: student.isGem,
-          fee: student.fee,
-          name: student.name,
-          eBookLicense: student.eBookLicense,
-          bill: student.bill,
+          students: students.map((s) => {
+            return {
+              grade: s.grade,
+              classAddition: s.classAddition,
+              isGem: s.isGem,
+              fee: s.fee,
+              name: s.name,
+              eBookLicense: s.eBookLicense,
+              bill: s.bill,
+            };
+          }),
         }),
       })
         .then((response: Response) => {
@@ -210,8 +217,15 @@ class LoadBackup implements Component {
           }
           return response.json();
         })
-        .then((val: Student) => {
-          resolve([student.id, val.id]);
+        .then((val: { students: Student[] }) => {
+          // resolve([student.id, val.id]);
+          const res: string[][] = [];
+
+          for (let i = 0; i < students.length; i++) {
+            res.push([students[i].id, val.students[i].id]);
+          }
+
+          resolve(res);
         })
         .catch(reject);
     });
