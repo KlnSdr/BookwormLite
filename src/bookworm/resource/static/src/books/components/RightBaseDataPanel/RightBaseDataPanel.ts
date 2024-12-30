@@ -2,15 +2,18 @@ class RightBaseDataPanel implements Component {
   private readonly validateBookData: () => boolean;
   private readonly getBookData: () => Book;
   private readonly resetPanel: () => void;
+  private readonly onSaveCallBack: (book: Book) => void;
 
   constructor(
     validateBookData: () => boolean,
     getBookData: () => Book,
     resetPanel: () => void,
+    onSaveCallBack: (book: Book) => void
   ) {
     this.validateBookData = validateBookData;
     this.getBookData = getBookData;
     this.resetPanel = resetPanel;
+    this.onSaveCallBack = onSaveCallBack;
   }
 
   public render(parent: edomElement) {
@@ -67,6 +70,10 @@ class RightBaseDataPanel implements Component {
         // @ts-ignore included from students project
         Alert.show("Daten erfolgreich gespeichert.");
         this.resetPanel();
+        return response.json();
+      })
+      .then((book: Book) => {
+        this.onSaveCallBack(book);
       })
       .catch((reason: any) => {
         console.error(reason);

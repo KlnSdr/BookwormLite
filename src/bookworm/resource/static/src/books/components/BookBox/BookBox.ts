@@ -1,5 +1,5 @@
 class BookBox implements Component {
-  private readonly data: Book;
+  private data: Book;
   private readonly onStockWarning: () => void;
   private readonly demandBorrowId: string = Math.random().toString(36);
   private readonly demandBuyId: string = Math.random().toString(36);
@@ -29,30 +29,35 @@ class BookBox implements Component {
           id: "editBook",
           type: "click",
           body: (self: edomElement) => {
-            this.openBook();
+            this.openBook(self);
           },
         },
       ],
-      children: [
+      children: this.renderData(this.data)
+    };
+  }
+
+  private renderData(data: Book): edomTemplate[] {
+    return [
         {
           tag: "h2",
-          text: "Name: " + this.data.name,
+          text: "Name: " + data.name,
         },
         {
           tag: "label",
-          text: "Klassenstufe: " + this.data.grades.join(", "),
+          text: "Klassenstufe: " + data.grades.join(", "),
         },
         {
           tag: "label",
-          text: "Preis: " + this.data.price + "€",
+          text: "Preis: " + data.price + "€",
         },
         {
           tag: "label",
-          text: "LG berechnen: " + (this.data.applyFee ? "Ja" : "Nein"),
+          text: "LG berechnen: " + (data.applyFee ? "Ja" : "Nein"),
         },
         {
           tag: "label",
-          text: "Bestand: " + this.data.stock,
+          text: "Bestand: " + data.stock,
           id: this.stockId,
         },
         {
@@ -65,8 +70,7 @@ class BookBox implements Component {
           text: "Bedarf (kauf): ???",
           id: this.demandBuyId,
         },
-      ],
-    };
+    ];
   }
 
   private loadAndDisplayDemand() {
@@ -117,7 +121,7 @@ class BookBox implements Component {
     }
   }
 
-  private openBook() {
+  private openBook(eventTarget: edomElement) {
     const basePanel: edomElement | undefined = edom.allElements.find(
       (e: edomElement) => e.hasStyle("baseDataPanel"),
     );
@@ -129,9 +133,24 @@ class BookBox implements Component {
 
     basePanel.delete();
 
-    new BaseDataPanel(this.data).render(
+    new BaseDataPanel(this.data, (book: Book) => this.updateUiAfterUpdate(eventTarget, book)).render(
       edom.findById("appContainerBasePanel")!,
     );
+  }
+
+  private updateUiAfterUpdate(target: edomElement, data: Book) {
+    this.data = {
+      ...data,
+      stock: parseInt(data.stock.toString()),
+      price: parseFloat(data.price.toString()),
+    };
+
+    while (target.children.length > 0) {
+      target.children[0].delete();
+    }
+
+    edom.fromTemplate(this.renderData(data), target);
+    this.loadAndDisplayDemand();
   }
 
   public unload() {}

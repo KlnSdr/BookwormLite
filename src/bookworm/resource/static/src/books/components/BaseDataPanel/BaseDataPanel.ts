@@ -10,12 +10,16 @@ class BaseDataPanel implements Component {
 
   private lowerClassLimit: number | undefined = undefined;
   private upperClassLimit: number | undefined = undefined;
+  private onSaveCallBack: (book: Book) => void = (_) => {};
 
-  public constructor(initalData: Book | null = null) {
+  public constructor(initalData: Book | null = null, onSaveCallBack: ((book: Book) => void) | null= null) {
     if (initalData) {
       this.bookData = initalData;
       this.lowerClassLimit = initalData.grades[0];
       this.upperClassLimit = initalData.grades[initalData.grades.length - 1];
+    }
+    if (onSaveCallBack) {
+      this.onSaveCallBack = onSaveCallBack!;
     }
   }
 
@@ -45,6 +49,7 @@ class BaseDataPanel implements Component {
           () => this.validateBookData(),
           () => this.getBookData(),
           () => this.reset(),
+          (book: Book) => this.onSaveCallBack(book)
         ).instructions(),
       ],
     };
