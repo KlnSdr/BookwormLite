@@ -136,6 +136,7 @@ class BookBox implements Component {
     new BaseDataPanel(this.data, (book: Book) => this.updateUiAfterUpdate(eventTarget, book)).render(
       edom.findById("appContainerBasePanel")!,
     );
+    window.scrollTo({left: 0, top: 0, behavior: 'smooth'});
   }
 
   private updateUiAfterUpdate(target: edomElement, data: Book) {

@@ -24,7 +24,7 @@ const BookwormInfo: Info = {
       date: "xx.yy.zzzz",
       changes: [
         "exportierte Rohdaten können wieder importiert werden",
-        "Schüler*innen werden in den Auswertungstabellen sortiert dargestellt"
+        "Schüler*innen werden in den Auswertungstabellen und dem Schüler*innen-Explorer sortiert dargestellt"
       ],
     },
     {
