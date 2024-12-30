@@ -142,6 +142,10 @@ class StudentsExplorer implements Component {
       return;
     }
 
+    data.sort((a: StudentData, b: StudentData) => {
+      return a.name.localeCompare(b.name);
+    });
+
     edom.fromTemplate(
       data.map((student) =>
         new Button(student.name, (self: edomElement) => {
