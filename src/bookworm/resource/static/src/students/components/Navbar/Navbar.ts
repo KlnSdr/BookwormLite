@@ -65,8 +65,8 @@ class Navbar implements Component {
           tag: "div",
           classes: ["navRight"],
           children: [
-            new NavbarButton("⚙", "{{CONTEXT}}/settings").instructions(),
-            new NavbarButton("🛈", "{{CONTEXT}}/info").instructions(),
+            new NavbarButton("", "{{CONTEXT}}/settings", ["fa", "fa-cog"]).instructions(),
+            new NavbarButton("", "{{CONTEXT}}/info", ["fa", "fa-info-circle"]).instructions(),
             new NavbarButton("abmelden", "{{CONTEXT}}/logout").instructions(),
           ],
         },

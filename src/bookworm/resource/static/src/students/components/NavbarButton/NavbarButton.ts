@@ -1,10 +1,12 @@
 class NavbarButton implements Component {
   private readonly text: string;
   private readonly destination: string;
+  private readonly additionalClasses: string[];
 
-  public constructor(text: string, destination: string) {
+  public constructor(text: string, destination: string, classes: string[] = []) {
     this.text = text;
     this.destination = destination;
+    this.additionalClasses = classes;
   }
 
   public render(parent: edomElement) {
@@ -14,7 +16,7 @@ class NavbarButton implements Component {
   public instructions(): edomTemplate {
     return new Button(this.text, () => {
       window.location.assign(this.destination);
-    }).instructions();
+    }, this.additionalClasses).instructions();
   }
 
   public unload() {}
