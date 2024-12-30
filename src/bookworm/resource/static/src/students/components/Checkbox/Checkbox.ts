@@ -2,6 +2,7 @@ class Checkbox implements Component {
   private readonly labelText: string;
   private readonly onClick: (val: boolean) => void;
   private readonly initialValue: boolean;
+  private value: boolean;
 
   public constructor(
     labelText: string,
@@ -11,6 +12,7 @@ class Checkbox implements Component {
     this.labelText = labelText;
     this.onClick = onClick;
     this.initialValue = initialValue;
+    this.value = initialValue;
   }
 
   public render(parent: edomElement) {
@@ -21,6 +23,18 @@ class Checkbox implements Component {
     return {
       tag: "div",
       classes: ["checkbox"],
+      handler: [
+        {
+          type: "click",
+          id: "onClick",
+          body: (self: edomElement) => {
+            this.value = !this.value;
+            const cb: edomInputElement = self.children[1] as edomInputElement;
+            cb.checked = this.value;
+            this.onClick(this.value);
+          },
+        },
+      ],
       children: [
         {
           tag: "label",
@@ -32,15 +46,6 @@ class Checkbox implements Component {
           classes: ["input"],
           type: "checkbox",
           checked: this.initialValue,
-          handler: [
-            {
-              type: "click",
-              id: "onClick",
-              body: (self: edomElement) => {
-                this.onClick((self.element as HTMLInputElement).checked);
-              },
-            },
-          ],
         },
       ],
     };
