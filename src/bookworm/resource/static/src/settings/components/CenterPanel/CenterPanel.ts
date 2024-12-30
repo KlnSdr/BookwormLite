@@ -12,14 +12,28 @@ class CenterPanel implements Component {
           tag: "h1",
           text: "Einstellungen",
         },
-        // @ts-ignore imported from students project
-        new Button("Backup erstellen", () => this.doBackup()).instructions(),
-        // @ts-ignore imported from students project
-        new Button("alle Daten löschen", () => DeleteDataPopup.show(), [
-          "dangerButton",
-        ]).instructions(),
-        // @ts-ignore imported from students project
-        new Button("Daten importieren", () => LoadBackupPopup.show()).instructions(),
+        {
+          tag: "div",
+          classes: ["containerDataActionButtons"],
+          children: [
+            // @ts-ignore imported from students project
+            new Button("Account", () => window.location.assign("{{CONTEXT}}/me")).instructions(),
+          ]
+        },
+        {
+          tag: "div",
+          classes: ["containerDataActionButtons"],
+          children: [
+            // @ts-ignore imported from students project
+            new Button("Backup erstellen", () => this.doBackup()).instructions(),
+            // @ts-ignore imported from students project
+            new Button("alle Daten löschen", () => DeleteDataPopup.show(), [
+              "dangerButton",
+            ]).instructions(),
+            // @ts-ignore imported from students project
+            new Button("Daten importieren", () => LoadBackupPopup.show()).instructions(),
+          ]
+        }
       ],
     };
   }

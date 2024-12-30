@@ -1,0 +1,199 @@
+* {
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #c0ffc0ff;
+}
+
+.navbarRight {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 12.5px;
+}
+
+.navButtons {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+nav {
+    background-color: #7abb7aff;
+    color: #343a40;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+button {
+    border: 2px solid #7abb7aff;
+    background-color: #7abb7aff;
+    color: #343a40;
+}
+
+button:hover {
+    background-color: #343a40;
+    color: #7abb7aff;
+}
+
+#headline {
+    display: inline;
+    margin-left: 5px;
+    text-decoration: none;
+    color: #343a40;
+}
+
+#headline:active {
+    color: #343a40;
+}
+
+#centerContainer {
+    text-align: center;
+    margin: 5px;
+}
+
+#containerOutUsers {
+    overflow: scroll;
+    max-height: 25vh;
+    text-align: left;
+}
+
+.actionBar {
+    text-align: left;
+    display: block;
+    width: 50%;
+    margin: auto;
+}
+
+td input,
+td button {
+    margin: auto;
+}
+
+td p {
+    text-align: left;
+    padding-left: 5px;
+}
+
+tr:nth-child(even) {
+    background-color: lightgrey;
+}
+
+tr:hover {
+    background-color: #7abb7aff;
+    color: #343a40;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        background-color: #343a40;
+    }
+    50% {
+        background-color: green;
+    }
+}
+
+.pulseGreen {
+    animation: pulse 0.5s ease-in-out;
+}
+
+table {
+    margin: auto;
+    width: 50%;
+}
+
+.popup {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #343a40;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    max-height: 50%;
+    overflow: scroll;
+}
+
+.popupBackground {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+
+.ulGroups, h3 {
+    width: 50%;
+    margin: auto;
+    text-align: left;
+}
+
+.tblUsers {
+    width: revert;
+    margin: revert;
+}
+
+.baseTechnology {
+    display: inline-block;
+}
+
+.technology {
+    width: 25vw;
+    margin: 5px;
+    padding: 5px;
+    border: 2px solid #16161d;
+    border-radius: 5px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+}
+
+.card_Hades {
+    background-color: #16161d;
+    color: #343a40;
+}
+
+.card_dobby,
+.card_thot {
+    background-color: #343a40;
+    color: #16161d;
+}
+
+.logo, .actionIcon {
+    width: 100px;
+    height: 100px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.actionIcon {
+    cursor: pointer;
+    margin: 0 5%;
+}
+
+.technologyTitle {
+    display: inline-block;
+}
+
+.description {
+    max-width: 50%;
+    text-align: justify;
+    margin: auto;
+}
+
+#bttnShowConfig {
+    float: left;
+    margin-left: 25%;
+}

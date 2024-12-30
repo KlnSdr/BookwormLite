@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hades - Userinfo</title>
+    <link rel="stylesheet" href="{{CONTEXT}}/hades/style.css">
+
+    <style>
+        body {
+            color: #343a40;
+        }
+
+        tr:hover {
+            background-color: initial;
+            color: initial;
+        }
+
+        td table tr:hover {
+          background-color: #7abb7aff;
+          color: #f9f9f9;
+        }
+
+        td table {
+            width: initial;
+        }
+
+        h1, p {
+            text-align: center;
+            color: #343a40;
+        }
+    </style>
+
+    <script>
+        const userId = '{{USERID}}';
+    </script>
+    <script src="{{CONTEXT}}/user/index.js"></script>
+    <script src="{{CONTEXT}}/hades/logout.js"></script>
+</head>
+<body>
+<nav>
+    <h1><a id="headline" href="{{CONTEXT}}">Bookworm</a></h1>
+    <div class="navbarRight">
+        <label id="lblCurrentUser">({{USERNAME}})</label>
+        <button onclick="doLogout()">logout</button>
+    </div>
+</nav>
+<h1>{{USERNAME}}</h1>
+<p>{{USERID}}</p>
+<div style="text-align: center">
+    <label for="inputLoginToken">Login-Token:</label>
+    <input type="text" name="" id="inputLoginToken" disabled style="width: 25%" value="{{LOGINTOKEN}}">
+    <button id="bttnCopyToken" onclick="copyToken()">copy</button>
+    <button id="bttnRegenToken" onclick="regenToken()">regenerate</button>
+</div>
+<table>
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <label for="username">Username:</label>
+                    </td>
+                    <td>
+                        <input type="text" id="username" name="username" value="{{USERNAME}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button id="updateUsername" onclick="updateName()">Update Username</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="email">Email:</label>
+                    </td>
+                    <td>
+                        <input type="email" id="email" name="email" value="{{EMAIL}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button id="updateEmail" onclick="updateMail()">Update Email</button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <label for="password">Old Password:</label>
+                    </td>
+                    <td>
+                        <input type="password" id="password" name="password">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="newPassword">New Password:</label>
+                    </td>
+                    <td>
+                        <input type="password" id="newPassword" name="newPassword">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="confirmPassword">Confirm Password:</label>
+                    </td>
+                    <td>
+                        <input type="password" id="confirmPassword" name="confirmPassword">
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button id="updatePassword" onclick="updatePassword()">Update Password</button>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

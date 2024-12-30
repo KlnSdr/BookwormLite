@@ -129,3 +129,14 @@ perl -i -pe 'next if /href="https/; next if /href="{{/; s/href="/href="{{CONTEXT
 mkdir ../../out/hades/signup
 cp -r docs/* ../../out/hades/signup
 rm -rf docs
+
+echo "building /hades overrides ======================"
+cd ../hades || exit
+cp -r * ../../out/hades
+echo "done!"
+
+echo "building /user ======================"
+cd ../user || exit
+mkdir ../../out/user
+cp -r * ../../out/user
+echo "done!"
