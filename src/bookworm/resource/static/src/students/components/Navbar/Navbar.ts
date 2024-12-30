@@ -67,7 +67,7 @@ class Navbar implements Component {
           children: [
             new NavbarButton("", "{{CONTEXT}}/settings", ["fa", "fa-cog"]).instructions(),
             new NavbarButton("", "{{CONTEXT}}/info", ["fa", "fa-info-circle"]).instructions(),
-            new NavbarButton("abmelden", "{{CONTEXT}}/logout").instructions(),
+            new NavbarButton("", "{{CONTEXT}}/logout", ["fa", "fa-sign-out"]).instructions(),
           ],
         },
       ],
