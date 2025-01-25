@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="BookwormLite:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/BookwormLite_jar</output-path>
+    <root id="archive" name="BookwormLite.jar">
+      <element id="module-output" name="BookwormLite" />
+      <element id="extracted-dir" path="$USER_HOME$/dev/customJars/Hades/v0.6/hades.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
