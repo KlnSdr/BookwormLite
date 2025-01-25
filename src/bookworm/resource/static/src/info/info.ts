@@ -1,7 +1,7 @@
 const BookwormInfo: Info = {
   appInfo: {
     name: "Bookworm",
-    version: "3.1.0-d",
+    version: "3.1",
     author: "KlnSdr",
     license: "MIT",
     vcsLink: "https://github.com/KlnSdr/BookwormLite",
@@ -20,15 +20,15 @@ const BookwormInfo: Info = {
   ],
   changelog: [
     {
-      version: "3.1.0",
-      date: "xx.yy.zzzz",
+      version: "3.1",
+      date: "25.01.2025",
       changes: [
         "exportierte Rohdaten können wieder importiert werden",
         "Schüler*innen werden in den Auswertungstabellen und dem Schüler*innen-Explorer sortiert dargestellt"
       ],
     },
     {
-      version: "3.0.0",
+      version: "3.0",
       date: "06.11.2024",
       changes: [
         "erster Release von Bookworm Version 3",
