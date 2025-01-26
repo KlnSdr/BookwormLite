@@ -15,7 +15,7 @@
     },
     "port": 2711,
     "threads": 10,
-    "logLevel": "WARN",
+    "logLevel": "DEBUG",
     "mode": "http"
   },
   "hades": {
