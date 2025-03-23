@@ -1,0 +1,20 @@
+{
+  "remoteRepoUrl": "https://repo.klnsdr.com",
+  "project": {
+    "entry": "bookworm.Main",
+    "name": "bookworm",
+    "version": "3.1",
+    "group": "dobby",
+    "dependencies": [
+      {
+        "group": "dobby",
+        "name": "hades",
+        "version": "0.7"
+      }
+    ]
+  },
+  "compiler": {
+    "version": "21"
+  },
+  "exclude": ["src"]
+}

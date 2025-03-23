@@ -2,7 +2,7 @@
   "application": {
     "name": "BookwormLite",
     "version": "3.1",
-    "devMode": false,
+    "devMode": true,
     "dbHost": "thot-container"
   },
   "dobby": {
