@@ -3,9 +3,9 @@ package bookworm.students;
 import bookworm.index.StringDatabaseIndex;
 import bookworm.index.service.IndexService;
 import dobby.util.json.NewJson;
-import dobby.util.logging.Logger;
-import janus.annotations.JanusUUID;
-import thot.annotations.v2.Bucket;
+import common.logger.Logger;
+import thot.janus.annotations.JanusUUID;
+import thot.api.annotations.v2.Bucket;
 
 import java.util.UUID;
 

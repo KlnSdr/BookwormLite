@@ -2,8 +2,8 @@ package bookworm.books.service;
 
 import bookworm.books.Book;
 import dobby.util.json.NewJson;
-import janus.Janus;
 import thot.connector.Connector;
+import thot.janus.Janus;
 
 import java.util.ArrayList;
 import java.util.List;

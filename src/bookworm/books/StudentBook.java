@@ -1,7 +1,7 @@
 package bookworm.books;
 
 import dobby.util.json.NewJson;
-import janus.DataClass;
+import thot.janus.DataClass;
 
 public class StudentBook implements DataClass {
     private final Book book;

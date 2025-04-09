@@ -3,13 +3,13 @@
   "project": {
     "entry": "bookworm.Main",
     "name": "bookworm",
-    "version": "3.1",
+    "version": "3.2",
     "group": "dobby",
     "dependencies": [
       {
         "group": "dobby",
         "name": "hades",
-        "version": "0.7"
+        "version": "2.1"
       }
     ]
   },

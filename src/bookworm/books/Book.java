@@ -2,9 +2,9 @@ package bookworm.books;
 
 import bookworm.books.service.BooksService;
 import dobby.util.json.NewJson;
-import janus.DataClass;
-import janus.annotations.*;
-import thot.annotations.Bucket;
+import thot.janus.DataClass;
+import thot.janus.annotations.*;
+import thot.api.annotations.v2.Bucket;
 
 import java.util.ArrayList;
 import java.util.List;

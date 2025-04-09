@@ -6,8 +6,8 @@ import bookworm.books.StudentBookAssociation;
 import bookworm.students.Student;
 import bookworm.students.service.StudentsService;
 import dobby.util.json.NewJson;
-import janus.Janus;
 import thot.connector.Connector;
+import thot.janus.Janus;
 
 import java.util.ArrayList;
 import java.util.Arrays;

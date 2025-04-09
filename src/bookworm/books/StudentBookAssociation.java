@@ -2,10 +2,10 @@ package bookworm.books;
 
 import bookworm.books.service.StudentBookAssociationService;
 import dobby.util.json.NewJson;
-import janus.DataClass;
-import janus.annotations.JanusString;
-import janus.annotations.JanusUUID;
-import thot.annotations.Bucket;
+import thot.api.annotations.v2.Bucket;
+import thot.janus.DataClass;
+import thot.janus.annotations.JanusString;
+import thot.janus.annotations.JanusUUID;
 
 import java.util.UUID;
 

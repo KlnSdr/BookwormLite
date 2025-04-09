@@ -1,7 +1,7 @@
 const BookwormInfo: Info = {
   appInfo: {
     name: "Bookworm",
-    version: "3.1",
+    version: "3.2",
     author: "KlnSdr",
     license: "MIT",
     vcsLink: "https://github.com/KlnSdr/BookwormLite",
@@ -9,7 +9,7 @@ const BookwormInfo: Info = {
   libs: [
     {
       name: "Hades",
-      version: "0.6",
+      version: "2.1",
       vcsLink: "https://github.com/KlnSdr/Hades",
     },
     {
@@ -19,6 +19,12 @@ const BookwormInfo: Info = {
     },
   ],
   changelog: [
+    {
+      version: "3.2",
+      date: "09.04.2025",
+      changes: [
+      ],
+    },
     {
       version: "3.1",
       date: "25.01.2025",

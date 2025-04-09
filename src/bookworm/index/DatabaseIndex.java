@@ -1,7 +1,7 @@
 package bookworm.index;
 
 import dobby.util.json.NewJson;
-import janus.DataClass;
+import thot.janus.DataClass;
 
 import java.util.HashMap;
 import java.util.HashSet;

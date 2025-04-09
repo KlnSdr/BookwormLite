@@ -2,8 +2,8 @@ package bookworm.students;
 
 import bookworm.index.IntegerDatabaseIndex;
 import dobby.util.json.NewJson;
-import dobby.util.logging.Logger;
-import janus.annotations.JanusUUID;
+import common.logger.Logger;
+import thot.janus.annotations.JanusUUID;
 
 import java.util.UUID;
 
