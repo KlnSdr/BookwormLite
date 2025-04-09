@@ -10,7 +10,7 @@ FROM gcr.io/distroless/java21
 
 WORKDIR /app
 
-COPY /app/build/bookworm/bookworm-3.2.jar /app/app.jar
+COPY --from=builder /app/build/bookworm-3.2.jar /app/app.jar
 
 EXPOSE 2711
 
