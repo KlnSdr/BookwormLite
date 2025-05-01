@@ -1,7 +1,7 @@
 {
   "application": {
     "name": "BookwormLite",
-    "version": "3.2",
+    "version": "3.3",
     "devMode": false,
     "dbHost": "thot-container"
   },
@@ -15,7 +15,7 @@
     },
     "port": 2711,
     "threads": 10,
-    "logLevel": "DEBUG",
+    "logLevel": "WARN",
     "mode": "http"
   },
   "hades": {
